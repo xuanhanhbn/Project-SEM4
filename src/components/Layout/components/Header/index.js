@@ -10,7 +10,6 @@ import {
     faEarthAsia,
     faCircleQuestion,
     faKeyboard,
-    faLanguage,
 } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './Header.module.scss';
@@ -63,10 +62,9 @@ function Header() {
 
     // handleMenuChange
     const handleMenuChange = (menuItem) => {
-        switch (menuItem.type){
+        switch (menuItem.type) {
             case 'Language':
-
-            break;
+                break;
             default:
         }
     };
