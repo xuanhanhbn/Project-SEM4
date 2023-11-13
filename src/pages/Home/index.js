@@ -1,7 +1,7 @@
+import React from 'react';
+
 function Home() {
-    return (
-        <h2>Home Page</h2>
-     );
+    return <div className="text-red-500 text-lg">HOME PAGE</div>;
 }
 
 export default Home;
