@@ -1,10 +1,7 @@
-import { HeaderOnly } from '~/components/Layout';
-
 import Home from '~/pages/Home';
-import Following from '~/pages/Following';
-import Upload from '~/pages/Upload';
-import Profile from '~/pages/Profile';
-import Search from '~/pages/Search';
+import About from '~/pages/About';
+import Campaigns from '~/pages/Campaigns';
+import Faqs from '~/pages/Faqs';
 
 // Public routes
 const publicRoutes = [
@@ -13,22 +10,16 @@ const publicRoutes = [
         component: Home,
     },
     {
-        path: '/following',
-        component: Following,
+        path: '/about',
+        component: About,
     },
     {
-        path: '/profile',
-        component: Profile,
+        path: '/campaigns',
+        component: Campaigns,
     },
     {
-        path: '/search',
-        component: Search,
-        layout: null,
-    },
-    {
-        path: '/upload',
-        component: Upload,
-        layout: HeaderOnly,
+        path: '/faq',
+        component: Faqs,
     },
 ];
 const privateRoutes = [];
