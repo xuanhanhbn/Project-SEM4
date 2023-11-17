@@ -2,7 +2,7 @@ import React from 'react';
 
 function Home() {
     return (
-        <div className="pt-[6.0625rem]    ">
+        <div className="pt-[6.0625rem]">
             <div className="bg-[#fff] overflow-hidden">
                 <div className="min-h-[40rem]  flex flex-col max-w-[1140px] w-full px-[1rem] mx-auto">
                     <div className="flex grow flex-wrap mx-[-1rem] ">

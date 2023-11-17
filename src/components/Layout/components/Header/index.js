@@ -1,102 +1,220 @@
-import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import './Header.css';
+
+const login = false;
 
 function Header() {
+    const [openMenuUser, setOpenMenuUser] = useState(false);
+    const [openMenuMobile, setOpenMenuMobile] = useState(false);
+
+    const handleOpenMenuUser = () => {
+        setOpenMenuUser(!openMenuUser);
+    };
+
+    const handleOpenMenuMobile = () => {
+        setOpenMenuMobile(!openMenuMobile);
+    };
+
+    const handleClose = () => {
+        setOpenMenuMobile(false);
+        setOpenMenuUser(false);
+    };
+
     return (
-        <header className="flex w-full fixed z-[1030] items-center justify-start border-b-[.0625rem] border-[#d9dddf] p-0 bg-[#fff] shadow-none border-solid ">
-            <div className="min-w-[15.75rem]">
-                <a href="/" className="w-auto bg-[#007dbc] inline-block">
-                    <img
-                        src="https://sharethemeal.org/icons/logo-stm-wfp.svg"
-                        alt="Share The Meal logo"
-                        className="h-[4.25rem] mx-[1.5rem] my-[.875rem] min-h-[4.25rem] w-auto"
-                    />
-                </a>
-            </div>
-            <div className="flex flex-wrap justify-center pl-0 mb-0 grow">
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? 'pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#031c2d]  leading-6 relative font-bold'
-                            : 'pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#687781]  leading-6 relative font-bold'
-                    }
-                    to="/about"
-                >
-                    About us
-                </NavLink>
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? 'pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#031c2d]  leading-6 relative font-bold'
-                            : 'pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#687781]  leading-6 relative font-bold'
-                    }
-                    to="/campaigns"
-                >
-                    Fundraising goals
-                </NavLink>
-                <NavLink
-                    className={({ isActive }) =>
-                        isActive
-                            ? 'pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#031c2d]  leading-6 relative font-bold'
-                            : 'pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#687781]  leading-6 relative font-bold'
-                    }
-                    to="/faq"
-                >
-                    FAQs
-                </NavLink>
-            </div>
-            <div className="grow-0 flex items-center justify-end min-w-[21.625rem]  divide-x">
-                <div className="mr-[1.25rem] static">
-                    <div className="px-[.75rem] py-[0.5rem]">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="22"
-                            height="22"
-                            viewBox="0 0 22 22"
-                            fill="none"
-                            id="svg150"
+        <nav id="header" className="bg-white border-b z-[999]  right-0 fixed w-full border-solid border-[#d9dddf] ">
+            <div className="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="relative flex  h-[6.0625rem] items-center justify-between">
+                    {/* button open menu mobile */}
+                    <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                        <button
+                            type="button"
+                            className="relative inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                            aria-controls="mobile-menu"
+                            aria-expanded="false"
+                            onClick={handleOpenMenuMobile}
                         >
-                            <defs id="defs18"></defs>
-                            <path
-                                id="path25"
-                                d="M 10.75 0 C 4.8218224 0 3.5527137e-15 4.8218224 0 10.75 C 1.9067263e-15 16.678178 4.8218224 21.5 10.75 21.5 C 16.678178 21.5 21.5 16.678178 21.5 10.75 C 21.5 4.8218224 16.678178 3.5527137e-15 10.75 0 z M 10.75 1.5 C 15.867517 1.5 20 5.6324826 20 10.75 C 20 15.867517 15.867517 20 10.75 20 C 5.6324826 20 1.5 15.867517 1.5 10.75 C 1.5 5.6324826 5.6324826 1.5 10.75 1.5 z "
-                                fill="#031C2D"
-                            ></path>
-                            <path
-                                d="M 11.2778,21.4297 C 9.3159004,20.4244 7.6688004,18.8981 6.5173004,17.0183 c -1.1515,-1.8798 -1.763,-4.0405 -1.7673,-6.245 -0.0043,-2.2044 0.5988,-4.3675 1.743,-6.2518 1.1442,-1.88423 2.7853,-3.4169 4.7432996,-4.4298 l 0.7719,1.49216 C 10.3244,2.45495 8.9130004,3.7731 7.9290004,5.3935 c -0.984,1.6205 -1.5027,3.4807 -1.499,5.3766 0.0037,1.8958 0.5296,3.754 1.5199,5.3706 0.9903,1.6167 2.4067996,2.9293 4.0939996,3.7938 z"
-                                fill="#031C2D"
-                                id="path142"
-                            ></path>
-                            <path
-                                d="m 10.2222,21.4297 c 1.9619,-1.0053 3.609,-2.5316 4.7605,-4.4114 1.1515,-1.8798 1.763,-4.0405 1.7673,-6.245 C 16.7543,8.5689 16.1512,6.4058 15.007,4.5215 13.8628,2.63727 12.2217,1.1046 10.2637,0.0917 L 9.4918004,1.58386 C 11.1756,2.45495 12.587,3.7731 13.571,5.3935 c 0.984,1.6205 1.5027,3.4807 1.499,5.3766 -0.0037,1.8958 -0.5296,3.754 -1.5199,5.3706 -0.9903,1.6167 -2.4068,2.9293 -4.0939996,3.7938 z"
-                                fill="#031C2D"
-                                id="path144"
-                            ></path>
-                            <path
-                                id="path33"
-                                d="M 0.75 13 L 0.75 14.5 L 20.75 14.5 L 20.75 13 L 0.75 13 z "
-                                fill="#031C2D"
-                            ></path>
-                            <path
-                                id="path29"
-                                d="M 0.75 7 L 0.75 8.5 L 20.75 8.5 L 20.75 7 L 0.75 7 z "
-                                fill="#031C2D"
-                            ></path>
-                        </svg>
+                            <span className="absolute -inset-0.5"></span>
+                            <span className="sr-only">Open main menu</span>
+
+                            <svg
+                                className="block w-6 h-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                                />
+                            </svg>
+
+                            <svg
+                                className="hidden w-6 h-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                aria-hidden="true"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div className="flex items-center justify-start flex-1 sm:items-stretch ml-[46px]">
+                        {/* logo */}
+                        <div className="flex items-center flex-shrink-0">
+                            <Link to="/">
+                                <img
+                                    className="w-auto h-8"
+                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                    alt="Your Company"
+                                />
+                            </Link>
+                        </div>
+
+                        {/* menu */}
+                        <div className="hidden sm:ml-6 sm:block">
+                            <div className="flex space-x-4">
+                                <NavLink
+                                    to="/about"
+                                    className={({ isActive }) => (isActive ? 'active' : 'not-active ')}
+                                    aria-current="page"
+                                >
+                                    About Us
+                                </NavLink>
+                                <NavLink
+                                    to="/campaigns"
+                                    className={({ isActive }) => (isActive ? 'active' : 'not-active')}
+                                >
+                                    Fundraising goals
+                                </NavLink>
+                                <NavLink to="/faq" className={({ isActive }) => (isActive ? 'active' : 'not-active')}>
+                                    FAQs
+                                </NavLink>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* User icon || singin */}
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                        <div className="relative hidden ml-3 sm:block">
+                            {login === true ? (
+                                <div className="border-r border-solid border-[#e5e7eb]">
+                                    <div className="text-[#007dbc] hover:text-[#031c2d]  uppercase pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] leading-6 relative font-bold">
+                                        Sign in
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <button
+                                        type="button"
+                                        className="relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                        id="user-menu-button"
+                                        aria-expanded="false"
+                                        aria-haspopup="true"
+                                        onClick={handleOpenMenuUser}
+                                    >
+                                        <span className="absolute -inset-1.5"></span>
+                                        <span className="sr-only">Open user menu</span>
+                                        <img
+                                            className="w-8 h-8 rounded-full"
+                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                            alt=""
+                                        />
+                                    </button>
+                                </div>
+                            )}
+
+                            {openMenuUser ? (
+                                <div
+                                    className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                    role="menu"
+                                    aria-orientation="vertical"
+                                    aria-labelledby="user-menu-button"
+                                    tabIndex="-1"
+                                    onClick={handleClose}
+                                >
+                                    <Link
+                                        to="#"
+                                        className="block px-4 py-2 mx-1.5 rounded-lg text-sm text-gray-700 hover:bg-slate-400 hover:text-white"
+                                        role="menuitem"
+                                        tabIndex="-1"
+                                        id="user-menu-item-0"
+                                    >
+                                        Your Profile
+                                    </Link>
+                                    <Link
+                                        to="#"
+                                        className="block px-4 py-2 text-sm mx-1.5 rounded-lg text-gray-700 hover:bg-slate-400 hover:text-white"
+                                        role="menuitem"
+                                        tabIndex="-1"
+                                        id="user-menu-item-1"
+                                    >
+                                        Settings
+                                    </Link>
+                                    <Link
+                                        to="#"
+                                        className="block px-4 py-2 text-sm mx-1.5 rounded-lg text-gray-700 hover:bg-slate-400 hover:text-white"
+                                        role="menuitem"
+                                        tabIndex="-1"
+                                        id="user-menu-item-2"
+                                    >
+                                        Sign out
+                                    </Link>
+                                </div>
+                            ) : null}
+                        </div>
+                        <button className="mx-[1.5rem]  w-[12.75rem] pt-[.75rem] pb-[.8125rem] px-[1rem] bg-[#febb00] hover:bg-[#fec629] text-[#031c2d] text-[.875rem] font-semibold rounded-[.5rem] border-[#febb00] hover:border-[#fec629]">
+                            Donate now
+                        </button>
                     </div>
                 </div>
-                <div className="text-[#007dbc] hover:text-[#031c2d]  uppercase pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] leading-6 relative font-bold">
-                    Sign in
-                </div>
-                <div className="">
-                    <button
-                        type="button"
-                        className="ml-[1.5rem] mr-[3rem] w-[12.75rem] pt-[.75rem] pb-[.8125rem] px-[1rem] bg-[#febb00] hover:bg-[#fec629] text-[#031c2d] text-[.875rem] font-semibold rounded-[.5rem] border-[#febb00] hover:border-[#fec629]"
-                    >
-                        Donate now
-                    </button>
-                </div>
             </div>
-        </header>
+
+            {/* menu mobile */}
+            {openMenuMobile ? (
+                <div id="mobile-menu">
+                    <div className="px-2 pt-2 pb-3 space-y-1" onClick={handleClose}>
+                        <Link
+                            to="/about"
+                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
+                            aria-current="page"
+                        >
+                            About Us
+                        </Link>
+                        <Link
+                            to="/campaigns"
+                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
+                        >
+                            Fundraising goals
+                        </Link>
+                        <Link
+                            to="/faq"
+                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
+                        >
+                            FAQs
+                        </Link>
+                        <Link
+                            to="/profile"
+                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
+                        >
+                            My Profile
+                        </Link>
+                        <Link
+                            to="/"
+                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
+                        >
+                            Sing Out
+                        </Link>
+                    </div>
+                </div>
+            ) : null}
+        </nav>
     );
 }
 
