@@ -1,7 +1,43 @@
 #header .active {
-    @apply pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#031c2d] leading-6 relative font-bold
+    @apply pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-dark-200 leading-6 relative font-bold
 }
 
 #header .not-active {
-    @apply pt-[0.625rem] hover:text-[#031c2d] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#687781] leading-6 relative font-bold
+    @apply pt-[0.625rem] hover:text-dark-200 pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-gray-100 leading-6 relative font-bold
+}
+
+#header {
+    @apply bg-white transition-[.4s] border-b z-[999] top-0 right-0 fixed w-full border-solid border-gray-200
+}
+
+#header .btn_menu_mobile {
+    @apply relative inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white
+}
+
+#header .btn_singin {
+    @apply text-blue-100 hover:text-dark-200 uppercase pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] leading-6 relative font-bold
+}
+
+#header .user_icon {
+    @apply absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0
+}
+
+#header .btn_user_menu {
+    @apply relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800
+}
+
+#header .user_menu {
+    @apply absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none
+}
+
+#header .li_user_menu {
+    @apply block px-4 py-2 mx-1.5 rounded-lg text-sm text-gray-700 hover:bg-slate-400 hover:text-white
+}
+
+#header .btn_donate_nav {
+    @apply mx-[1.5rem] max-[320px]:w-auto transition-[.4s] pt-3 pb-[13px] px-4 w-[12.75rem] hover:bg-orange-100 text-dark-200 text-[.875rem] font-semibold rounded-[.5rem] border-orange-200 hover:border-orange-100 bg-orange-200
+}
+
+#header .li_mobile_menu {
+    @apply block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white
 }
