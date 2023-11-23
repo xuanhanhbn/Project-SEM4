@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './Header.css';
 
@@ -21,12 +21,34 @@ function Header() {
         setOpenMenuUser(false);
     };
 
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 90 || document.documentElement.scrollTop > 90) {
+            document.getElementById('nav_scroll').style.height = '5.0625rem';
+            document.getElementById('header').style.height = '5.0625rem';
+            document.getElementById('btn_donate').style.padding = '6px 12px';
+        } else {
+            document.getElementById('nav_scroll').style.height = '6.0625rem';
+            document.getElementById('header').style.height = '6.0625rem';
+            document.getElementById('btn_donate').style.padding = '12px 16px 13px';
+        }
+    }
+
     return (
-        <nav id="header" className="bg-white border-b z-[999]  right-0 fixed w-full border-solid border-[#d9dddf] ">
+        <nav
+            id="header"
+            className="bg-white transition-[.4s] border-b z-[999] top-0 right-0 fixed w-full border-solid border-[#d9dddf] "
+        >
             <div className="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div className="relative flex  h-[6.0625rem] items-center justify-between">
+                <div
+                    id="nav_scroll"
+                    className="relative flex transition-[.4s] h-[6.0625rem]  items-center justify-between"
+                >
                     {/* button open menu mobile */}
-                    <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                    <div className="absolute inset-y-0 left-0 flex items-center min-[925px]:hidden">
                         <button
                             type="button"
                             className="relative inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -76,9 +98,8 @@ function Header() {
                                 />
                             </Link>
                         </div>
-
                         {/* menu */}
-                        <div className="hidden sm:ml-6 sm:block">
+                        <div className="hidden sm:ml-6 min-[925px]:block">
                             <div className="flex space-x-4">
                                 <NavLink
                                     to="/about"
@@ -110,7 +131,7 @@ function Header() {
                                     </div>
                                 </div>
                             ) : (
-                                <div>
+                                <div className="hidden min-[925px]:block">
                                     <button
                                         type="button"
                                         className="relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -169,7 +190,10 @@ function Header() {
                                 </div>
                             ) : null}
                         </div>
-                        <button className="mx-[1.5rem]  w-[12.75rem] pt-[.75rem] pb-[.8125rem] px-[1rem] bg-[#febb00] hover:bg-[#fec629] text-[#031c2d] text-[.875rem] font-semibold rounded-[.5rem] border-[#febb00] hover:border-[#fec629]">
+                        <button
+                            id="btn_donate"
+                            className="mx-[1.5rem] max-[320px]:w-auto transition-[.4s] pt-3 pb-[13px] px-4  w-[12.75rem]  bg-[#febb00] hover:bg-[#fec629] text-[#031c2d] text-[.875rem] font-semibold rounded-[.5rem] border-[#febb00] hover:border-[#fec629]"
+                        >
                             Donate now
                         </button>
                     </div>

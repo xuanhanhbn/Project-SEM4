@@ -1,13 +1,9 @@
-import classNames from 'classnames/bind';
 import Header from '~/components/Layout/components/Header';
-import styles from './DefaultLayout.module.scss';
 import Footer from '../components/Footer';
-
-const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {
     return (
-        <div className=" bg-[#f2f4f4] min-h-[100vh] flex-col cursor-grabbing">
+        <div className=" bg-[#f2f4f4] min-h-[100vh] h-full flex-col pt-[5.75rem]">
             <Header />
             <div>
                 <div>{children}</div>
