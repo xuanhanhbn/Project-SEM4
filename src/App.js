@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from '~/routes';
 import { DefaultLayout } from '~/components/Layout';
+import '../src/components/GlobalStyles/font-awesome-6.4.2-pro-main/css/all.css';
 
 function App() {
     return (
