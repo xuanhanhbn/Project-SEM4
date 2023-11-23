@@ -1,0 +1,7 @@
+#header .active {
+    @apply pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#031c2d] leading-6 relative font-bold
+}
+
+#header .not-active {
+    @apply pt-[0.625rem] hover:text-[#031c2d] pb-[0.6875rem] px-[1.75rem] text-[.875rem] uppercase text-[#687781] leading-6 relative font-bold
+}
