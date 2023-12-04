@@ -1,0 +1,31 @@
+#home_banner {
+    @apply flex flex-col w-full md:flex-row-reverse md:min-h-[640px] bg-white
+}
+
+#home_banner .home_content {
+    @apply flex items-center w-full px-4 text-center lg:w-auto
+}
+
+#home_banner .banner {
+    @apply min-h-[12.5rem] relative bg-[50%_center] w-full md:w-2/4 lg:w-11/12
+}
+
+#home_banner .sm_svg {
+    @apply w-[101%] h-auto bottom-[-.0625rem] absolute z-[1] md:hidden align-middle
+}
+
+#home_banner .home_h1 {
+    @apply mb-2 mt-6 relative font-semibold w-full leading-10 text-[2rem] text-dark-200 md:text-[3rem] md:text-left md:leading-[3.5rem]
+}
+
+#home_banner .home_h3 {
+    @apply text-center px-4 font-normal leading-7 mb-6 text-[1rem] text-gray-100 md:text-left
+}
+
+#home_banner .md_svg {
+    @apply hidden md:block bottom-[-0.0625rem] h-[101%] left-[-0.0625rem] top-[-0.0625rem] w-auto absolute
+}
+
+#home_banner .wrapper_content {
+    @apply flex flex-col items-center justify-center mx-6 md:w-2/4
+}

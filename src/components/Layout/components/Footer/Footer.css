@@ -1,3 +1,23 @@
 #footer .logo-icon {
     @apply ml-[1rem] h-[1.875rem] min-w-[1.875rem] flex justify-center items-center bg-blue-100 text-dark-200 rounded-full
 }
+
+#footer .wrapper_footer_menu {
+    @apply min-h-[5rem] text-[.75rem] mx-0 border-t-[.0625rem] border-gray-200 shadow-none border-solid flex flex-wrap
+}
+
+#footer .menu_footer {
+    @apply py-[1rem] items-center flex flex-wrap basis-0 justify-start px-0 grow max-w-full relative w-full text-[.75rem] text-dark-200
+}
+
+#footer .li_menu_footer {
+    @apply text-gray-100 hover:text-black my-[.5rem] mr-[2.75rem] text-[.875rem] font-normal text-left leading-[1.5]
+}
+
+#footer .list_contact {
+    @apply flex justify-end items-center px-0 w-auto max-w-full relative text-[.75rem]
+}
+
+#footer .footer_name_uuu {
+    @apply flex justify-end ml-[1.5rem] p-0 items-center text-gray-100 text-[.875rem] w-auto max-w-full
+}
