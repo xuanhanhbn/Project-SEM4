@@ -1,0 +1,15 @@
+#homeConnect .home_container {
+    @apply p-6 bg-white border border-gray-200 md:flex rounded-2xl md:py-[4.5rem] md:px-14
+}
+
+#homeConnect .home_input {
+    @apply bg-gray-400 focus:shadow-[0_0_0_0.1rem_#007dbc] overflow-visible outline-0 focus:border-blue-100 block bg-clip-padding w-full border-gray-400 rounded-[.625rem] text-black text-base font-normal min-h-[3rem] py-3 px-6
+}
+
+#homeConnect .home_btn {
+    @apply rounded-bl-[1.75rem] bg-orange-200 border-orange-200 shadow-[0_0_0_0.125rem_#fff] pb-[.6875rem] pr-2 pt-[.625rem] pl-4 absolute top-0 -right-2 rounded-tl-lg rounded-tr-lg rounded-br-lg
+}
+
+#homeConnect .home_content {
+    @apply relative text-center md:flex md:justify-center md:flex-col md:ml-16 md:text-left
+}

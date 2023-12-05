@@ -1,0 +1,7 @@
+#impact .title_h2 {
+    @apply mb-2 text-2xl font-bold leading-8 text-center text-dark-900 md:leading-[3.75rem] md:text-4xl
+}
+
+#impact .content_h4 {
+    @apply text-base font-semibold leading-6 text-center text-gray-100 mb-9 md:mb-[3.25rem] md:text-xl
+}

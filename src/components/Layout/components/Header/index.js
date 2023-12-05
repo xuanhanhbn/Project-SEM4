@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './Header.css';
+import UserAvatar from '../../../../assets/images/avatar/avatar.png';
 
 const login = false;
 
@@ -38,20 +39,14 @@ function Header() {
     }
 
     return (
-        <nav
-            id="header"
-            className="bg-white transition-[.4s] border-b z-[999] top-0 right-0 fixed w-full border-solid border-[#d9dddf] "
-        >
+        <nav id="header">
             <div className="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    id="nav_scroll"
-                    className="relative flex transition-[.4s] h-[6.0625rem]  items-center justify-between"
-                >
+                <div id="nav_scroll" className="wrapper_nav">
                     {/* button open menu mobile */}
-                    <div className="absolute inset-y-0 left-0 flex items-center min-[925px]:hidden">
+                    <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
                         <button
                             type="button"
-                            className="relative inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                            className="btn_menu_mobile"
                             aria-controls="mobile-menu"
                             aria-expanded="false"
                             onClick={handleOpenMenuMobile}
@@ -59,35 +54,11 @@ function Header() {
                             <span className="absolute -inset-0.5"></span>
                             <span className="sr-only">Open main menu</span>
 
-                            <svg
-                                className="block w-6 h-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                                />
-                            </svg>
-
-                            <svg
-                                className="hidden w-6 h-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                aria-hidden="true"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <i className="fa-light fa-bars" style={{ color: '#d9dddf' }}></i>
                         </button>
                     </div>
 
-                    <div className="flex items-center justify-start flex-1 sm:items-stretch ml-[46px]">
+                    <div className="wrapper_logo">
                         {/* logo */}
                         <div className="flex items-center flex-shrink-0">
                             <Link to="/">
@@ -99,7 +70,7 @@ function Header() {
                             </Link>
                         </div>
                         {/* menu */}
-                        <div className="hidden sm:ml-6 min-[925px]:block">
+                        <div className="hidden sm:ml-6 md:block">
                             <div className="flex space-x-4">
                                 <NavLink
                                     to="/about"
@@ -122,19 +93,17 @@ function Header() {
                     </div>
 
                     {/* User icon || singin */}
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                    <div className="user_icon">
                         <div className="relative hidden ml-3 sm:block">
                             {login === true ? (
-                                <div className="border-r border-solid border-[#e5e7eb]">
-                                    <div className="text-[#007dbc] hover:text-[#031c2d]  uppercase pt-[0.625rem] pb-[0.6875rem] px-[1.75rem] text-[.875rem] leading-6 relative font-bold">
-                                        Sign in
-                                    </div>
+                                <div className="border-r border-white border-solid">
+                                    <div className="btn_singin">Sign in</div>
                                 </div>
                             ) : (
-                                <div className="hidden min-[925px]:block">
+                                <div className="hidden md:block">
                                     <button
                                         type="button"
-                                        className="relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                        className="btn_user_menu"
                                         id="user-menu-button"
                                         aria-expanded="false"
                                         aria-haspopup="true"
@@ -142,18 +111,14 @@ function Header() {
                                     >
                                         <span className="absolute -inset-1.5"></span>
                                         <span className="sr-only">Open user menu</span>
-                                        <img
-                                            className="w-8 h-8 rounded-full"
-                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                            alt=""
-                                        />
+                                        <img className="w-8 h-8 rounded-full" alt="" src={UserAvatar} />
                                     </button>
                                 </div>
                             )}
 
                             {openMenuUser ? (
                                 <div
-                                    className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                    className="user_menu"
                                     role="menu"
                                     aria-orientation="vertical"
                                     aria-labelledby="user-menu-button"
@@ -162,7 +127,7 @@ function Header() {
                                 >
                                     <Link
                                         to="#"
-                                        className="block px-4 py-2 mx-1.5 rounded-lg text-sm text-gray-700 hover:bg-slate-400 hover:text-white"
+                                        className="li_user_menu"
                                         role="menuitem"
                                         tabIndex="-1"
                                         id="user-menu-item-0"
@@ -171,7 +136,7 @@ function Header() {
                                     </Link>
                                     <Link
                                         to="#"
-                                        className="block px-4 py-2 text-sm mx-1.5 rounded-lg text-gray-700 hover:bg-slate-400 hover:text-white"
+                                        className="li_user_menu"
                                         role="menuitem"
                                         tabIndex="-1"
                                         id="user-menu-item-1"
@@ -180,7 +145,7 @@ function Header() {
                                     </Link>
                                     <Link
                                         to="#"
-                                        className="block px-4 py-2 text-sm mx-1.5 rounded-lg text-gray-700 hover:bg-slate-400 hover:text-white"
+                                        className="li_user_menu"
                                         role="menuitem"
                                         tabIndex="-1"
                                         id="user-menu-item-2"
@@ -190,10 +155,7 @@ function Header() {
                                 </div>
                             ) : null}
                         </div>
-                        <button
-                            id="btn_donate"
-                            className="mx-[1.5rem] max-[320px]:w-auto transition-[.4s] pt-3 pb-[13px] px-4  w-[12.75rem]  bg-[#febb00] hover:bg-[#fec629] text-[#031c2d] text-[.875rem] font-semibold rounded-[.5rem] border-[#febb00] hover:border-[#fec629]"
-                        >
+                        <button id="btn_donate" className="btn_donate_nav">
                             Donate now
                         </button>
                     </div>
@@ -202,37 +164,21 @@ function Header() {
 
             {/* menu mobile */}
             {openMenuMobile ? (
-                <div id="mobile-menu">
+                <div id="mobile-menu" className="mobile_menu">
                     <div className="px-2 pt-2 pb-3 space-y-1" onClick={handleClose}>
-                        <Link
-                            to="/about"
-                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
-                            aria-current="page"
-                        >
+                        <Link to="/about" className="li_mobile_menu" aria-current="page">
                             About Us
                         </Link>
-                        <Link
-                            to="/campaigns"
-                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
-                        >
+                        <Link to="/campaigns" className="li_mobile_menu">
                             Fundraising goals
                         </Link>
-                        <Link
-                            to="/faq"
-                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
-                        >
+                        <Link to="/faq" className="li_mobile_menu">
                             FAQs
                         </Link>
-                        <Link
-                            to="/profile"
-                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
-                        >
+                        <Link to="/profile" className="li_mobile_menu">
                             My Profile
                         </Link>
-                        <Link
-                            to="/"
-                            className="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-slate-400 hover:text-white"
-                        >
+                        <Link to="/" className="li_mobile_menu">
                             Sing Out
                         </Link>
                     </div>

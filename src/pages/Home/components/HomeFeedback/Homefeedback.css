@@ -1,0 +1,15 @@
+#homeFb .card {
+    @apply w-full h-[430px] border border-gray-200 lg:py-10 lg:px-20 md:h-[370px] rounded-2xl bg-white px-4 pb-4 pt-40 md:pt-44
+}
+
+#homeFb .card_content {
+    @apply relative h-full p-6 border-2 border-gray-300 lg:h-52 lg:-bottom-12 rounded-2xl
+}
+
+#homeFb .card_img {
+    @apply lg:mx-0 mx-auto rounded-2xl w-52 lg:absolute lg:right-20 lg:-bottom-20 lg:w-72
+}
+
+#homeFb .fb_content {
+    @apply mb-1 text-sm md:h-[3rem] font-semibold leading-5 min-h-[5rem] md:min-h-full lg:h-full md:leading-6 lg:line-clamp-4 md:line-clamp-2 line-clamp-4 text-ellipsis lg:leading-8 lg:text-xl
+}
