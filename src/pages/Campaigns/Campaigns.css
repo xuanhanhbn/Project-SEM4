@@ -1,0 +1,39 @@
+#campaigns .container_wrapper {
+    @apply flex items-center justify-center min-h-screen
+}
+
+#campaigns .wrapper {
+    @apply gap-12 space-y-4 flex md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:space-y-0
+}
+
+#campaigns .card {
+    @apply max-w-sm px-6 pt-6 pb-2 transition border duration-500 transform bg-white shadow-lg rounded-xl hover:scale-105
+}
+
+#campaigns .card_title {
+    @apply h-20 mb-3 text-2xl font-bold text-gray-800 cursor-pointer line-clamp-2 text-ellipsis
+}
+
+#campaigns .card_btn {
+    @apply inline-block mb-4 text-sm text-blue-100
+}
+
+#campaigns .card_image {
+    @apply w-full rounded-xl md:max-h-52 md:h-52
+}
+
+#campaigns .col {
+    @apply flex items-center w-2/4 text-gray-100
+}
+
+#campaigns .col_3 {
+    @apply flex items-center justify-end w-2/4 text-gray-100
+}
+
+#campaigns .text_1 {
+    @apply text-sm font-semibold leading-6 text-blue-100
+}
+
+#campaigns .text_2 {
+    @apply text-sm font-semibold leading-6 text-blue-100
+}
