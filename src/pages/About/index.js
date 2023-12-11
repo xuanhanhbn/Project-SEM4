@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 function About() {
     return (
-        <div id="aboutPage" className="bg-gray-400">
+        <div id="aboutPage" className="mx-auto bg-gray-400">
             <div className="w-full px-6 pt-8 mb-12 text-center">
                 <div className="max-w-4xl mx-auto ">
                     <h1 className="mb-2 text-4xl font-bold leading-10 text-center md:leading-[3.75rem] md:text-5xl">

@@ -32,7 +32,7 @@ function Campaigns() {
                                             alt=""
                                             className="absolute h-full rounded-2xl translate-x-[-50%]  top-0 left-1/2"
                                         />
-                                        <div className="relative -bottom-48">
+                                        <div className="relative -bottom-40 md:-bottom-64">
                                             <h2 className="text-white z-[1] relative mb-4 leading-6 font-bold text-[1.625rem] ">
                                                 Feed families who need it the most
                                             </h2>
@@ -47,7 +47,7 @@ function Campaigns() {
                             return (
                                 <CardCustom
                                     key={data.cardTitle}
-                                    to={data.to}
+                                    to="/campaign-detail"
                                     cardImage={Card_img_1}
                                     target={data.target}
                                     supporteds={data.supporteds}

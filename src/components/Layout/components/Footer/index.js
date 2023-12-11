@@ -4,9 +4,9 @@ import './Footer.css';
 export default function Footer() {
     return (
         <div id="footer">
-            <div className="bg-white text-[.875rem] pt-[2.25rem] mt-auto">
-                <div className="max-w-[1140px] mx-auto px-[1rem] w-full ">
-                    <div className="pb-[2rem] mx-0 flex flex-wrap">
+            <div className="bg-white text-[.875rem] pt-9 mt-auto">
+                <div className="w-full px-4 mx-auto ">
+                    <div className="flex flex-wrap pb-8 mx-0">
                         <div className="px-0 basis-1/2 max-w-[50%]">
                             <div className="text-gray-100  hover:text-black  pt-[.8125rem] flex  font-semibold  ">
                                 <i className="mt-[10px] mr-1 hover:text-black text-gray-100 fa-light fa-envelope fa-xl "></i>

@@ -1,0 +1,27 @@
+#collapse .ant-collapse {
+    @apply bg-white rounded-2xl mb-2
+}
+
+#collapse .ant-collapse-item {
+    @apply p-6 rounded-2xl md:p-10
+}
+
+#collapse .ant-collapse-header {
+    @apply p-0
+}
+
+#collapse .ant-collapse-header-text {
+    @apply text-base font-semibold leading-7 md:text-xl
+}
+
+#collapse .ant-collapse-content-box {
+    @apply p-0 mt-6 text-gray-100 text-sm leading-6 md:text-base
+}
+
+#collapse .ant-collapse-header {
+    @apply flex-row-reverse
+}
+
+#collapse .ant-collapse-content {
+    @apply border-0
+}
