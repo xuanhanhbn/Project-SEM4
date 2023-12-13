@@ -2,7 +2,8 @@ import React from 'react';
 import { Collapse } from 'antd';
 import './collapse.css';
 
-export default function CollapseCustom({ title, content }) {
+export default function CollapseCustom(props) {
+    const { title, content } = props;
     return (
         <div id="collapse">
             <Collapse
