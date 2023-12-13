@@ -4,7 +4,7 @@ import '../../GlobalStyles/GlobalStyles.css';
 
 function DefaultLayout({ children }) {
     return (
-        <div className=" bg-white min-h-[100vh] h-full flex-col pt-[5.75rem] duong">
+        <div className=" bg-gray-400 min-h-[100vh] h-full flex-col pt-[5.75rem] ">
             <Header />
             <div>
                 <div>{children}</div>

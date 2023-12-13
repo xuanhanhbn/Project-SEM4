@@ -1,5 +1,5 @@
 #footer .logo-icon {
-    @apply ml-[1rem] h-[1.875rem] min-w-[1.875rem] flex justify-center items-center bg-blue-100 text-dark-200 rounded-full
+    @apply ml-4 h-[1.875rem] min-w-[1.875rem] flex justify-center items-center bg-blue-100 text-dark-200 rounded-full
 }
 
 #footer .wrapper_footer_menu {
@@ -7,7 +7,7 @@
 }
 
 #footer .menu_footer {
-    @apply py-[1rem] items-center flex flex-wrap basis-0 justify-start px-0 grow max-w-full relative w-full text-[.75rem] text-dark-200
+    @apply py-4 items-center flex flex-wrap basis-0 justify-start px-0 grow max-w-full relative w-full text-[.75rem] text-dark-200
 }
 
 #footer .li_menu_footer {

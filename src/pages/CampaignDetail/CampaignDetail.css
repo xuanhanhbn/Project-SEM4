@@ -1,0 +1,39 @@
+#campaignDetail .image-gallery-thumbnail,
+.image-gallery-thumbnail {
+    @apply border-none
+}
+
+#campaignDetail .image-gallery-thumbnail.active,
+.image-gallery-thumbnail:focus {
+    @apply shadow-[0_0_0_.25rem_#febb00]
+}
+
+#campaignDetail .image-gallery-content .image-gallery-slide .image-gallery-image {
+    @apply max-h-none
+}
+
+#campaignDetail .image-gallery-thumbnail {
+    @apply rounded-2xl min-h-[81px] mx-2
+}
+
+#campaignDetail .image-gallery-thumbnail-inner {
+    @apply w-full h-full
+}
+
+#campaignDetail .image-gallery-thumbnail-image {
+    @apply rounded-2xl h-full min-h-[81px]
+}
+
+#campaignDetail .image-gallery-image {
+    @apply rounded-2xl
+}
+
+#campaignDetail .image-gallery-slides {
+    @apply rounded-2xl
+}
+
+#campaignDetail .image-gallery-thumbnails {
+    @apply py-6 pb-1
+}
+
+#campaignDetail .image-gallery-thumbnails-container {}

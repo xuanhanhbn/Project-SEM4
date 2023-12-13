@@ -50,7 +50,7 @@ export default function HomeConnect() {
                                             return (
                                                 <input
                                                     placeholder="Enter your mail"
-                                                    type="email"
+                                                    type="text"
                                                     required
                                                     className="home_input placeholder:text-gray-100"
                                                     onChange={onChange}

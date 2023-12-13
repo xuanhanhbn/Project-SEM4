@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import './Header.css';
 import UserAvatar from '../../../../assets/images/avatar/avatar.png';
 
-const login = false;
+const login = true;
 
 function Header() {
     const [openMenuUser, setOpenMenuUser] = useState(false);
@@ -54,7 +54,7 @@ function Header() {
                             <span className="absolute -inset-0.5"></span>
                             <span className="sr-only">Open main menu</span>
 
-                            <i className="fa-light fa-bars" style={{ color: '#d9dddf' }}></i>
+                            <i className="text-gray-200 fa-light fa-bars"></i>
                         </button>
                     </div>
 
@@ -97,7 +97,7 @@ function Header() {
                         <div className="relative hidden ml-3 sm:block">
                             {login === true ? (
                                 <div className="border-r border-white border-solid">
-                                    <div className="btn_singin">Sign in</div>
+                                    <div className="cursor-pointer btn_singin">Sign in</div>
                                 </div>
                             ) : (
                                 <div className="hidden md:block">
@@ -141,7 +141,7 @@ function Header() {
                                         tabIndex="-1"
                                         id="user-menu-item-1"
                                     >
-                                        Settings
+                                        History and tax receipts
                                     </Link>
                                     <Link
                                         to="#"
