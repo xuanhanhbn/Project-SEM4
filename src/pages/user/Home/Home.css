@@ -1,0 +1,3 @@
+#homePage .bg_banner {
+    @apply bg-cover bg-repeat bg-[url('../../../assets/images/banner/bn-1.png')];
+}

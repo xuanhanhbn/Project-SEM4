@@ -1,10 +1,10 @@
 import React from 'react';
 import './AboutPage.css';
-import Card_img_1 from '../../assets/images/campaigns/Cover_Photo_November_12 .jpg';
-import Card_img_2 from '../../assets/images/campaigns/DPRK_20120620_WFP-Rein_Skullerud_D3S2561.jpg';
-import Logo1 from '../../assets/images/logo/WFP_STM_Values_Illustrations_Open.png';
-import Logo2 from '../../assets/images/logo/WFP_STM_Values_Illustrations_Counts.png';
-import Logo3 from '../../assets/images/logo/WFP_STM_Values_Illustrations_Together.png';
+import Card_img_1 from '~/assets/images/campaigns/Cover_Photo_November_12 .jpg';
+import Card_img_2 from '~/assets/images/campaigns/DPRK_20120620_WFP-Rein_Skullerud_D3S2561.jpg';
+import Logo1 from '~/assets/images/logo/WFP_STM_Values_Illustrations_Open.png';
+import Logo2 from '~/assets/images/logo/WFP_STM_Values_Illustrations_Counts.png';
+import Logo3 from '~/assets/images/logo/WFP_STM_Values_Illustrations_Together.png';
 import { Link } from 'react-router-dom';
 
 function About() {

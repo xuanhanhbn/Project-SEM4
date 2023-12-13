@@ -1,5 +1,5 @@
 import CardCustom from '~/components/Cards';
-import Card_img_1 from '../../assets/images/campaigns/Cover_Photo_November_12 .jpg';
+import Card_img_1 from '~/assets/images/campaigns/Cover_Photo_November_12 .jpg';
 import { CampaignsData } from './CampaignsData';
 import './Campaigns.css';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import UserFb_1 from '../../../../assets/images/avatar/mark_ruffalo.png';
-import UserFb_2 from '../../../../assets/images/avatar/George_Strombo.png';
-import UserFb_3 from '../../../../assets/images/avatar/karoline-herfurth.jpg';
+import UserFb_1 from '~/assets/images/avatar/mark_ruffalo.png';
+import UserFb_2 from '~/assets/images/avatar/George_Strombo.png';
+import UserFb_3 from '~/assets/images/avatar/karoline-herfurth.jpg';
 import './Homefeedback.css';
 
 export default function Homefeedback() {

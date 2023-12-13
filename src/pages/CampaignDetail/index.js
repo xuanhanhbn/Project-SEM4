@@ -4,10 +4,10 @@ import ImageGallery from 'react-image-gallery';
 
 import './CampaignDetail.css';
 import './style.css';
-import CardImg from '../../assets/images/campaigns/drc2_homecard.jpg';
-import Avatar_Img from '../../assets/images/avatar/avatar.png';
+import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
+import Avatar_Img from '~/assets/images/avatar/avatar.png';
 
-import Img from '../../assets/images/logo/Screenshot .png';
+import Img from '~/assets/images/logo/Screenshot .png';
 import { Link } from 'react-router-dom';
 import ModalDonate from './components/ModalDonate';
 
