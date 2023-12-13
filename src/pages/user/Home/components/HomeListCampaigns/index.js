@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Palestin_1 from '../../../../assets/images/campaigns/Palestine-1.png';
-import Congo_1 from '../../../../assets/images/campaigns/WFP_STM_GN__updated_image_gallery_3.png';
-import Afga_1 from '../../../../assets/images/campaigns/afghanistan-2.png';
+import Palestin_1 from '~/assets/images/campaigns/Palestine-1.png';
+import Congo_1 from '~/assets/images/campaigns/WFP_STM_GN__updated_image_gallery_3.png';
+import Afga_1 from '~/assets/images/campaigns/afghanistan-2.png';
 import { Link } from 'react-router-dom';
 import './HomeListCampaigns.css';
 

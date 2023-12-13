@@ -3,8 +3,8 @@ import ImageGallery from 'react-image-gallery';
 
 import './CampaignDetail.css';
 import './style.css';
-import CardImg from '../../assets/images/campaigns/drc2_homecard.jpg';
-import Img from '../../assets/images/logo/Screenshot .png';
+import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
+import Img from '~/assets/images/logo/Screenshot .png';
 import { Link } from 'react-router-dom';
 
 const images = [

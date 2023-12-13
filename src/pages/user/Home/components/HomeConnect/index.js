@@ -5,11 +5,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
 import './HomeConnect.css';
-import Mail_connect from '../../../../assets/images/logo/connect_mail.png';
+import Mail_connect from '~/assets/images/logo/connect_mail.png';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string()
         .required('Email is required')
+        // eslint-disable-next-line no-useless-escape
         .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
 });
 

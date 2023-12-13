@@ -1,6 +1,6 @@
 import React from 'react';
 import './HomeCampaign.css';
-import Palestine11 from '../../../../assets/images/campaigns/palestine11_Homecard.png';
+import Palestine11 from '~/assets/images/campaigns/palestine11_Homecard.png';
 
 export default function HomeCampaign() {
     return (

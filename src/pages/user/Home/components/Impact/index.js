@@ -1,7 +1,7 @@
 import React from 'react';
 import './OutImpact.css';
 import { Link } from 'react-router-dom';
-import MapMobile from '../../../../assets/images/banner/Impact_Map_Mobile.png';
+import MapMobile from '~/assets/images/banner/Impact_Map_Mobile.png';
 
 export default function OutImpact() {
     return (

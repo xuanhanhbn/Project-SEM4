@@ -1,8 +1,8 @@
-import Home from '~/pages/Home';
-import About from '~/pages/About';
-import Campaigns from '~/pages/Campaigns';
-import Faqs from '~/pages/Faqs';
-import CampaignDetail from '~/pages/CampaignDetail';
+import Home from '~/pages/user/Home';
+import About from '~/pages/user/About';
+import Campaigns from '~/pages/user/Campaigns';
+import Faqs from '~/pages/user/Faqs';
+import CampaignDetail from '~/pages/user/CampaignDetail';
 
 // Public routes
 const publicRoutes = [
