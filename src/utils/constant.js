@@ -1,0 +1,1 @@
+// NHỮNG FUNCTION NÀO DÙNG CHUNG THÌ SẼ VIẾT TẠI ĐÂY
