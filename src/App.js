@@ -10,7 +10,7 @@ function App() {
 
     // Xử lý check type
     const handleReturnRouter = () => {
-        if (type === 'admin') {
+        if (type === 'user') {
             return publicRoutes;
         } else {
             return AdminRouter;
@@ -18,7 +18,7 @@ function App() {
     };
 
     const handleReturnLayout = () => {
-        if (type === 'admin') {
+        if (type === 'user') {
             return DefaultLayout;
         } else {
             return LayoutAdmin;
