@@ -1,0 +1,18 @@
+.ant-tabs-nav-wrap {
+    justify-content: center;
+}
+
+.ant-tabs-tab-active {
+    color: black;
+}
+
+:where(.css-dev-only-do-not-override-p7e5j5).ant-tabs-top>.ant-tabs-nav::before,
+:where(.css-dev-only-do-not-override-p7e5j5).ant-tabs-bottom>.ant-tabs-nav::before,
+:where(.css-dev-only-do-not-override-p7e5j5).ant-tabs-top>div>.ant-tabs-nav::before,
+:where(.css-dev-only-do-not-override-p7e5j5).ant-tabs-bottom>div>.ant-tabs-nav::before {
+    border-bottom: none;
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: black;
+}

@@ -37,3 +37,23 @@
 #campaigns .text_2 {
     @apply text-sm font-semibold leading-6 text-blue-100
 }
+
+#campaigns .h1 {
+    @apply mb-2 text-4xl md:leading-[3.75rem] md:text-5xl font-bold leading-10 text-center
+}
+
+#campaigns .h4 {
+    @apply text-base font-semibold leading-6 text-center text-gray-100 md:text-3xl md:mb-14 md:leading-7 mb-9
+}
+
+#campaigns .tag {
+    @apply max-w-sm flex flex-col p-6 min-h-[457.27px] border shadow-lg bg-[#e0eff7]
+}
+
+#campaigns .tag_title {
+    @apply h-10 mb-6 text-2xl font-bold text-gray-800 cursor-pointer line-clamp-2 text-ellipsis
+}
+
+#campaigns .btn_read {
+    @apply relative border-white text-sm font-semibold rounded-lg p-[.75rem_1rem_.8125rem] bg-white
+}

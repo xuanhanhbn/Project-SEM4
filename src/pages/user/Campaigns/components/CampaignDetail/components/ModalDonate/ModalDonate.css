@@ -1,0 +1,19 @@
+#buton_donate .active_btn {
+    @apply bg-blue-400 text-white hover:text-black m-[.375rem_.25rem] block rounded-lg border-[.0625rem] text-base leading-[2.875rem] min-h-[3rem] text-center
+}
+
+#buton_donate .noactive {
+    @apply m-[.375rem_.25rem] block rounded-lg border-[.0625rem] text-base leading-[2.875rem] min-h-[3rem] text-center
+}
+
+#input_donate .input {
+    @apply m-[.375rem_.25rem] placeholder:text-gray-100 bg-gray-400 border-gray-400 rounded-lg leading-[3rem] text-base text-black font-normal py-3 px-6 w-full h-12
+}
+
+/* #modal .btn_css {
+    @apply bg-orange-100 text-center hover:text-black hover:bg-orange-200 border-orange-100 hover:border-orange-200 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]
+} */
+
+.ant-modal-footer {
+    display: none;
+}

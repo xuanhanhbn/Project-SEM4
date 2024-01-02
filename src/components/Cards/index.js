@@ -3,7 +3,7 @@ import './Cards.css';
 import { Link } from 'react-router-dom';
 
 export default function CardCustom(props) {
-    const { cardTitle, cardImage, target, supporteds, progressValue, progressPercentage, to, disabled, status } = props;
+    const { cardTitle, cardImage, target, supporteds, progressValue, progressPercentage, to, status } = props;
     return (
         <Link to={to} className="card">
             <h1 className="card_title">{cardTitle}</h1>

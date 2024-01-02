@@ -2,7 +2,8 @@ import Home from '~/pages/user/Home';
 import About from '~/pages/user/About';
 import Campaigns from '~/pages/user/Campaigns';
 import Faqs from '~/pages/user/Faqs';
-import CampaignDetail from '~/pages/user/CampaignDetail';
+import CampaignDetail from '~/pages/user/Campaigns/components/CampaignDetail';
+import RegisterPage from '~/pages/user/Register';
 
 // Public routes
 const publicRoutes = [
@@ -25,6 +26,10 @@ const publicRoutes = [
     {
         path: '/campaign-detail',
         component: CampaignDetail,
+    },
+    {
+        path: '/register',
+        component: RegisterPage,
     },
 ];
 const privateRoutes = [];
