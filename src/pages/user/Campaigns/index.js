@@ -1,21 +1,21 @@
 import CardCustom from '~/components/Cards';
 import Card_img_1 from '~/assets/images/campaigns/Cover_Photo_November_12 .jpg';
-import { CampaignsData } from './CampaignsData';
+import { CampaignsData } from './constants';
 import './Campaigns.css';
 
 function Campaigns() {
     return (
-        <div id="campaigns" className="px-4 py-12 bg-gray-400 md:py-24">
+        <div id="campaigns">
             <div>
-                <h1 className="h1">Choose where to donate</h1>
-                <h4 className="h4 ">The UN World Food Program delivers the meals</h4>
+                <h1 className="campaign_title">Choose where to donate</h1>
+                <h4 className="campaign_content ">The UN World Food Program delivers the meals</h4>
             </div>
             <div className="container_wrapper ">
                 <div className="flex-wrap wrapper">
                     {CampaignsData.map((data) => {
                         if (data.field === 'true') {
                             return (
-                                <div key={data.cardTitle} className="tag">
+                                <div key={data.cardTitle} className="tag_campaign">
                                     <h1 className="tag_title">{data.cardTitle}</h1>
                                     <div className="relative flex-1 p-6 ">
                                         <img

@@ -24,7 +24,7 @@ const validationLoginSchema = Yup.object().shape({
 
 function RegisterPage() {
     // State
-    const [toggled, setToggled] = useState(false);
+    const [toggledFormLogin, setToggledFormLogin] = useState(false);
 
     const {
         control,
@@ -54,12 +54,15 @@ function RegisterPage() {
 
     // xử lý chuyển form login <=> register
     const toggleLoginRegister = () => {
-        setToggled(!toggled);
+        setToggledFormLogin(!toggledFormLogin);
     };
 
     return (
         <div>
-            <div id="container" className={toggled ? 'container_lgrs sign-up_lgrs' : 'container_lgrs sign-in_lgrs'}>
+            <div
+                id="container"
+                className={toggledFormLogin ? 'container_lgrs sign-up_lgrs' : 'container_lgrs sign-in_lgrs'}
+            >
                 <div className="row_lgrs ">
                     <div className="flex-col_lgrs col_lgrs align-items-center_lgrs sign-up_lgrs">
                         <form

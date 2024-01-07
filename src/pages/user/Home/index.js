@@ -9,7 +9,7 @@ import HomeConnect from './components/HomeConnect';
 
 function Home() {
     return (
-        <div id="homePage" className="mx-auto overflow-hidden bg-gray-400">
+        <div id="homePage">
             <div>
                 <HomeBanner />
             </div>

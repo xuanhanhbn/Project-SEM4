@@ -33,7 +33,3 @@
 #cardCustom .text_1 {
     @apply text-sm font-semibold leading-6 text-blue-100
 }
-
-#cardCustom .text_2 {
-    @apply text-sm font-semibold leading-6 text-blue-100
-}

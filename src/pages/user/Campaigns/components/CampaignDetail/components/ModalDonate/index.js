@@ -1,4 +1,4 @@
-import { Input, Modal, Radio, Space } from 'antd';
+import { Input, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './ModalDonate.css';
 import { Link } from 'react-router-dom';
@@ -6,40 +6,13 @@ import { inputValueDonate } from './data';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-// import ModalTypeDonate from '../ModalTypeDonate';
 
 const validationSchema = Yup.object().shape({
-    value: Yup.string().required('Donate value is required'),
+    amount: Yup.string().required('Donate value is required'),
 });
 
 function ModalDonate(props) {
     const { open, handleOk, handleCancel } = props;
-
-    // state
-    // const [isOpenModalType, setIsOpenModalType] = useState(false);
-    const [donateValue, setDonateValue] = useState('4.9');
-
-    // xử lý open modal
-    // const showModalType = () => {
-    //     donateValue && setIsOpenModalType(true);
-    // };
-
-    // xử lý khi click submit modal
-    // const handleSubmitModalType = () => {
-    //     setIsOpenModalType(false);
-    //     console.log('click ok btn');
-    // };
-
-    // xử lý khi click đóng modal
-    // const handleCancelModalType = () => {
-    //     setIsOpenModalType(false);
-    // };
-
-    //useEffect
-    useEffect(() => {
-        setValue('value', 4.9);
-        setValue('donate_type', 'paypal');
-    }, []);
 
     const {
         control,
@@ -48,7 +21,19 @@ function ModalDonate(props) {
         formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
+        defaultValues: {
+            paymentMethod: 'PAYPAL', // Set default payment method
+        },
     });
+
+    // state
+    const [donateValue, setDonateValue] = useState('4.9');
+    const [donateType, setDonateType] = useState('PAYPAL');
+
+    //useEffect set value và type donate mặc định
+    useEffect(() => {
+        setValue('amount', 4.9);
+    }, []);
 
     // xử lý khi chọn value donate mặc định
     const getValueDonate = (data) => {
@@ -58,19 +43,21 @@ function ModalDonate(props) {
     // xử lý khi click nút donate
     const onSubmit = (data) => {
         console.log('data: ', data);
+        // console.log('donateType: ', donateType);
     };
 
     const dollarUSLocale = Intl.NumberFormat('en-US');
 
+    // reander input, radio, button donate
     const renderInput = (input) => {
-        if (input.type === 'button') {
+        if (input.type === 'BUTTON') {
             return (
                 <div key={input.id} id="buton_donate" className="w-2/6 ">
                     <Link
                         to=""
                         onFocus={() => {
                             getValueDonate(input.value);
-                            setValue('value', input.value);
+                            setValue('amount', input.value);
                         }}
                         className={donateValue === input?.value ? 'active_btn' : 'noactive'}
                     >
@@ -80,7 +67,7 @@ function ModalDonate(props) {
             );
         }
 
-        if (input.type === 'input') {
+        if (input.type === 'INPUT') {
             return (
                 <div id="input_donate" key={input.id} className="w-4/6">
                     <Controller
@@ -99,36 +86,40 @@ function ModalDonate(props) {
                                 />
                             );
                         }}
-                        name="value"
+                        name="amount"
                     />
                     <div className="h-6 ml-2 text-red-600">{errors.value?.message}</div>
                 </div>
             );
         }
 
-        if (input.type === 'radio') {
+        if (input.type === 'RADIO') {
             return (
-                <div key={input.id} className="w-4/6">
-                    <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => {
-                            return (
-                                <Radio.Group onChange={onChange} defaultValue={'paypal'} value={value}>
-                                    <Space direction="horizontal">
-                                        <Radio value={input.value}>{input.label}</Radio>
-                                    </Space>
-                                </Radio.Group>
-                            );
+                <div key={input.id} id="btn_type_donate" className="w-full md:w-1/2 ">
+                    <Link
+                        to=""
+                        className={
+                            donateType === input?.value
+                                ? 'type_checkout_btn bg-red-100 border-red-200'
+                                : 'type_checkout_btn'
+                        }
+                        // bg-red-100 border-red-200
+                        onClick={() => {
+                            setDonateType(input.value);
+                            setValue('paymentMethod', input.value);
                         }}
-                        name="donate_type"
-                    />
+                        value={input.value}
+                    >
+                        <img src={input.icon} alt="" className="w-10 mr-3" />
+                        {input.label}
+                    </Link>
                 </div>
             );
         }
     };
 
     return (
-        <div id="modal">
+        <div id="modalDonate">
             <Modal open={open} okText="Continue" onOk={handleOk} onCancel={handleCancel}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div>
@@ -148,23 +139,12 @@ function ModalDonate(props) {
                     <div></div>
                     <button
                         type="submit"
-                        // onClick={showModalType}
                         className="bg-orange-100 text-center hover:text-black hover:bg-orange-200 border-orange-100 hover:border-orange-200 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]"
                     >
                         Continue
                     </button>
                 </form>
             </Modal>
-
-            {/* mở modal donate type */}
-            {/* {isOpenModalType && (
-                <ModalTypeDonate
-                    openModalType={isOpenModalType}
-                    handleSubmitModalType={handleSubmitModalType}
-                    handleCancelModalType={handleCancelModalType}
-                    donateValue={donateValue}
-                />
-            )} */}
         </div>
     );
 }

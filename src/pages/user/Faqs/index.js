@@ -1,6 +1,6 @@
 import React from 'react';
 import CollapseCustom from './components/CollapseCustom';
-import { dataFaqs } from './data';
+import { dataFaqs } from './constants';
 import './faq.css';
 
 // render blobk faqs
@@ -19,11 +19,11 @@ const renderCollapse = () => {
 
 function Faqs() {
     return (
-        <div id="faq">
+        <div id="faq_container">
             <div className="mt-8 mb-12 md:mt-24 ">
                 <div>
-                    <h1 className="h1">FAQs</h1>
-                    <h4 className="h4">Have questions? We’ve got answers</h4>
+                    <h1 className="faq_title">FAQs</h1>
+                    <h4 className="faq_content">Have questions? We’ve got answers</h4>
                 </div>
                 <div className="flex flex-row flex-wrap justify-center">
                     <div className="relative w-full px-4 ">{dataFaqs.map((item) => renderCollapse(item))}</div>
@@ -31,9 +31,9 @@ function Faqs() {
             </div>
             <div className="mb-12 text-center md:mb-24">
                 <div>
-                    <h1 className="h1">Still have questions?</h1>
-                    <h4 className="h4">Write to us at any time</h4>
-                    <button className="btn">Contact support</button>
+                    <h1 className="faq_title">Still have questions?</h1>
+                    <h4 className="content">Write to us at any time</h4>
+                    <button className="btn_submit">Contact support</button>
                 </div>
             </div>
         </div>

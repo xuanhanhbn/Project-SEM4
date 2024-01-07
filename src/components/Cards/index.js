@@ -34,7 +34,7 @@ export default function CardCustom(props) {
                 </div>
                 <div className="flex justify-between mx-auto mt-2">
                     <div className="text_1">{progressValue}</div>
-                    {status === 'done' ? null : <div className="text_2">{progressPercentage}</div>}
+                    {status === 'done' ? null : <div className="text_1">{progressPercentage}</div>}
                 </div>
             </div>
             <button className="bg-orange-100 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]">

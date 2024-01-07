@@ -71,6 +71,10 @@ module.exports = {
 
                     900: 'rgb(0, 0, 0, 1)',
                 },
+                red: {
+                    100: '#fff8f8',
+                    200: '#d32f2f',
+                },
             },
             aspectRatio: {
                 '4/3': '4 / 3',

@@ -18,7 +18,7 @@ export const inputRegister = [
         type: 'password',
     },
     {
-        field: 'confirm_password',
+        field: 'confirmPassword',
         placeholder: 'Confirm Password',
         icon: <i className="fa-solid fa-lock"></i>,
         type: 'password',

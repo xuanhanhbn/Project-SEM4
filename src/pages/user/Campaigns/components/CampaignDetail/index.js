@@ -8,6 +8,7 @@ import Img from '~/assets/images/logo/Screenshot .png';
 import { Link } from 'react-router-dom';
 import ModalDonate from './components/ModalDonate';
 import Avatar from '~/assets/images/avatar/avatar.png';
+import ShareMailModal from '../ShareMailModal';
 
 const images = [
     {
@@ -63,10 +64,16 @@ const images = [
 export default function CampaignDetail() {
     // state
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalShareMail, setIsOpenModalShareMail] = useState(false);
 
     // xử lý open modal
     const showModal = () => {
         setIsOpenModal(true);
+    };
+
+    // xử lý open modal share mail
+    const showModalShareMail = () => {
+        setIsOpenModalShareMail(true);
     };
 
     // xử lý khi click submit modal
@@ -75,9 +82,21 @@ export default function CampaignDetail() {
         console.log('click ok btn');
     };
 
+    // xử lý khi click submit modal share mail
+    const handleSubmitModalShareMail = () => {
+        setIsOpenModalShareMail(false);
+        console.log('click ok btn');
+    };
+
     // xử lý khi click đóng modal
     const handleCancelModal = () => {
         setIsOpenModal(false);
+        console.log('click cancel btn');
+    };
+
+    // xử lý khi click đóng modal share mail
+    const handleCancelModalShareMail = () => {
+        setIsOpenModalShareMail(false);
         console.log('click cancel btn');
     };
 
@@ -103,7 +122,7 @@ export default function CampaignDetail() {
                                             </div>
                                         </div>
                                         <div className="pl-1 max-w-[50%] basis-1/2 w-full pr-4 relative ">
-                                            <div className="flex w-full text-xs text-gray-100 md:text-base">
+                                            <div className="flex justify-end w-full text-xs text-gray-100 md:text-base">
                                                 <i className="text-base fa-light fa-user-group"></i>
                                                 <p className="ml-2 text-xs line-clamp-1 text-ellipsis whitespace-nowrap">
                                                     500,000 supporteds
@@ -138,7 +157,7 @@ export default function CampaignDetail() {
                                     <button className="btn_share">
                                         <i className=" fa-light fa-comment"></i> 234
                                     </button>
-                                    <button className="btn_share">
+                                    <button onClick={showModalShareMail} className="btn_share">
                                         <i className=" fa-light fa-share"></i> 567
                                     </button>
                                 </div>
@@ -166,7 +185,7 @@ export default function CampaignDetail() {
                                 <button className="btn_share">
                                     <i className=" fa-light fa-comment"></i> 234
                                 </button>
-                                <button className="btn_share">
+                                <button onClick={showModalShareMail} className="btn_share">
                                     <i className=" fa-light fa-share"></i> 567
                                 </button>
                             </div>
@@ -194,8 +213,11 @@ export default function CampaignDetail() {
                 </div>
                 <div className="hidden w-5/12 pr-4 pl-11 lg:block">
                     <div className="sticky py-6 bg-white top-24 rounded-2xl">
-                        <div className="mb-5">
+                        <div className="flex items-center justify-around mb-5">
                             <h3 className="text-2xl font-bold leading-8 ">List Donate</h3>
+                            <Link to="">
+                                <i className="fa-solid fa-download"></i>
+                            </Link>
                         </div>
                         <div className="flex items-center px-4">
                             <div className="mx-2 ">
@@ -216,6 +238,16 @@ export default function CampaignDetail() {
             {/* Open modal */}
             {isOpenModal && (
                 <ModalDonate open={isOpenModal} handleOk={handleSubmitModal} handleCancel={handleCancelModal} />
+            )}
+
+            {/* open modal share mail */}
+
+            {isOpenModalShareMail && (
+                <ShareMailModal
+                    openModal={isOpenModalShareMail}
+                    onSubmitModal={handleSubmitModalShareMail}
+                    onCancelModal={handleCancelModalShareMail}
+                />
             )}
         </div>
     );

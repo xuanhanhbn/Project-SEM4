@@ -1,0 +1,63 @@
+#aboutPage {
+    @apply mx-auto bg-gray-400
+}
+
+#aboutPage .aboutPage_container {
+    @apply w-full px-6 pt-8 mb-12 text-center
+}
+
+#aboutPage .page_title {
+    @apply mb-2 text-4xl font-bold leading-10 text-center md:leading-[3.75rem] md:text-5xl
+}
+
+#aboutPage .page_sub_title {
+    @apply mb-4 font-semibold leading-6 text-center text-gray-100 md:text-xl md:mb-6 md:leading-7
+}
+
+#aboutPage .page_description {
+    @apply mb-8 text-base leading-8 md:text-lg md:mb-12 md:leading-9
+}
+
+#aboutPage .box_campaign {
+    @apply bg-white border-gray-200 rounded-2xl border-[.0625rem] -mt-32 p-[8rem_3rem_2.5rem]
+}
+
+#aboutPage .box_campaign_title {
+    @apply mb-4 text-base font-semibold leading-6 text-center text-gray-100 md:text-xl md:leading-7
+}
+
+#aboutPage .ourValue-box {
+    @apply flex items-center mb-4 text-base font-semibold leading-7 text-left text-black md:items-start md:flex-col lg:items-center lg:flex-row md:mb-8 md:text-xl lg:mb-6
+}
+
+#aboutPage .our_container {
+    @apply relative w-full max-w-full px-4 basis-full md:basis-4/12 md:w-2/6
+}
+
+#aboutPage .our_wrapper {
+    @apply bg-white border-gray-200 rounded-2xl border-[.0625rem] mb-4 p-8 md:h-full md:mb-0
+}
+
+#aboutPage .page_ft {
+    @apply pb-12 mt-8 text-center mx-auto w-full md:mb-24 md:max-w-[45rem] lg:mt-12 lg:max-w-[60rem]
+}
+
+#aboutPage .page_ft_container {
+    @apply mt-48 bg-white border-gray-200 rounded-2xl border-[.0625rem] md:mt-[13.75rem] lg:mt-14
+}
+
+#aboutPage .page_ft_img {
+    @apply relative w-full max-w-full px-4 -mt-40 basis-full md:px-12 lg:mt-0 lg:p-0 lg:basis-6/12
+}
+
+#aboutPage .img_ft {
+    @apply block rounded-2xl max-w-full -my-[.0625rem] -ml-[.0625rem] lg:h-[16.0625rem] lg:w-[24.125rem] md:h-96 md:w-[36rem] lg:rounded-[1rem_0_0_1rem]
+}
+
+#aboutPage .page_ftbd {
+    @apply relative flex flex-col justify-center max-w-full px-8 pt-6 pb-12 mx-auto text-center w-full md:pt-10 lg:py-0
+}
+
+#aboutPage .btn {
+    @apply mx-auto w-48 p-[.75rem_1rem_.8125rem] bg-orange-100 border-orange-100 rounded-lg text-black text-sm font-semibold hover:bg-orange-200 hover:border-orange-200
+}

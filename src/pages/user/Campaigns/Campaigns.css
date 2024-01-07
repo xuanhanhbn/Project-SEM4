@@ -1,3 +1,7 @@
+#campaigns {
+    @apply px-4 py-12 bg-gray-400 md:py-24
+}
+
 #campaigns .container_wrapper {
     @apply flex items-center justify-center min-h-screen
 }
@@ -30,23 +34,15 @@
     @apply flex items-center justify-end w-2/4 text-gray-100
 }
 
-#campaigns .text_1 {
-    @apply text-sm font-semibold leading-6 text-blue-100
-}
-
-#campaigns .text_2 {
-    @apply text-sm font-semibold leading-6 text-blue-100
-}
-
-#campaigns .h1 {
+#campaigns .campaign_title {
     @apply mb-2 text-4xl md:leading-[3.75rem] md:text-5xl font-bold leading-10 text-center
 }
 
-#campaigns .h4 {
+#campaigns .campaign_content {
     @apply text-base font-semibold leading-6 text-center text-gray-100 md:text-3xl md:mb-14 md:leading-7 mb-9
 }
 
-#campaigns .tag {
+#campaigns .tag_campaign {
     @apply max-w-sm flex flex-col p-6 min-h-[457.27px] border shadow-lg bg-[#e0eff7]
 }
 
