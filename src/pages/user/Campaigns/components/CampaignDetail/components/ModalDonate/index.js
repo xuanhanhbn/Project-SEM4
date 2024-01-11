@@ -43,7 +43,6 @@ function ModalDonate(props) {
     // xử lý khi click nút donate
     const onSubmit = (data) => {
         console.log('data: ', data);
-        // console.log('donateType: ', donateType);
     };
 
     const dollarUSLocale = Intl.NumberFormat('en-US');
@@ -143,6 +142,16 @@ function ModalDonate(props) {
                     >
                         Continue
                     </button>
+                    <div className="mt-4 text-xs leading-5 text-center">
+                        <p>
+                            <Link className="text-blue-100">How is my donation used?</Link> By donating you are agreeing
+                            to our Privacy Policy and Terms of Use.
+                        </p>
+                        <p>
+                            Donations are tax-deductible in several countries. Find out more in our{' '}
+                            <Link className="text-blue-100">FAQs</Link>.
+                        </p>
+                    </div>
                 </form>
             </Modal>
         </div>

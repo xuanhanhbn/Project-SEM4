@@ -5,7 +5,7 @@ import './CampaignDetail.css';
 import './style.css';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
 import Img from '~/assets/images/logo/Screenshot .png';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ModalDonate from './components/ModalDonate';
 import Avatar from '~/assets/images/avatar/avatar.png';
 import ShareMailModal from '../ShareMailModal';
@@ -65,6 +65,11 @@ export default function CampaignDetail() {
     // state
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenModalShareMail, setIsOpenModalShareMail] = useState(false);
+
+    const [prams] = useSearchParams();
+    const status = prams.get('status');
+
+    console.log('status', status);
 
     // xử lý open modal
     const showModal = () => {
@@ -139,7 +144,11 @@ export default function CampaignDetail() {
                                         <div className="text-sm font-semibold leading-6 text-blue-100">100.000</div>
                                         <div className="text-sm font-semibold leading-6 text-blue-100">15%</div>
                                     </div>
-                                    <button onClick={showModal} className="btn">
+                                    <button
+                                        disabled={status === 'done' ? true : false}
+                                        onClick={showModal}
+                                        className="btn"
+                                    >
                                         Donate now
                                     </button>
                                 </div>

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export default function CardCustom(props) {
     const { cardTitle, cardImage, target, supporteds, progressValue, progressPercentage, to, status } = props;
     return (
-        <Link to={to} className="card">
+        <Link to={`${to}?status=${status}`} className="card">
             <h1 className="card_title">{cardTitle}</h1>
             <div className="card_btn ">Read more</div>
             <div className="relative ">
@@ -37,7 +37,10 @@ export default function CardCustom(props) {
                     {status === 'done' ? null : <div className="text_1">{progressPercentage}</div>}
                 </div>
             </div>
-            <button className="bg-orange-100 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]">
+            <button
+                disabled={status === 'done' ? true : false}
+                className="bg-orange-100 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]"
+            >
                 Donate now
             </button>
         </Link>
