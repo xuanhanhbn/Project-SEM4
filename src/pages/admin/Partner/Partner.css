@@ -1,0 +1,10 @@
+.css-dev-only-do-not-override-6j9yrn.ant-btn-primary {
+    background: #4096ff;
+}
+/* .css-dev-only-do-not-override-6j9yrn {
+    width: 60%;
+} */
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-modal {
+    width: 60%;
+}
