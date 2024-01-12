@@ -84,7 +84,7 @@ function Partner() {
                 <FormAddPartner valueEdit={valueEdit}></FormAddPartner>
             </Modal>
 
-            <nav className="flex items-center gap-2 text-[#262b3f]">
+            {/* <nav className="flex items-center gap-2 text-[#262b3f]">
                 <svg width="20" height="16" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M21.125 7.87352V1.4375H17.0625V4.40566L13 0.625L0 12.8125H3.25V23.375H10.5625V15.25H15.4375V23.375H22.75V12.8125H26L21.125 7.87352Z"
@@ -107,17 +107,17 @@ function Partner() {
                 <NavLink to={'/admin/partner'} className={'font-semibold '}>
                     Partner
                 </NavLink>
-            </nav>
+            </nav> */}
             <h1 className="mt-3 text-xl font-bold">Partner</h1>
             <div className="flex items-center justify-end gap-3">
                 <div className="w-[20%]">
-                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">
+                    <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only">
                         Search
                     </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg
-                                class="w-4 h-4 text-gray-500 "
+                    <div className="relative">
+                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            {/* <svg
+                                className="w-4 h-4 text-gray-500 "
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -130,12 +130,12 @@ function Partner() {
                                     stroke-width="2"
                                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                                 />
-                            </svg>
+                            </svg> */}
                         </div>
                         <input
                             type="search"
                             id="default-search"
-                            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 outline-none placeholder:text-gray-100 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 outline-none placeholder:text-gray-100 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search Mockups, Logos..."
                             required
                         />
@@ -160,23 +160,23 @@ function Partner() {
                 </svg>
             </div>
 
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-                <table class="w-full text-sm text-left rtl:text-right">
-                    <thead class="text-xs text-black uppercase bg-gray-50 ">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
+                <table className="w-full text-sm text-left rtl:text-right">
+                    <thead className="text-xs text-black uppercase bg-gray-50 ">
                         <tr>
-                            <th scope="col" class="px-6 py-3 ">
+                            <th scope="col" className="px-6 py-3 ">
                                 #
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Name
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Email
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Payment Method
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Action
                             </th>
                         </tr>
@@ -186,16 +186,16 @@ function Partner() {
                             dataFake?.map((item, index) => (
                                 <tr
                                     key={index}
-                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                                 >
-                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {item.id}
                                     </td>
-                                    <td class="px-6 py-4">{item?.name}</td>
-                                    <td class="px-6 py-4">{item?.email}</td>
-                                    <td class="px-6 py-4">{item?.paymentMethod}</td>
+                                    <td className="px-6 py-4">{item?.name}</td>
+                                    <td className="px-6 py-4">{item?.email}</td>
+                                    <td className="px-6 py-4">{item?.paymentMethod}</td>
 
-                                    <td class="px-6 py-4" className="">
+                                    <td className="px-6 py-4">
                                         <p className="flex gap-2">
                                             <Button
                                                 onClick={() => {
@@ -220,7 +220,7 @@ function Partner() {
                             ))}
                     </tbody>
                 </table>
-                <nav class="flex justify-end p-4" aria-label="Table navigation">
+                <nav className="flex justify-end p-4" aria-label="Table navigation">
                     <Pagination defaultCurrent={1} total={50} />
                 </nav>
             </div>

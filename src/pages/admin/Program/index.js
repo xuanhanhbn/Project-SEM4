@@ -40,16 +40,19 @@ let dataFake = [
     },
 ];
 function Program() {
+    // State
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [modalText, setModalText] = useState('Content of the modal');
     const [valueEdit, setValueEdit] = useState({});
 
+    // xử lý ấn mở nút thêm program
     const showModal = (item) => {
         setValueEdit(item);
         setOpen(true);
     };
 
+    // xử lý khi ấn submit modal
     const handleOk = () => {
         setModalText('The modal will be closed after two seconds');
         setConfirmLoading(true);
@@ -61,6 +64,7 @@ function Program() {
         }, 2000);
     };
 
+    // xử lý khi ấn cancel modal
     const handleCancel = () => {
         setValueEdit({});
         console.log('Clicked cancel button');
@@ -99,7 +103,7 @@ function Program() {
             >
                 <FormAddProgram valueEdit={valueEdit}></FormAddProgram>
             </Modal>
-            <div className="flex justify-end w-full gap-4">
+            {/* <div className="flex justify-end w-full gap-4">
                 <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M19.3479 16.3321C19.2636 16.2306 19.1808 16.129 19.0995 16.031C17.9824 14.6797 17.3065 13.8642 17.3065 10.0388C17.3065 8.05836 16.8327 6.43336 15.8988 5.21461C15.2102 4.31426 14.2794 3.63125 13.0525 3.12648C13.0367 3.1177 13.0226 3.10618 13.0109 3.09246C12.5696 1.61473 11.362 0.625 10 0.625C8.6381 0.625 7.43103 1.61473 6.98974 3.09094C6.97796 3.10415 6.96406 3.11531 6.9486 3.12395C4.08556 4.30258 2.69415 6.56387 2.69415 10.0373C2.69415 13.8642 2.01927 14.6797 0.901065 16.0295C0.819815 16.1275 0.737042 16.227 0.652745 16.3306C0.434995 16.5932 0.297033 16.9127 0.255185 17.2513C0.213338 17.5898 0.269356 17.9333 0.416612 18.241C0.729932 18.9012 1.39771 19.311 2.15993 19.311H17.8458C18.6044 19.311 19.2676 18.9017 19.582 18.2446C19.7299 17.9368 19.7864 17.593 19.7449 17.2541C19.7034 16.9151 19.5656 16.5952 19.3479 16.3321ZM10 23.375C10.7339 23.3744 11.4538 23.1752 12.0836 22.7986C12.7133 22.4219 13.2294 21.8818 13.5771 21.2356C13.5935 21.2046 13.6015 21.1699 13.6006 21.1349C13.5996 21.0999 13.5896 21.0657 13.5715 21.0357C13.5534 21.0057 13.5278 20.9809 13.4973 20.9637C13.4668 20.9465 13.4323 20.9375 13.3973 20.9375H6.6038C6.56872 20.9374 6.53421 20.9463 6.50363 20.9635C6.47304 20.9807 6.44743 21.0055 6.42928 21.0355C6.41112 21.0655 6.40105 21.0997 6.40005 21.1348C6.39904 21.1699 6.40713 21.2046 6.42353 21.2356C6.77114 21.8817 7.28714 22.4218 7.9168 22.7984C8.54647 23.1751 9.26633 23.3743 10 23.375Z"
@@ -110,8 +114,8 @@ function Program() {
                     <img src="/logo192.png" alt="avatar" className="w-[36px] aspect-square" />
                     <span className="font-medium">Admin</span>
                 </p>
-            </div>
-            <nav className="flex items-center gap-2 text-[#262b3f]">
+            </div> */}
+            {/* <nav className="flex items-center gap-2 text-[#262b3f]">
                 <svg width="20" height="16" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M21.125 7.87352V1.4375H17.0625V4.40566L13 0.625L0 12.8125H3.25V23.375H10.5625V15.25H15.4375V23.375H22.75V12.8125H26L21.125 7.87352Z"
@@ -134,17 +138,17 @@ function Program() {
                 <NavLink to={'/admin/program'} className={'font-semibold '}>
                     Program
                 </NavLink>
-            </nav>
+            </nav> */}
             <h1 className="mt-3 text-xl font-bold">Program</h1>
             <div className="flex items-center justify-end gap-3">
                 <div className="w-[20%]">
-                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">
+                    <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only">
                         Search
                     </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg
-                                class="w-4 h-4 text-gray-500 "
+                    <div className="relative">
+                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            {/* <svg
+                                className="w-4 h-4 text-gray-500 "
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -157,12 +161,12 @@ function Program() {
                                     stroke-width="2"
                                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                                 />
-                            </svg>
+                            </svg> */}
                         </div>
                         <input
                             type="search"
                             id="default-search"
-                            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 outline-none placeholder:text-gray-100 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 outline-none placeholder:text-gray-100 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Search Mockups, Logos..."
                             required
                         />
@@ -187,29 +191,29 @@ function Program() {
                 </svg>
             </div>
 
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
-                <table class="w-full text-sm text-left rtl:text-right">
-                    <thead class="text-xs text-black uppercase bg-gray-50 ">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
+                <table className="w-full text-sm text-left rtl:text-right">
+                    <thead className="text-xs text-black uppercase bg-gray-50 ">
                         <tr>
-                            <th scope="col" class="px-6 py-3 ">
+                            <th scope="col" className="px-6 py-3 ">
                                 #
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Name
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Start_date
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 End_date
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Target
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Status
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Action
                             </th>
                         </tr>
@@ -225,17 +229,17 @@ function Program() {
                             dataFake.map((item, index) => (
                                 <tr
                                     key={index}
-                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                                 >
-                                    <td class="px-6 py-4">{item?.id}</td>
-                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <td className="px-6 py-4">{item?.id}</td>
+                                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {item?.name}
                                     </td>
-                                    <td class="px-6 py-4">{item?.start_date}</td>
-                                    <td class="px-6 py-4">{item?.end_date}</td>
-                                    <td class="px-6 py-4">{item?.target}</td>
-                                    <td class="px-6 py-4">{item?.status}</td>
-                                    <td class="px-6 py-4" className="">
+                                    <td className="px-6 py-4">{item?.start_date}</td>
+                                    <td className="px-6 py-4">{item?.end_date}</td>
+                                    <td className="px-6 py-4">{item?.target}</td>
+                                    <td className="px-6 py-4">{item?.status}</td>
+                                    <td className="px-6 py-4">
                                         <p className="flex gap-2">
                                             <Button
                                                 onClick={() => {
@@ -260,7 +264,7 @@ function Program() {
                             ))}
                     </tbody>
                 </table>
-                <nav class="flex justify-end p-4" aria-label="Table navigation">
+                <nav className="flex justify-end p-4" aria-label="Table navigation">
                     <Pagination defaultCurrent={1} total={50} />
                 </nav>
             </div>

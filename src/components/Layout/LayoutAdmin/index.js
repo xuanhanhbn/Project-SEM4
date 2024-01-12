@@ -1,52 +1,67 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-
-const listNav = [
-    {
-        to: '/admin/program',
-        exact: false,
-        img: '/home-admin.png',
-        title: 'Program',
-    },
-    {
-        to: '/admin/partner',
-        exact: false,
-        img: '/home-admin.png',
-        title: 'Partner',
-    },
-];
+import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import './layouts.css';
+import { sideBarList } from './constants';
 
 function LayoutAdmin({ children }) {
-    return (
-        <div className=" bg-gray-400 min-h-[100vh] h-full flex">
-            <div className="w-[220px] bg-[#262b3f] flex flex-col items-center pt-6">
-                <div className="flex w-full flex-col gap-1 px-[20px]">
-                    <NavLink
-                        to={'/admin'}
-                        exact={true}
-                        className="flex items-center w-full gap-3 px-3 py-2 text-white transition duration-300 hover:text-blue-500"
-                        activeClassName="bg-[#1a1e2e]"
-                    >
-                        <img src={'/logo192.png'} alt="logo" className="h-[24px] aspect-square" />
-                        Dashboard
-                    </NavLink>
-                    {listNav.map((item, index) => (
-                        <NavLink
-                            key={index}
-                            to={item.to}
-                            exact={item.exact}
-                            className="flex items-center w-full gap-3 hover:bg-[#303552] px-3 py-2 hover:border-[#5d6177] border-transparent text-white transition duration-300 border rounded-md "
-                            activeClassName="bg-[#1a1e2e]"
+    //State
+    const [activeLink, setActiveLink] = useState('');
+
+    // bắt sự kiện active khi click
+    const handleLinkClick = (id) => {
+        setActiveLink(id);
+    };
+
+    // render sidebar item
+    const renderTabItems = (item) => {
+        if (item.type === 'TABITEM') {
+            return (
+                <li
+                    id="admin_sidebar_item"
+                    key={item.id}
+                    class="mt-0.5 w-full"
+                    onClick={() => handleLinkClick(item.id)}
+                >
+                    <Link class={activeLink === item.id ? 'tab_active tab_item' : 'tab_item'} to={item.path}>
+                        <div class="tab_item_icon">{item.tabIcon}</div>
+                        <span
+                            class={
+                                activeLink === item.id ? 'tab_item_name font-semibold text-blue-200' : 'tab_item_name'
+                            }
                         >
-                            <img src={item?.img} alt="logo" className="h-[24px] aspect-square" />
-                            {item?.title}
-                        </NavLink>
-                    ))}
+                            {item.tabName}
+                        </span>
+                    </Link>
+                </li>
+            );
+        }
+
+        if (item.type === 'TABTITLE') {
+            return (
+                <li id="admin_sidebar_tab_title" key={item.id} class="w-full mt-4">
+                    <h6 class="sidebar_tab_title">{item.tabName}</h6>
+                </li>
+            );
+        }
+    };
+
+    return (
+        <div id="adminLayout">
+            <aside class="admin_sidebar">
+                <div class="h-[5rem]">
+                    <Link class="admin_logo" to="/admin">
+                        <img src="../assets/img/logo-ct.png" class="admin_logo_img" alt="main_logo" />
+                        <span class="admin_logo_name"> Tên tổ chức</span>
+                    </Link>
                 </div>
-            </div>
-            <div className="w-full ">
-                <div>{children}</div>
-            </div>
+
+                <hr class="admin_sidebar_line" />
+
+                <div class="admin_sidebar_list">
+                    <ul class="flex flex-col pl-0 mb-0">{sideBarList.map((data) => renderTabItems(data))}</ul>
+                </div>
+            </aside>
+            <main class="admin_container">{children}</main>
         </div>
     );
 }
