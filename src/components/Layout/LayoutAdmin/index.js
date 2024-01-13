@@ -22,7 +22,7 @@ function LayoutAdmin({ children }) {
                     class="mt-0.5 w-full"
                     onClick={() => handleLinkClick(item.id)}
                 >
-                    <Link class={activeLink === item.id ? 'tab_active tab_item' : 'tab_item'} to={item.path}>
+                    <Link class={activeLink === item.id ? 'tab_active shadow-md tab_item' : 'tab_item'} to={item.path}>
                         <div class="tab_item_icon">{item.tabIcon}</div>
                         <span
                             class={

@@ -1,0 +1,51 @@
+#todayCard {
+    @apply w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4
+}
+
+#todayCard .card_container {
+    @apply relative flex flex-col min-w-0 break-words bg-white shadow-md rounded-2xl bg-clip-border;
+}
+
+#todayCard .card_icon {
+    @apply inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500
+}
+
+#dasboard {
+    @apply w-full px-6 py-6 mx-auto
+}
+
+#dasboard .das_chart_container {
+    @apply shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border
+}
+
+#dasboard .das_chart_header {
+    @apply mb-0 rounded-t-2xl border-b-0 border-solid bg-white p-6 pb-0
+}
+
+#dasboard .list_completed_donate {
+    @apply relative shadow-md flex flex-col h-full min-w-0 break-words bg-white border-0 border-transparent border-solid rounded-2xl bg-clip-border
+}
+
+#dasboard .list_completed_header {
+    @apply p-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl border-b-transparent
+}
+
+#dasboard .view_all_btn {
+    @apply inline-block px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer leading-6 text-xs border-fuchsia-500 text-fuchsia-500
+}
+
+#dasboard .campaign_completed_item {
+    @apply relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-xl
+}
+
+#dasboard .download_pdf_btn {
+    @apply inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer text-sm text-slate-700
+}
+
+#completion {
+    @apply w-3/4 mx-auto
+}
+
+#completion .completion_ {
+    @apply bg-gradient-to-tl from-blue-600 to-cyan-400 -ml-px flex h-1.5 w-3/5 flex-col justify-center overflow-hidden whitespace-nowrap rounded bg-fuchsia-500 text-center text-white transition-all
+}

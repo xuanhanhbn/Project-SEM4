@@ -35,7 +35,7 @@
 }
 
 #admin_sidebar_item .tab_item:hover {
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    @apply shadow-md
 }
 
 #admin_sidebar_item .tab_item:hover {
@@ -50,7 +50,6 @@
 
 #admin_sidebar_item .tab_active {
     background: white;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 
     .tab_item_icon {
         background-image: linear-gradient(#ff0080, #7928ca);

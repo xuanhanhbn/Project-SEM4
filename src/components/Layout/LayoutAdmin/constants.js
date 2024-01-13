@@ -17,7 +17,7 @@ export const sideBarList = [
         id: 4,
         tabName: 'Billing',
         type: 'TABITEM',
-        tabIcon: <i class="fa-regular fa-file-invoice"></i>,
+        tabIcon: <i class="fa-duotone fa-credit-card"></i>,
         path: '#',
     },
     {
