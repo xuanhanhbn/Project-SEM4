@@ -101,12 +101,12 @@ const InputToken = () => {
     return (
         <div id="input_token">
             <h1 className="text-2xl font-semibold text-gray-100 ">Account Verification</h1>
-            <p className="mb-12 font-semibold text-gray-500">
+            <p className="font-semibold text-gray-500">
                 Enter the verification token you received on your email into the input field below.
             </p>
             {/* render input item */}
             {otp.map((_, index) => (
-                <React.Fragment key={index}>
+                <div key={index}>
                     <input
                         ref={index === activeOTPIndex ? inputRef : null}
                         type="number"
@@ -116,7 +116,7 @@ const InputToken = () => {
                         value={otp[index]}
                     />
                     {index !== otp.length - 1 && <span className="w-2 py-0.5 bg-gray-400" />}
-                </React.Fragment>
+                </div>
             ))}
 
             {/* check khi nhập full mã otp mới hiển thị button submit */}

@@ -55,12 +55,12 @@ function Dashboard() {
                 <div id="completion">
                     <div>
                         <div>
-                            <span class="text-xs font-semibold leading-tight">60%</span>
+                            <span className="text-xs font-semibold leading-tight">60%</span>
                         </div>
                     </div>
-                    <div class="text-xs m-0 flex overflow-visible rounded-lg bg-gray-200">
+                    <div className="flex m-0 overflow-visible text-xs bg-gray-200 rounded-lg">
                         <div
-                            class="completion_"
+                            className="completion_"
                             // role="progressbar"
                             // aria-valuenow="10"
                             // aria-valuemin="0"
@@ -110,31 +110,31 @@ function Dashboard() {
                             className="shadow-md rounded-2xl"
                         />
                     </div>
-                    <div class="w-full max-w-full px-3 mt-6 lg:w-1/3 lg:flex-none">
-                        <div class="list_completed_donate">
-                            <div class="list_completed_header">
-                                <div class="flex flex-wrap -mx-3">
-                                    <div class="flex items-center flex-none w-1/2 max-w-full px-3">
-                                        <h6 class="mb-0">Campaign completed</h6>
+                    <div className="w-full max-w-full px-3 mt-6 lg:w-1/3 lg:flex-none">
+                        <div className="list_completed_donate">
+                            <div className="list_completed_header">
+                                <div className="flex flex-wrap -mx-3">
+                                    <div className="flex items-center flex-none w-1/2 max-w-full px-3">
+                                        <h6 className="mb-0">Campaign completed</h6>
                                     </div>
-                                    <div class="flex-none w-1/2 max-w-full px-3 text-right">
-                                        <button class="view_all_btn">View All</button>
+                                    <div className="flex-none w-1/2 max-w-full px-3 text-right">
+                                        <button className="view_all_btn">View All</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex-auto p-4 pb-0">
-                                <ul class="flex flex-col pl-0 mb-0 rounded-lg">
-                                    <li class="campaign_completed_item">
-                                        <div class="flex flex-col">
-                                            <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
+                            <div className="flex-auto p-4 pb-0">
+                                <ul className="flex flex-col pl-0 mb-0 rounded-lg">
+                                    <li className="campaign_completed_item">
+                                        <div className="flex flex-col">
+                                            <h6 className="mb-1 text-sm font-semibold leading-normal text-slate-700">
                                                 March, 01, 2020
                                             </h6>
-                                            <span class="leading-tight text-xs">#MS-415646</span>
+                                            <span className="text-xs leading-tight">#MS-415646</span>
                                         </div>
-                                        <div class="flex items-center leading-normal text-sm">
+                                        <div className="flex items-center text-sm leading-normal">
                                             $18.000
-                                            <button class="download_pdf_btn">
-                                                <i class="mr-1 fas fa-file-pdf text-lg"></i> PDF
+                                            <button className="download_pdf_btn">
+                                                <i className="mr-1 text-lg fas fa-file-pdf"></i> PDF
                                             </button>
                                         </div>
                                     </li>
