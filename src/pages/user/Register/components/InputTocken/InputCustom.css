@@ -1,0 +1,12 @@
+#input_token {
+
+    .spin-button-none::-webkit-outer-spin-button,
+    .spin-button-none::-webkit-inner-spin-button {
+        appearance: none;
+    }
+
+}
+
+#input_token .input_item {
+    @apply w-12 h-12 mx-1 mb-12 text-xl font-semibold text-center text-black transition bg-transparent border-2 border-gray-400 rounded outline-none focus:border-gray-950
+}

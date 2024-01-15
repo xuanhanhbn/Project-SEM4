@@ -5,13 +5,14 @@ import { inputRegister, inputLogin } from './constants';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import InputToken from './components/InputTocken';
 
 // validate register form
 const validationRegisterSchema = Yup.object().shape({
     username: Yup.string().required('User name is required'),
     password: Yup.string().required('Password is required'),
     email: Yup.string().required('Email is required'),
-    confirm_password: Yup.string()
+    confirmPassword: Yup.string()
         .required('Confirm Password is required')
         .oneOf([Yup.ref('password')], 'Passwords do not match'),
 });
@@ -25,6 +26,7 @@ const validationLoginSchema = Yup.object().shape({
 function RegisterPage() {
     // State
     const [toggledFormLogin, setToggledFormLogin] = useState(false);
+    const [istoggleFromToken, setIstoggleFromToken] = useState(false);
 
     const {
         control,
@@ -50,6 +52,7 @@ function RegisterPage() {
     // xử lý khi click nút register
     const onSubmitRegister = (data) => {
         console.log('dataRegister: ', data);
+        if (data) setIstoggleFromToken(true);
     };
 
     // xử lý chuyển form login <=> register
@@ -67,7 +70,8 @@ function RegisterPage() {
                     <div className="flex-col_lgrs col_lgrs align-items-center_lgrs sign-up_lgrs">
                         <form
                             onSubmit={handleSubmit(onSubmitRegister)}
-                            className="form-wrapper_lgrs align-items-center_lgrs"
+                            // className={istoggleFromToken ? 'hidden' : 'form-wrapper_lgrs align-items-center_lgrs'}
+                            className={istoggleFromToken ? 'hidden' : ''}
                         >
                             <div className="form_lgrs sign-up_lgrs">
                                 {/* Render input register */}
@@ -108,6 +112,11 @@ function RegisterPage() {
                                 </p>
                             </div>
                         </form>
+                        <div className={!istoggleFromToken ? 'hidden' : 'form-wrapper_lgrs align-items-center_lgrs'}>
+                            <div className="text-center form_lgrs sign-up_lgrs">
+                                <InputToken />
+                            </div>
+                        </div>
                     </div>
                     <div className="flex-col_lgrs col_lgrs align-items-center_lgrs sign-in_lgrs">
                         <form

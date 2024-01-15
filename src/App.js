@@ -6,7 +6,7 @@ import '../src/components/GlobalStyles/font-awesome-6.4.2-pro-main/css/all.css';
 import { AdminRouter } from './routes/routeAdmin';
 
 function App() {
-    const type = 'admin';
+    const type = 'user';
 
     // Xử lý check type
     const handleReturnRouter = () => {
