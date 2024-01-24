@@ -4,7 +4,7 @@ import { dataFaqs } from './constants';
 import './faq.css';
 
 // render blobk faqs
-const renderCollapse = () => {
+const RENDER_COLLAPE = () => {
     return dataFaqs.map((data) => {
         return (
             <div key={data.heading} className="mb-14 md:mb-24">
@@ -26,7 +26,7 @@ function Faqs() {
                     <h4 className="faq_content">Have questions? We’ve got answers</h4>
                 </div>
                 <div className="flex flex-row flex-wrap justify-center">
-                    <div className="relative w-full px-4 ">{dataFaqs.map((item) => renderCollapse(item))}</div>
+                    <div className="relative w-full px-4 ">{dataFaqs.map((item) => RENDER_COLLAPE(item))}</div>
                 </div>
             </div>
             <div className="mb-12 text-center md:mb-24">

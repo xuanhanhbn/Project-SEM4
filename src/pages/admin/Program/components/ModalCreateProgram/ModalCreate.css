@@ -1,0 +1,45 @@
+#create_program_modal {
+
+    .ant-picker,
+    .ant-input-number,
+    .ant-space-item {
+        width: 100%;
+    }
+
+    .ant-input-number>.ant-input-number-handler-wrap {
+        display: none;
+    }
+
+    .input-height {
+        height: 40px;
+    }
+
+    .ant-input-number-input-wrap,
+    .ant-input-number-input {
+        height: 100%;
+    }
+
+    .ant-btn-primary {
+        border: 1px solid #d946ef;
+        background-color: white;
+        color: #d946ef;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .ant-btn-default {
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .ant-btn-primary:hover {
+        border: 1px solid #e374f3 !important;
+        background-color: white !important;
+        color: #e374f3 !important;
+    }
+
+    .text-lable {
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+}

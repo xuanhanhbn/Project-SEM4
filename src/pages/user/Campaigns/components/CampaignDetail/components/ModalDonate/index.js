@@ -48,7 +48,7 @@ function ModalDonate(props) {
     const dollarUSLocale = Intl.NumberFormat('en-US');
 
     // reander input, radio, button donate
-    const renderInput = (input) => {
+    const RENDER_INPUT = (input) => {
         if (input.type === 'BUTTON') {
             return (
                 <div key={input.id} id="buton_donate" className="w-2/6 ">
@@ -132,7 +132,7 @@ function ModalDonate(props) {
                     <div className="my-6 ">
                         <div className="flex flex-wrap m-[-.375rem_-.25rem]">
                             {/* render input and buton donate */}
-                            {inputValueDonate.map((input) => renderInput(input))}
+                            {inputValueDonate.map((input) => RENDER_INPUT(input))}
                         </div>
                     </div>
                     <div></div>

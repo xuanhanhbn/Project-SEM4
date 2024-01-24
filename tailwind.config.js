@@ -56,7 +56,7 @@ module.exports = {
                     600: '#FF452D',
                 },
                 pink: {
-                    100: '#FFF3F0',
+                    100: '#d946ef', //
                     200: '#ffdddb',
                 },
                 grey: {

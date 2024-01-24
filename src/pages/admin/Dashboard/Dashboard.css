@@ -30,17 +30,18 @@
     @apply p-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl border-b-transparent
 }
 
-#dasboard .view_all_btn {
-    @apply inline-block px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer leading-6 text-xs border-fuchsia-500 text-fuchsia-500
+#dasboard .mess_box_header {
+    @apply inline-flex items-center justify-center w-12 h-12 mr-4 text-white transition-all duration-200 text-base rounded-xl
 }
 
-#dasboard .campaign_completed_item {
-    @apply relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-xl
+#dasboard .mess_box_container {
+    @apply relative flex items-center px-0 py-2 mb-2 bg-white border-0 rounded-t-lg text-inherit
 }
 
-#dasboard .download_pdf_btn {
-    @apply inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer text-sm text-slate-700
+#dasboard .mess_rep_btn {
+    @apply inline-block py-3 pl-0 pr-4 mb-0 ml-auto text-xs font-bold text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer text-fuchsia-500 hover:text-fuchsia-800 hover:shadow-none active:scale-100
 }
+
 
 #completion {
     @apply w-3/4 mx-auto

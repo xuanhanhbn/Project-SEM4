@@ -1,40 +1,27 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import './layouts.css';
 import { sideBarList } from './constants';
 
 function LayoutAdmin({ children }) {
-    //State
-    const [activeLink, setActiveLink] = useState('');
-
-    // bắt sự kiện active khi click
-    const handleLinkClick = (id) => {
-        setActiveLink(id);
-    };
-
     // render sidebar item
-    const renderTabItems = (item) => {
+    const RENDER_TAB_ITEMS = (item) => {
         if (item.type === 'TABITEM') {
             return (
-                <li
-                    id="admin_sidebar_item"
-                    key={item.id}
-                    className="mt-0.5 w-full"
-                    onClick={() => handleLinkClick(item.id)}
-                >
-                    <Link
-                        className={activeLink === item.id ? 'tab_active shadow-md tab_item' : 'tab_item'}
+                <li id="admin_sidebar_item" key={item.id} className="mt-0.5 w-full">
+                    <NavLink
+                        className={({ isActive }) => (isActive ? 'tab_active shadow-md tab_item' : 'tab_item')}
                         to={item.path}
                     >
                         <div className="tab_item_icon">{item.tabIcon}</div>
                         <span
-                            className={
-                                activeLink === item.id ? 'tab_item_name font-semibold text-blue-200' : 'tab_item_name'
-                            }
+                        // className={
+                        //     isAcitve ? 'tab_item_name font-semibold text-blue-200' : 'tab_item_name'
+                        // }
                         >
                             {item.tabName}
                         </span>
-                    </Link>
+                    </NavLink>
                 </li>
             );
         }
@@ -61,7 +48,7 @@ function LayoutAdmin({ children }) {
                 <hr className="admin_sidebar_line" />
 
                 <div className="admin_sidebar_list">
-                    <ul className="flex flex-col pl-0 mb-0">{sideBarList.map((data) => renderTabItems(data))}</ul>
+                    <ul className="flex flex-col pl-0 mb-0">{sideBarList.map((data) => RENDER_TAB_ITEMS(data))}</ul>
                 </div>
             </aside>
             <main className="admin_container">{children}</main>

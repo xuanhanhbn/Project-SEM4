@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import TableCommon from '~/components/TableCommon';
+import messAvater from '~/assets/images/avatar/avatar.png';
 
 // <--------- compare payment methods ---------->
 
@@ -22,7 +23,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 function Dashboard() {
     // render thẻ thông số theo ngày
-    const renderTodayCard = (data) => {
+    const RENDER_TODAY_CARD = (data) => {
         return (
             <div id="todayCard" key={data.id}>
                 <div className="card_container">
@@ -59,13 +60,7 @@ function Dashboard() {
                         </div>
                     </div>
                     <div className="flex m-0 overflow-visible text-xs bg-gray-200 rounded-lg">
-                        <div
-                            className="completion_"
-                            // role="progressbar"
-                            // aria-valuenow="10"
-                            // aria-valuemin="0"
-                            // aria-valuemax="100"
-                        ></div>
+                        <div className="completion_"></div>
                     </div>
                 </div>
             );
@@ -79,7 +74,7 @@ function Dashboard() {
             <h1 className="my-6 text-xl font-bold">Dashboard</h1>
             <div className="flex flex-wrap -mx-3">
                 {/* thẻ tổng hợp theo ngày */}
-                {todayCardData.map((data) => renderTodayCard(data))}
+                {todayCardData.map((data) => RENDER_TODAY_CARD(data))}
 
                 <div className="flex-1 w-full mt-12 ">
                     <div className="w-full max-w-full px-3 mt-0 lg:flex-none">
@@ -115,28 +110,25 @@ function Dashboard() {
                             <div className="list_completed_header">
                                 <div className="flex flex-wrap -mx-3">
                                     <div className="flex items-center flex-none w-1/2 max-w-full px-3">
-                                        <h6 className="mb-0">Campaign completed</h6>
-                                    </div>
-                                    <div className="flex-none w-1/2 max-w-full px-3 text-right">
-                                        <button className="view_all_btn">View All</button>
+                                        <h6 className="mb-0">Conversations</h6>
                                     </div>
                                 </div>
                             </div>
                             <div className="flex-auto p-4 pb-0">
                                 <ul className="flex flex-col pl-0 mb-0 rounded-lg">
-                                    <li className="campaign_completed_item">
-                                        <div className="flex flex-col">
-                                            <h6 className="mb-1 text-sm font-semibold leading-normal text-slate-700">
-                                                March, 01, 2020
-                                            </h6>
-                                            <span className="text-xs leading-tight">#MS-415646</span>
+                                    <li className="mess_box_container">
+                                        <div className="mess_box_header">
+                                            <img
+                                                src={messAvater}
+                                                alt="kal"
+                                                className="w-full shadow-soft-2xl rounded-xl"
+                                            />
                                         </div>
-                                        <div className="flex items-center text-sm leading-normal">
-                                            $18.000
-                                            <button className="download_pdf_btn">
-                                                <i className="mr-1 text-lg fas fa-file-pdf"></i> PDF
-                                            </button>
+                                        <div className="flex flex-col items-start justify-center">
+                                            <h6 className="mb-0 text-sm leading-normal">Sophie B.</h6>
+                                            <p className="mb-0 text-xs leading-tight">Hi! I need more information..</p>
                                         </div>
+                                        <button className="mess_rep_btn">Reply</button>
                                     </li>
                                 </ul>
                             </div>
