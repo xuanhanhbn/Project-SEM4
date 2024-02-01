@@ -1,36 +1,18 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Modal, Input, InputNumber, Space, Select, DatePicker, Upload, message } from 'antd';
+import { Modal, Input, InputNumber, Space, Select, DatePicker, message, List } from 'antd';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { PlusOutlined } from '@ant-design/icons';
 
 // import { beforeUpload, getBase64 } from 'src/utils/common';
 import { inputCreateProgram } from './constants';
 import './ModalCreate.css';
 import moment from 'moment';
+import UploadImageCarousel from '../UploadImageCarousel';
+import UploadImageBanner from '../UploadImageBanner';
+import { getBase64, beforeUpload, getBaseUploadCarousel64 } from '~/utils/common';
 
 const { TextArea } = Input;
-
-const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-    });
-
-const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-};
 
 const validationSchema = Yup.object().shape({
     // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
@@ -66,6 +48,9 @@ function ModalCreateProgram(props) {
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileListCarouselImage] = useState([]);
     const [imageUrl, setImageUrl] = useState();
+    const [endDateProgram, setEndDateProgram] = useState('');
+    const [finishDateProgram, setFinishDateProgram] = useState('');
+    // console.log(endDateProgram);
 
     const {
         handleSubmit,
@@ -74,6 +59,24 @@ function ModalCreateProgram(props) {
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
+
+    const disabledStartDate = (current) => {
+        // Lấy ngày hiện tại
+        const currentDate = moment().startOf('day');
+
+        // So sánh ngày hiện tại với ngày được chọn
+        return current && current <= currentDate;
+    };
+
+    const disabledEndDate = (current) => {
+        // So sánh ngày hiện tại với ngày được chọn
+        return current && current <= endDateProgram.add(1, 'day');
+    };
+
+    const disabledFinishDate = (current) => {
+        // So sánh ngày hiện tại với ngày được chọn
+        return current && current <= finishDateProgram.add(1, 'day');
+    };
 
     // xử lý create progeam
     const onSubmit = (data) => {
@@ -94,64 +97,32 @@ function ModalCreateProgram(props) {
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
     // xử lý upload ảnh
-    const handleUploadCarouselImage = ({ fileList: newFileList }) => {
-        setFileListCarouselImage(newFileList);
-    };
+    const handleUploadCarouselImage = ({ fileList: newFileList }) => setFileListCarouselImage(newFileList);
 
     // xử lý upload ảnh banner
-    const handleChangeUpaloadImageBanner = (info) => setImageUrl(info);
+    const handleChangeUpaloadImageBanner = (info) => {
+        if (info.file.status === 'done') {
+            message.success(`${info.file.name} file uploaded successfully`);
+            getBase64(info.file.originFileObj, (url) => {
+                setImageUrl(url);
+            });
+        } else if (info.file.status === 'error') {
+            message.error(`${info.file.name} file upload failed.`);
+        }
+    };
 
     // xử lý ấn đóng rivew ảnh
     const handleCancel = () => setPreviewOpen(false);
+
     //  xử lý khi ấn xem review ảnh
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
+            file.preview = await getBaseUploadCarousel64(file.originFileObj);
         }
         setPreviewImage(file.url || file.preview);
         setPreviewOpen(true);
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
     };
-
-    // style button upload
-    const uploadButtonUploadCareousel = (
-        <button
-            style={{
-                border: 0,
-                background: 'none',
-            }}
-            type="button"
-        >
-            <PlusOutlined />
-            <div
-                style={{
-                    marginTop: 8,
-                }}
-            >
-                Upload
-            </div>
-        </button>
-    );
-
-    // style button upload
-    const uploadButtonUploadBanner = (
-        <button
-            style={{
-                border: 0,
-                background: 'none',
-            }}
-            type="button"
-        >
-            <PlusOutlined />
-            <div
-                style={{
-                    marginTop: 8,
-                }}
-            >
-                Upload
-            </div>
-        </button>
-    );
 
     // render input create program
     const RENDER_INPUT_CREATE_PROGRAM = (item) => {
@@ -231,7 +202,7 @@ function ModalCreateProgram(props) {
             }
         }
 
-        if (item.type === 'INPUTNAME') {
+        if (item.type === 'INPUT_NAME') {
             const { field } = item;
             const message = errors[field] && errors[field].message;
             return (
@@ -256,33 +227,98 @@ function ModalCreateProgram(props) {
             );
         }
 
-        if (item.type === 'INPUTDATE') {
-            const { field } = item;
-            const message = errors[field] && errors[field].message;
-            return (
-                <div key={item.field} className="flex flex-col w-full">
-                    <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                    <Controller
-                        control={control}
-                        render={({ field }) => {
-                            return (
-                                <Space direction="vertical">
-                                    <DatePicker
-                                        onChange={(date) => field.onChange(date)}
-                                        selected={field.value}
-                                        className="input-height"
-                                    />
-                                </Space>
-                            );
-                        }}
-                        name={item.field}
-                    />
-                    {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-                </div>
-            );
+        if (item.type === 'INPUT_DATE') {
+            if (item.field === 'startDate') {
+                const { field } = item;
+                const message = errors[field] && errors[field].message;
+                return (
+                    <div key={item.field} className="flex flex-col w-full">
+                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
+                        <Controller
+                            control={control}
+                            render={({ field }) => {
+                                return (
+                                    <Space direction="vertical">
+                                        <DatePicker
+                                            onChange={(date) => {
+                                                field.onChange(date);
+                                                setEndDateProgram(date);
+                                            }}
+                                            selected={field.value}
+                                            className="input-height"
+                                            disabledDate={disabledStartDate}
+                                        />
+                                    </Space>
+                                );
+                            }}
+                            name={item.field}
+                        />
+                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
+                    </div>
+                );
+            }
+
+            if (item.field === 'endDate') {
+                const { field } = item;
+                const message = errors[field] && errors[field].message;
+                return (
+                    <div key={item.field} className="flex flex-col w-full">
+                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
+                        <Controller
+                            control={control}
+                            render={({ field }) => {
+                                return (
+                                    <Space direction="vertical">
+                                        <DatePicker
+                                            disabled={endDateProgram ? false : true}
+                                            onChange={(date) => {
+                                                field.onChange(date);
+                                                setFinishDateProgram(date);
+                                            }}
+                                            selected={field.value}
+                                            className="input-height"
+                                            disabledDate={disabledEndDate}
+                                        />
+                                    </Space>
+                                );
+                            }}
+                            name={item.field}
+                        />
+                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
+                    </div>
+                );
+            }
+
+            if (item.field === 'finishDate') {
+                const { field } = item;
+                const message = errors[field] && errors[field].message;
+                return (
+                    <div key={item.field} className="flex flex-col w-full">
+                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
+                        <Controller
+                            control={control}
+                            render={({ field }) => {
+                                return (
+                                    <Space direction="vertical">
+                                        <DatePicker
+                                            disabled={finishDateProgram ? false : true}
+                                            onChange={(date) => field.onChange(date)}
+                                            selected={field.value}
+                                            className="input-height"
+                                            disabledDate={disabledFinishDate}
+                                        />
+                                    </Space>
+                                );
+                            }}
+                            name={item.field}
+                        />
+                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
+                    </div>
+                );
+            }
         }
 
-        if (item.type === 'INPUTAMOUNT') {
+        if (item.type === 'INPUT_AMOUNT') {
             const { field } = item;
             const message = errors[field] && errors[field].message;
             return (
@@ -295,7 +331,6 @@ function ModalCreateProgram(props) {
                                 <Space>
                                     <InputNumber
                                         className="input-height"
-                                        defaultValue={1000}
                                         formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                         parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                                         onChange={onChange}
@@ -311,7 +346,7 @@ function ModalCreateProgram(props) {
             );
         }
 
-        if (item.type === 'INPUTAREA') {
+        if (item.type === 'INPUT_AREA') {
             const { field } = item;
             const message = errors[field] && errors[field].message;
             return (
@@ -339,32 +374,22 @@ function ModalCreateProgram(props) {
             );
         }
 
-        if (item.type === 'INPUTUPLOAD') {
+        if (item.type === 'INPUT_UPLOAD') {
             if (item.field === 'programThumbnailCarouselId') {
                 return (
-                    <div key={item.field} className="flex col-span-2">
+                    <div key={item.field} className="flex flex-col col-span-2">
                         <>
                             <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                            <div>
-                                <Upload
-                                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                                    listType="picture-card"
-                                    fileList={fileList}
-                                    onPreview={handlePreview}
-                                    onChange={handleUploadCarouselImage}
-                                >
-                                    {fileList.length >= 8 ? null : uploadButtonUploadCareousel}
-                                </Upload>
-                                <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                                    <img
-                                        alt="example"
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        src={previewImage}
-                                    />
-                                </Modal>
-                            </div>
+
+                            <UploadImageCarousel
+                                fileList={fileList}
+                                onPreview={handlePreview}
+                                onChange={handleUploadCarouselImage}
+                                open={previewOpen}
+                                title={previewTitle}
+                                onCancel={handleCancel}
+                                src={previewImage}
+                            />
                         </>
                     </div>
                 );
@@ -372,32 +397,15 @@ function ModalCreateProgram(props) {
 
             if (item.field === 'programThumbnailBannerId') {
                 return (
-                    <div key={item.field} className="flex col-span-2">
+                    <div key={item.field} className="flex flex-col col-span-2">
                         <>
                             <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                            <div>
-                                <Upload
-                                    name="avatar"
-                                    listType="picture-card"
-                                    className="avatar-uploader"
-                                    showUploadList={false}
-                                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                                    beforeUpload={beforeUpload}
-                                    onChange={handleChangeUpaloadImageBanner}
-                                >
-                                    {imageUrl ? (
-                                        <img
-                                            src={imageUrl}
-                                            alt="avatar"
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                        />
-                                    ) : (
-                                        uploadButtonUploadBanner
-                                    )}
-                                </Upload>
-                            </div>
+
+                            <UploadImageBanner
+                                beforeUpload={beforeUpload}
+                                onChange={handleChangeUpaloadImageBanner}
+                                imageUrl={imageUrl}
+                            />
                         </>
                     </div>
                 );

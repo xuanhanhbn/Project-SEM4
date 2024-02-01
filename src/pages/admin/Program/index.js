@@ -6,16 +6,14 @@ import ProjectImage from '~/assets/images/campaigns/Palestine-6.png';
 import ModalCreateProgram from './components/ModalCreateProgram';
 import TableCommon from '~/components/TableCommon';
 import { columns, dataTablePrograms } from './constants';
+import { Space, Input } from 'antd';
 
 const status = 'inProcess';
+const { Search } = Input;
 function Program() {
     // State
     const [isOpenModalCreateProject, setIsOpenModalCreateProject] = useState(false);
-
-    // xử lý ấn mở nút thêm program
-    const showModalCreateProgram = () => {
-        setIsOpenModalCreateProject(true);
-    };
+    const [listSearchDataTable, setListSearchDataTable] = useState([]);
 
     // xử lý khi ấn submit modal
     const handleSubmitModal = (data) => {
@@ -26,6 +24,10 @@ function Program() {
     const handleCancelModal = () => {
         setIsOpenModalCreateProject(false);
         console.log('click cancel btn');
+    };
+
+    const onSearch = (value) => {
+        setListSearchDataTable(dataTablePrograms.filter((data) => data.programName.toLowerCase().includes(value)));
     };
 
     // render data table
@@ -93,7 +95,7 @@ function Program() {
                             <div className="program_new_project">
                                 <div className="create_project_btn">
                                     <div className="flex flex-col justify-center flex-auto p-6 text-center">
-                                        <button onClick={() => showModalCreateProgram()}>
+                                        <button onClick={() => setIsOpenModalCreateProject(true)}>
                                             <i className="mb-4 fa fa-plus text-slate-400"></i>
                                             <h5 className="text-slate-400">New project</h5>
                                         </button>
@@ -104,9 +106,20 @@ function Program() {
                     </div>
                 </div>
             </div>
+            <div className="flex justify-end max-w-full px-3">
+                <Space direction="vertical">
+                    <Search
+                        placeholder="input search program"
+                        allowClear
+                        enterButton="Search"
+                        size="large"
+                        onSearch={onSearch}
+                    />
+                </Space>
+            </div>
             <div className="flex-none w-full max-w-full px-3 mt-6">
                 <TableCommon
-                    data={dataTablePrograms || []}
+                    data={listSearchDataTable.length > 0 ? listSearchDataTable : dataTablePrograms || []}
                     parseFunction={parseData}
                     columns={columns}
                     isShowPaging
@@ -116,7 +129,7 @@ function Program() {
             {/* modal tạo chương trình mới */}
             {isOpenModalCreateProject && (
                 <ModalCreateProgram
-                    onOpenCreateModal={showModalCreateProgram}
+                    onOpenCreateModal={isOpenModalCreateProject}
                     handleSubmitModalCreate={handleSubmitModal}
                     handleCancelModalCreate={handleCancelModal}
                     type="create"

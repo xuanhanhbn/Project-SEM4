@@ -26,11 +26,11 @@ function ModalDonate(props) {
         },
     });
 
-    // state
+    // STATE
     const [donateValue, setDonateValue] = useState('4.9');
     const [donateType, setDonateType] = useState('PAYPAL');
 
-    //useEffect set value và type donate mặc định
+    // set value và type donate mặc định
     useEffect(() => {
         setValue('amount', 4.9);
     }, []);
@@ -119,7 +119,7 @@ function ModalDonate(props) {
 
     return (
         <div id="modalDonate">
-            <Modal open={open} okText="Continue" onOk={handleOk} onCancel={handleCancel}>
+            <Modal footer={false} open={open} okText="Continue" onOk={handleOk} onCancel={handleCancel}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <h3 className="text-base font-bold leading-6 text-center md:text-xl">Donate</h3>

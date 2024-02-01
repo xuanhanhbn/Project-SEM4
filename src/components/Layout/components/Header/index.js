@@ -155,9 +155,9 @@ function Header() {
                                 </div>
                             ) : null}
                         </div>
-                        <button id="btn_donate" className="btn_donate_nav">
+                        <Link to="/campaigns" id="btn_donate" className="text-center btn_donate_nav">
                             Donate now
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

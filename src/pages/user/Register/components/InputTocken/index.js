@@ -76,6 +76,7 @@ const InputToken = () => {
         } else {
             setActiveOTPIndex(currentOTPIndex + 1);
         }
+        // const token = newOTP.reduce((acc, curr) => acc + curr, '');
 
         setOtp(newOTP);
     };
@@ -90,7 +91,7 @@ const InputToken = () => {
 
     // xử lý ấn submit confirm button
     const handleSubmitToken = () => {
-        console.log(otp);
+        console.log('token', otp.join(''));
     };
 
     // tự động focus input item
@@ -122,7 +123,7 @@ const InputToken = () => {
             {/* check khi nhập full mã otp mới hiển thị button submit */}
             {otp.every((value) => value !== '') ? (
                 <button onClick={() => handleSubmitToken()} className="bg-blue-100">
-                    Confirm Token
+                    Confirm
                 </button>
             ) : null}
         </div>

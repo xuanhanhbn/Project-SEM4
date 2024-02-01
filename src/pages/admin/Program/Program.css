@@ -1,4 +1,30 @@
 #program_page {
+    .ant-input-search-button {
+        /* background-image: linear-gradient(#ff0080, #7928ca); */
+        font-weight: 600;
+        background-color: #ff0080;
+    }
+
+    .ant-input-affix-wrapper:hover {
+        border-color: #ff0080;
+    }
+
+    input.ant-input {
+        font-weight: 500;
+    }
+
+    .ant-input-affix-wrapper:focus {
+        border-color: #ff0080;
+        box-shadow: none;
+    }
+
+    .ant-input-affix-wrapper:focus-within {
+        border-color: #ff0080;
+        box-shadow: none;
+    }
+}
+
+#program_page {
     @apply w-full px-5 pt-5
 }
 

@@ -6,7 +6,7 @@ import { sideBarList } from './constants';
 function LayoutAdmin({ children }) {
     // render sidebar item
     const RENDER_TAB_ITEMS = (item) => {
-        if (item.type === 'TABITEM') {
+        if (item.type === 'TAB_ITEM') {
             return (
                 <li id="admin_sidebar_item" key={item.id} className="mt-0.5 w-full">
                     <NavLink
