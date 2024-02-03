@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ImageGallery from 'react-image-gallery';
 
 import './CampaignDetail.css';
 import './style.css';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
 import Img from '~/assets/images/logo/Screenshot .png';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import ModalDonate from './components/ModalDonate';
+import Avatar from '~/assets/images/avatar/avatar.png';
+import ShareMailModal from '../ShareMailModal';
 
 const images = [
     {
@@ -59,29 +62,72 @@ const images = [
 ];
 
 export default function CampaignDetail() {
+    // state
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalShareMail, setIsOpenModalShareMail] = useState(false);
+
+    const [prams] = useSearchParams();
+    const status = prams.get('status');
+
+    console.log('status', status);
+
+    // xử lý open modal
+    const showModal = () => {
+        setIsOpenModal(true);
+    };
+
+    // xử lý open modal share mail
+    const showModalShareMail = () => {
+        setIsOpenModalShareMail(true);
+    };
+
+    // xử lý khi click submit modal
+    const handleSubmitModal = () => {
+        setIsOpenModal(false);
+        console.log('click ok btn');
+    };
+
+    // xử lý khi click submit modal share mail
+    const handleSubmitModalShareMail = () => {
+        setIsOpenModalShareMail(false);
+        console.log('click ok btn');
+    };
+
+    // xử lý khi click đóng modal
+    const handleCancelModal = () => {
+        setIsOpenModal(false);
+        console.log('click cancel btn');
+    };
+
+    // xử lý khi click đóng modal share mail
+    const handleCancelModalShareMail = () => {
+        setIsOpenModalShareMail(false);
+        console.log('click cancel btn');
+    };
+
     return (
-        <div id="campaignDetail" className="max-w-6xl px-4 pt-8 pb-24 mx-auto text-center">
+        <div id="campaignDetail">
             <div>
                 <h1 className="mb-12 text-4xl font-bold leading-10 ">Help in the Democratic Republic of the Congo</h1>
             </div>
-            <div className=" flex-nowrap">
+            <div className="flex flex-nowrap">
                 <div className="lg:w-7/12">
                     <div className="flex flex-wrap -mx-4">
                         <div className="w-full px-4 ">
                             <div className="relative px-4 my-auto z-[1] ">
                                 <img src={CardImg} alt="" className="w-full rounded-2xl" />
                             </div>
-                            <div className="mt-[-25%] pt-[25%] bg-white border-gray-400 rounded-2xl border-[.0625rem] flex flex-col relative">
-                                <div className="p-5 grow shrink basis-auto md:px-16 md:pt-9 md:pb-10  lg:px-[4rem] ">
+                            <div className="card">
+                                <div className="card_container ">
                                     <div className="flex -mx-4 flex-nowrap ">
                                         <div className="pr-1 max-w-[50%] basis-1/2 w-full pl-4 relative ">
-                                            <div className="flex w-full overflow-hidden text-xs text-gray-100 text-ellipsis whitespace-nowrap md:text-base ">
+                                            <div className="card_header">
                                                 <i className="text-base fa-sharp fa-thin fa-bullseye-arrow"></i>
                                                 <p className="ml-2 text-xs">500,000 $</p>
                                             </div>
                                         </div>
                                         <div className="pl-1 max-w-[50%] basis-1/2 w-full pr-4 relative ">
-                                            <div className="flex w-full text-xs text-gray-100 md:text-base">
+                                            <div className="flex justify-end w-full text-xs text-gray-100 md:text-base">
                                                 <i className="text-base fa-light fa-user-group"></i>
                                                 <p className="ml-2 text-xs line-clamp-1 text-ellipsis whitespace-nowrap">
                                                     500,000 supporteds
@@ -98,7 +144,11 @@ export default function CampaignDetail() {
                                         <div className="text-sm font-semibold leading-6 text-blue-100">100.000</div>
                                         <div className="text-sm font-semibold leading-6 text-blue-100">15%</div>
                                     </div>
-                                    <button className="bg-orange-100 mt-10 lg:hidden border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]">
+                                    <button
+                                        disabled={status === 'done' ? true : false}
+                                        onClick={showModal}
+                                        className="btn"
+                                    >
                                         Donate now
                                     </button>
                                 </div>
@@ -107,7 +157,20 @@ export default function CampaignDetail() {
                     </div>
                     <div className=" pt-14">
                         <div className="p-5 text-left bg-white rounded-2xl">
-                            <h2 className="mb-6 text-2xl font-bold leading-8">Overview</h2>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
+                                <div className="hidden md:block">
+                                    <button className="btn_share">
+                                        <i className=" fa-light fa-bell-on"></i> 1.2k
+                                    </button>
+                                    <button className="btn_share">
+                                        <i className=" fa-light fa-comment"></i> 234
+                                    </button>
+                                    <button onClick={showModalShareMail} className="btn_share">
+                                        <i className=" fa-light fa-share"></i> 567
+                                    </button>
+                                </div>
+                            </div>
                             <p className="mb-6 text-sm font-semibold leading-6">
                                 Shared meals will provide emergency food assistance to families in Palestine.
                             </p>
@@ -124,9 +187,20 @@ export default function CampaignDetail() {
                                 crisis with an aim to ramp up and support 800,000 people in Gaza and the West Bank area.
                                 Food support includes bread, canned chickpeas and beans.{' '}
                             </p>
+                            <div className="flex mt-4 md:hidden">
+                                <button className="btn_share">
+                                    <i className=" fa-light fa-bell-on"></i> 1.2k
+                                </button>
+                                <button className="btn_share">
+                                    <i className=" fa-light fa-comment"></i> 234
+                                </button>
+                                <button onClick={showModalShareMail} className="btn_share">
+                                    <i className=" fa-light fa-share"></i> 567
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div className="relative pt-10 ">
+                    <div className="relative pt-10">
                         <ImageGallery
                             showPlayButton={false}
                             showFullscreenButton={false}
@@ -146,10 +220,44 @@ export default function CampaignDetail() {
                         </p>
                     </div>
                 </div>
-                <div className="w-5/12 pr-4 pl-11 lg:block">
-                    <div className="sticky bg-white top-24 rounded-2xl"></div>
+                <div className="hidden w-5/12 pr-4 pl-11 lg:block">
+                    <div className="sticky py-6 bg-white top-24 rounded-2xl">
+                        <div className="flex items-center justify-around mb-5">
+                            <h3 className="text-2xl font-bold leading-8 ">List Donate</h3>
+                            <Link to="">
+                                <i className="fa-solid fa-download"></i>
+                            </Link>
+                        </div>
+                        <div className="flex items-center px-4">
+                            <div className="mx-2 ">
+                                <img className="w-12 rounded-full" src={Avatar} alt="" />
+                            </div>
+                            <div className="w-full mx-2 text-left">
+                                <div className="text-lg font-semibold leading-6 text-gray-100">Nguyen Van A</div>
+                                <div className="flex justify-between">
+                                    <p className="text-xs leading-6 text-gray-100 ">20.10.2022</p>
+                                    <span className="text-base font-semibold leading-6 text-blue-100">$ 22,000</span>
+                                </div>
+                                <div className="bg-slate-400 h-[.5px]"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            {/* Open modal */}
+            {isOpenModal && (
+                <ModalDonate open={isOpenModal} handleOk={handleSubmitModal} handleCancel={handleCancelModal} />
+            )}
+
+            {/* open modal share mail */}
+
+            {isOpenModalShareMail && (
+                <ShareMailModal
+                    openModal={isOpenModalShareMail}
+                    onSubmitModal={handleSubmitModalShareMail}
+                    onCancelModal={handleCancelModalShareMail}
+                />
+            )}
         </div>
     );
 }

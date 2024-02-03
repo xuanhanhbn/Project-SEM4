@@ -26,6 +26,8 @@ export default function HomeConnect() {
         },
     });
 
+    // xử lý click nút send mail contact
+
     const onSubmit = (data) => console.log(data);
 
     return (
@@ -52,7 +54,6 @@ export default function HomeConnect() {
                                                 <input
                                                     placeholder="Enter your mail"
                                                     type="text"
-                                                    required
                                                     className="home_input placeholder:text-gray-100"
                                                     onChange={onChange}
                                                     value={value == null ? '' : value}

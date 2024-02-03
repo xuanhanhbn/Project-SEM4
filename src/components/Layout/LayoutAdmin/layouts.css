@@ -1,0 +1,74 @@
+#adminLayout {
+    @apply m-0 font-sans antialiased font-normal h-full text-base leading-6
+}
+
+#adminLayout .admin_sidebar {
+    @apply max-w-[15rem] fixed inset-y-0 my-4 ml-4 block -translate-x-full flex-wrap items-center justify-between rounded-2xl border-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 xl:bg-transparent
+}
+
+#adminLayout .admin_logo {
+    @apply block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700
+}
+
+#adminLayout .admin_logo_img {
+    @apply inline h-full max-w-full transition-all duration-200 max-h-8
+}
+
+#adminLayout .admin_logo_name {
+    @apply ml-1 font-semibold transition-all duration-200
+}
+
+#adminLayout .admin_sidebar_line {
+    @apply h-px mt-0 bg-transparent bg-gradient-to-r mb-4 from-transparent via-black/40 to-transparent
+}
+
+#adminLayout .admin_sidebar_list {
+    @apply items-center block w-auto max-h-screen h-full grow basis-full
+}
+
+#adminLayout .admin_container {
+    @apply h-full xl:ml-[17.125rem] relative max-h-screen rounded-xl transition-all duration-200
+}
+
+#admin_sidebar_item .tab_item {
+    @apply py-2 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors rounded-lg hover:bg-white
+}
+
+#admin_sidebar_item .tab_item:hover {
+    @apply shadow-md
+}
+
+#admin_sidebar_item .tab_item:hover {
+    .tab_item_icon {
+        background-image: linear-gradient(#ff0080, #7928ca);
+    }
+
+    i {
+        color: white;
+    }
+}
+
+#admin_sidebar_item .tab_active {
+    background: white;
+
+    .tab_item_icon {
+        background-image: linear-gradient(#ff0080, #7928ca);
+    }
+
+    i {
+        color: white;
+    }
+}
+
+#admin_sidebar_item .tab_item_icon {
+    @apply mr-2 flex text-black h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+#admin_sidebar_item .tab_item_name {
+    @apply ml-1 duration-300 opacity-100 pointer-events-none
+}
+
+#admin_sidebar_tab_title .sidebar_tab_title {
+    @apply pl-6 ml-2 mb-2 font-bold leading-5 uppercase text-xs opacity-60
+}

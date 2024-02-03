@@ -1,0 +1,29 @@
+#billing_page .create_card {
+    @apply relative flex flex-col min-w-0 break-words bg-transparent border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border
+}
+
+
+
+#payment_method {
+    @apply w-full max-w-full px-3 md:w-1/2 md:flex-none
+}
+
+#payment_method .box_payment_method {
+    @apply relative shadow-md flex flex-col min-w-0 break-words bg-white border-0 border-transparent border-solid rounded-2xl bg-clip-border
+}
+
+#payment_method .box_payment_method {
+    @apply relative shadow-md flex flex-col min-w-0 break-words bg-white border-0 border-transparent border-solid rounded-2xl bg-clip-border
+}
+
+#payment_method .payment_mt_header {
+    @apply p-4 mx-6 mb-0 text-center justify-center flex bg-white border-b-0 rounded-t-2xl border-b-transparent
+}
+
+#payment_method .payment_method_icon {
+    @apply w-16 h-16 text-center bg-center flex justify-center items-center bg-gradient-to-tl from-purple-700 to-pink-500 rounded-xl
+}
+
+#payment_method .line_card {
+    @apply h-px my-4 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent
+}
