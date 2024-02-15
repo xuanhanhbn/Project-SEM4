@@ -27,13 +27,12 @@ export const getBase64 = (img, callback) => {
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
 };
-<<<<<<< HEAD
 
 export const getBaseUploadLogo = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
-=======
+};
 export const notify = (message, type) => {
     if (type === 'info') {
         toast.info(message);
@@ -50,5 +49,4 @@ export const notify = (message, type) => {
     if (!type || type === 'default') {
         toast(message);
     }
->>>>>>> dev
 };
