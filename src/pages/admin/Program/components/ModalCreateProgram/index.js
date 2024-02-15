@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Modal, Input, InputNumber, Space, Select, DatePicker, message, List } from 'antd';
+import { Modal, Input, InputNumber, Space, Select, DatePicker, message } from 'antd';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-// import { beforeUpload, getBase64 } from 'src/utils/common';
 import { inputCreateProgram } from './constants';
 import './ModalCreate.css';
 import moment from 'moment';
@@ -13,18 +12,6 @@ import UploadImageBanner from '../UploadImageBanner';
 import { getBase64, beforeUpload, getBaseUploadCarousel64 } from '~/utils/common';
 
 const { TextArea } = Input;
-
-const validationSchema = Yup.object().shape({
-    // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
-    programName: Yup.string().required('Full name is required'),
-    programDescription: Yup.string().required('Description is required'),
-    tagName: Yup.string().required('Tag is required'),
-    partner: Yup.string().required('Partner is required'),
-    startDate: Yup.string().required('Start date is required'),
-    endDate: Yup.string().required('End date is required'),
-    finishDate: Yup.string().required('Finish date is required'),
-    target: Yup.string().required('Target is required'),
-});
 
 const selectOptions = [
     {
@@ -50,7 +37,18 @@ function ModalCreateProgram(props) {
     const [imageUrl, setImageUrl] = useState();
     const [endDateProgram, setEndDateProgram] = useState('');
     const [finishDateProgram, setFinishDateProgram] = useState('');
-    // console.log(endDateProgram);
+
+    const validationSchema = Yup.object().shape({
+        // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
+        programName: Yup.string().required('Full name is required'),
+        programDescription: Yup.string().required('Description is required'),
+        tagName: type === 'create' && Yup.string().required('Tag is required'),
+        partner: type === 'create' && Yup.string().required('Partner is required'),
+        startDate: type === 'create' && Yup.string().required('Start date is required'),
+        endDate: Yup.string().required('End date is required'),
+        finishDate: Yup.string().required('Finish date is required'),
+        target: type === 'create' && Yup.string().required('Target is required'),
+    });
 
     const {
         handleSubmit,
@@ -124,6 +122,18 @@ function ModalCreateProgram(props) {
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
     };
 
+    // ử lý chọn ngày bắt đầu chương trình
+    const onChangeStartDate = (value, field) => {
+        field.onChange(value);
+        if (type === 'create') setEndDateProgram(value);
+    };
+
+    // xử lý chọn ngày dừng nhận donate
+    const onChangeEndDate = (value, field) => {
+        field.onChange(value);
+        setFinishDateProgram(value);
+    };
+
     // render input create program
     const RENDER_INPUT_CREATE_PROGRAM = (item) => {
         if (item.type === 'SELECT') {
@@ -147,6 +157,7 @@ function ModalCreateProgram(props) {
                                         // onSearch={onSearchPartner}
                                         filterOption={filterOption}
                                         options={selectOptions || []}
+                                        disabled={type === 'edit' ? true : false}
                                     />
                                 );
                             }}
@@ -176,6 +187,7 @@ function ModalCreateProgram(props) {
                                         onChange={onChange}
                                         value={value}
                                         // onSearch={onSearchPartner}
+                                        disabled={type === 'edit' ? true : false}
                                         filterOption={filterOption}
                                         options={[
                                             {
@@ -240,13 +252,11 @@ function ModalCreateProgram(props) {
                                 return (
                                     <Space direction="vertical">
                                         <DatePicker
-                                            onChange={(date) => {
-                                                field.onChange(date);
-                                                setEndDateProgram(date);
-                                            }}
+                                            onChange={(date) => onChangeStartDate(date, field)}
                                             selected={field.value}
                                             className="input-height"
                                             disabledDate={disabledStartDate}
+                                            disabled={type === 'edit' ? true : false}
                                         />
                                     </Space>
                                 );
@@ -270,14 +280,11 @@ function ModalCreateProgram(props) {
                                 return (
                                     <Space direction="vertical">
                                         <DatePicker
-                                            disabled={endDateProgram ? false : true}
-                                            onChange={(date) => {
-                                                field.onChange(date);
-                                                setFinishDateProgram(date);
-                                            }}
+                                            disabled={type === 'create' && endDateProgram ? true : false}
+                                            onChange={(date) => onChangeEndDate(date, field)}
                                             selected={field.value}
                                             className="input-height"
-                                            disabledDate={disabledEndDate}
+                                            disabledDate={type === 'create' ? disabledEndDate : disabledStartDate}
                                         />
                                     </Space>
                                 );
@@ -335,6 +342,7 @@ function ModalCreateProgram(props) {
                                         parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                                         onChange={onChange}
                                         value={value}
+                                        disabled={type === 'edit' ? true : false}
                                     />
                                 </Space>
                             );

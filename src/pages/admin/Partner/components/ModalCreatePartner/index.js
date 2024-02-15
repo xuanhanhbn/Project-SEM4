@@ -165,7 +165,14 @@ function ModalCreatePartner(props) {
     };
     return (
         <div>
-            <Modal title="Create partner" footer={false} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Modal
+                style={{ top: 0 }}
+                title="Create partner"
+                footer={false}
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div id="create_partner_modal" className="grid grid-cols-2 gap-4 pt-3">
                         {inputCreatePartner.map((item) => RENDER_INPUT_CREATE_PARTNER(item))}

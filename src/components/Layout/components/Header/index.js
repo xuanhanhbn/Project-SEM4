@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import './Header.css';
 import UserAvatar from '../../../../assets/images/avatar/avatar.png';
 
-const login = true;
+const login = false;
 
 function Header() {
     const [openMenuUser, setOpenMenuUser] = useState(false);
