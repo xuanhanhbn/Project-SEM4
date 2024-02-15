@@ -4,9 +4,11 @@ import { publicRoutes } from '~/routes';
 import { DefaultLayout, LayoutAdmin } from '~/components/Layout';
 import '../src/components/GlobalStyles/font-awesome-6.4.2-pro-main/css/all.css';
 import { AdminRouter } from './routes/routeAdmin';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-    const type = 'admin';
+    const type = 'user';
 
     // Xử lý check type
     const handleReturnRouter = () => {
@@ -28,6 +30,8 @@ function App() {
     return (
         <Router>
             <div className="App">
+                <ToastContainer />
+
                 <Routes>
                     {handleReturnRouter().map((route, index) => {
                         const Page = route.component;
