@@ -1,5 +1,5 @@
 #campaigns {
-    @apply px-4 py-12 bg-gray-400 md:py-24
+    @apply px-4 py-12 bg-gray-400
 }
 
 #campaigns .container_wrapper {
@@ -31,7 +31,7 @@
 }
 
 #campaigns .col_3 {
-    @apply flex items-center justify-end w-2/4 text-gray-100
+    @apply flex items-center justify-start w-2/4 text-gray-100
 }
 
 #campaigns .campaign_title {

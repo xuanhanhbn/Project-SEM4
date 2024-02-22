@@ -13,9 +13,9 @@ export default function HomeListCampaigns() {
                 <div className="wrapper">
                     <Link to="#" className="card">
                         <h1 className="card_title">Give emergency aid in Palestine</h1>
-                        <div to="#" className="card_btn ">
+                        {/* <div to="#" className="card_btn ">
                             Read more
-                        </div>
+                        </div> */}
                         <div className="relative ">
                             <img className="card_image" alt="Palestine" src={Palestin_1} />
                         </div>
@@ -42,9 +42,9 @@ export default function HomeListCampaigns() {
                     </Link>
                     <Link to="#" className="hidden card md:block ">
                         <h1 className="card_title">Help in the Democratic Republic of Congo</h1>
-                        <div to="#" className="card_btn">
+                        {/* <div to="#" className="card_btn">
                             Read more
-                        </div>
+                        </div> */}
                         <div className="relative ">
                             <img className="card_image" alt="Colors" src={Congo_1} />
                         </div>
@@ -70,10 +70,14 @@ export default function HomeListCampaigns() {
                         </div>
                     </Link>
                     <Link to="#" className="hidden card lg:block ">
-                        <h1 className="card_title">Donate emergency support in Afghanistan</h1>
-                        <div to="#" className="card_btn ">
+                        <h1 className="card_title">
+                            Donate emergency support in AfghanistanDonate emergency support in AfghanistanDonate
+                            emergency support in AfghanistanDonate emergency support in AfghanistanDonate emergency
+                            support in AfghanistanDonate emergency support in Afghanistan
+                        </h1>
+                        {/* <div to="#" className="card_btn ">
                             Read more
-                        </div>
+                        </div> */}
                         <div className="relative ">
                             <img className="card_image" src={Afga_1} alt="Colors" />
                         </div>

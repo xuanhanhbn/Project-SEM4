@@ -1,6 +1,7 @@
 import React from 'react';
 import './HomeSlide.css';
 import HomeListCampaigns from '../HomeListCampaigns';
+import { Link } from 'react-router-dom';
 
 export default function HomeSlide() {
     return (
@@ -18,7 +19,9 @@ export default function HomeSlide() {
             <div>
                 <HomeListCampaigns />
             </div>
-            <button className="seeall_btn">See all</button>
+            <Link to="/campaigns" className="seeall_btn">
+                See all
+            </Link>
         </div>
     );
 }

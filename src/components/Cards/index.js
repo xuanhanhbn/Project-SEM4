@@ -7,7 +7,7 @@ export default function CardCustom(props) {
     return (
         <Link to={`${to}?status=${status}`} className="card">
             <h1 className="card_title">{cardTitle}</h1>
-            <div className="card_btn ">Read more</div>
+            {/* <div className="card_btn ">Read more</div> */}
             <div className="relative ">
                 <img className="card_image" alt="Palestine" src={cardImage} />
             </div>
@@ -25,10 +25,10 @@ export default function CardCustom(props) {
                         <p className="ml-2 text-sm">{supporteds}</p>
                     </div>
                 </div>
-                <div className="min-h-[12px]">
+                <div className="min-h-[12px] mt-4">
                     {status === 'done' ? null : (
                         <div className="h-1 mx-auto mt-2 bg-gray-400 rounded-sm">
-                            <div className="w-10/12 h-1 mt-4 bg-blue-100 rounded-sm"></div>
+                            <div className="w-10/12 h-1 bg-blue-100 rounded-sm"></div>
                         </div>
                     )}
                 </div>

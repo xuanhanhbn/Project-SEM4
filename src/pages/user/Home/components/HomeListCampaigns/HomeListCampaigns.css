@@ -1,5 +1,5 @@
 #listCampaigns .container_wrapper {
-    @apply flex items-center justify-center min-h-screen
+    @apply flex items-center justify-center
 }
 
 #listCampaigns .wrapper {

@@ -3,7 +3,7 @@
 }
 
 #footer .wrapper_footer_menu {
-    @apply min-h-[5rem] text-[.75rem] mx-0 border-t-[.0625rem] border-gray-200 shadow-none border-solid flex flex-wrap
+    @apply min-h-[5rem] text-[.75rem] mx-0 border-gray-200 shadow-none border-solid flex flex-wrap
 }
 
 #footer .menu_footer {

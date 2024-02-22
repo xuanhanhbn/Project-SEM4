@@ -13,7 +13,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import TableCommon from '~/components/TableCommon';
-import messAvater from '~/assets/images/avatar/avatar.png';
+// import messAvater from '~/assets/images/avatar/avatar.png';
 
 // <--------- compare payment methods ---------->
 
@@ -105,7 +105,7 @@ function Dashboard() {
                             className="shadow-md rounded-2xl"
                         />
                     </div>
-                    <div className="w-full max-w-full px-3 mt-6 lg:w-1/3 lg:flex-none">
+                    {/* <div className="w-full max-w-full px-3 mt-6 lg:w-1/3 lg:flex-none">
                         <div className="list_completed_donate">
                             <div className="list_completed_header">
                                 <div className="flex flex-wrap -mx-3">
@@ -133,7 +133,7 @@ function Dashboard() {
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

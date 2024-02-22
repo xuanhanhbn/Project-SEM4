@@ -2,6 +2,7 @@ import CardCustom from '~/components/Cards';
 import Card_img_1 from '~/assets/images/campaigns/Cover_Photo_November_12 .jpg';
 import { CampaignsData } from './constants';
 import './Campaigns.css';
+import { Link } from 'react-router-dom';
 
 function Campaigns() {
     return (
@@ -23,11 +24,13 @@ function Campaigns() {
                                             alt=""
                                             className="absolute h-full rounded-2xl translate-x-[-50%] top-0 left-1/2"
                                         />
-                                        <div className="relative -bottom-40 md:-bottom-64">
+                                        <div className="relative -bottom-40 md:-bottom-52">
                                             <h2 className="text-white z-[1] relative mb-4 leading-6 font-bold text-[1.625rem]">
                                                 Feed families who need it the most
                                             </h2>
-                                            <button className="btn_read">Read more</button>
+                                            <Link to="/campaign-detail" className="btn_read">
+                                                Read more
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

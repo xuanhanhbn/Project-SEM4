@@ -1,4 +1,5 @@
 import BillingPage from '~/pages/admin/Billing';
+import ChatBox from '~/pages/admin/ChatBox';
 import Dashboard from '~/pages/admin/Dashboard';
 import Partner from '~/pages/admin/Partner';
 import Program from '~/pages/admin/Program';
@@ -22,6 +23,10 @@ const AdminRouter = [
     {
         path: '/admin/partner',
         component: Partner,
+    },
+    {
+        path: '/admin/message',
+        component: ChatBox,
     },
     {
         path: '/admin/billing',

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import './Home.css';
 import HomeBanner from './components/HomeBanner';
 import HomeCampaign from './components/HomeCampaign';
@@ -6,9 +6,9 @@ import HomeSlide from './components/HomeSlide';
 import OutImpact from './components/Impact';
 import HomeContact from './components/HomeContact';
 import HomeConnect from './components/HomeConnect';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { testGet } from './callApi';
-import { notify } from '~/utils/common';
+// import { useMutation, useQuery } from '@tanstack/react-query';
+// import { testGet } from './callApi';
+// import { notify } from '~/utils/common';
 
 function Home() {
     // const mutation = useMutation({
@@ -28,19 +28,13 @@ function Home() {
             <div>
                 <HomeBanner />
             </div>
-            <div>
+            <div className="md:px-10">
                 <HomeCampaign />
-            </div>
-            <div>
                 <HomeSlide />
-            </div>
-            <div>
                 <OutImpact />
-            </div>
-            <div>
                 <HomeContact />
+                <HomeConnect />
             </div>
-            <HomeConnect />
         </div>
     );
 }

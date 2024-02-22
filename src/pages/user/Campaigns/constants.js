@@ -6,7 +6,8 @@ export const CampaignsData = [
         supporteds: '100.000 supporteds',
         progressValue: '10.000 $',
         progressPercentage: '46 %',
-        cardTitle: 'Give emergency aid in Palestine',
+        cardTitle:
+            'Give emergency aid in PalestineGive emergency aid in PalestineGive emergency aid in PalestineGive emergency aid in PalestineGive emergency aid in Palestine ',
         status: 'done',
         field: 'false',
     },
@@ -17,7 +18,8 @@ export const CampaignsData = [
         supporteds: '',
         progressValue: '',
         progressPercentage: '',
-        cardTitle: 'Not sure where to help?',
+        cardTitle:
+            'Not sure where to help?Give emergency aid in PalestineGive emergency aid in PalestineGive emergency aid in PalestineGive emergency aid in PalestineGive emergency aid in Palestine',
         status: '',
         field: 'true',
     },

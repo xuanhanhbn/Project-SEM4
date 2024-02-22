@@ -87,7 +87,7 @@ export const linePaymentData = {
         {
             label: 'Paypal',
             tension: 0.4,
-            borderWidth: 0,
+            // borderWidth: 0,
             pointRadius: 0,
             borderColor: '#cb0c9f',
             borderWidth: 3,
@@ -99,7 +99,7 @@ export const linePaymentData = {
         {
             label: 'Create Card',
             tension: 0.4,
-            borderWidth: 0,
+            // borderWidth: 0,
             pointRadius: 0,
             borderColor: '#3A416F',
             backgroundColor: 'rgba(20,23,39,0.2)',

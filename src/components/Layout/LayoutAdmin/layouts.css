@@ -3,7 +3,7 @@
 }
 
 #adminLayout .admin_sidebar {
-    @apply max-w-[15rem] fixed inset-y-0 my-4 ml-4 block -translate-x-full flex-wrap items-center justify-between rounded-2xl border-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 xl:bg-transparent
+    @apply max-w-[15rem] fixed inset-y-0 block -translate-x-full flex-wrap items-center justify-between rounded-2xl border-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 xl:bg-transparent
 }
 
 #adminLayout .admin_logo {
@@ -27,7 +27,7 @@
 }
 
 #adminLayout .admin_container {
-    @apply h-full xl:ml-[17.125rem] relative max-h-screen rounded-xl transition-all duration-200
+    @apply h-full relative max-h-screen rounded-xl transition-all duration-200
 }
 
 #admin_sidebar_item .tab_item {

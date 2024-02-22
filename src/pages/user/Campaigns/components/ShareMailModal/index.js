@@ -8,7 +8,13 @@ function ShareMailModal(props) {
     const [emails, setEmails] = useState([]);
     return (
         <div>
-            <Modal title="Share for everyone" open={openModal} onOk={onSubmitModal} onCancel={onCancelModal}>
+            <Modal
+                title="Share for everyone"
+                footer={false}
+                open={openModal}
+                onOk={onSubmitModal}
+                onCancel={onCancelModal}
+            >
                 <div className="p-5">
                     <ReactMultiEmail
                         className="mb-5"

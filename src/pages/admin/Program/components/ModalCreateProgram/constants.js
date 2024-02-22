@@ -12,42 +12,42 @@ export const inputCreateProgram = [
     {
         field: 'programName',
         lable: 'Program name',
-        type: 'INPUTNAME',
+        type: 'INPUT_NAME',
     },
 
     {
         field: 'startDate',
         lable: 'Start date',
-        type: 'INPUTDATE',
+        type: 'INPUT_DATE',
     },
     {
         field: 'endDate',
         lable: 'End date',
-        type: 'INPUTDATE',
+        type: 'INPUT_DATE',
     },
     {
         field: 'finishDate',
         lable: 'Finish date',
-        type: 'INPUTDATE',
+        type: 'INPUT_DATE',
     },
     {
         field: 'target',
         lable: 'Target',
-        type: 'INPUTAMOUNT',
+        type: 'INPUT_AMOUNT',
     },
     {
         field: 'programDescription',
         lable: 'Program description',
-        type: 'INPUTAREA',
-    },
-    {
-        field: 'programThumbnailCarouselId',
-        lable: 'Upload carousel image',
-        type: 'INPUTUPLOAD',
+        type: 'INPUT_AREA',
     },
     {
         field: 'programThumbnailBannerId',
         lable: 'Upload banner image',
-        type: 'INPUTUPLOAD',
+        type: 'INPUT_UPLOAD',
+    },
+    {
+        field: 'programThumbnailCarouselId',
+        lable: 'Upload carousel image',
+        type: 'INPUT_UPLOAD',
     },
 ];
