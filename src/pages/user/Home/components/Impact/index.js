@@ -5,18 +5,15 @@ import MapMobile from '~/assets/images/banner/Impact_Map_Mobile.png';
 
 export default function OutImpact() {
     return (
-        <div id="impact" className="px-6 pt-8 pb-9">
+        <div id="impact" className="px-6 pt-8 ">
             <h2 className="title_h2">Our impact to date</h2>
             <h4 className="content_h4">
                 ShareTheMeal donations not only provide life-saving food in emergencies but also facilitate school
                 feeding, nutrition support, cash transfers and resilience programmes all over the world.
             </h4>
-            <div className="font-bold text-center text-blue-100">
-                <Link to="#" className="">
-                    Learn more
-                </Link>
+            {/* <div className="font-bold text-center text-blue-100">
                 <i className="ml-2 fa-solid fa-angle-right "></i>
-            </div>
+            </div> */}
             <div className="flex my-5">
                 <div className="md:w-3/5">
                     <div className="w-full ">
@@ -73,7 +70,7 @@ export default function OutImpact() {
                             world.
                         </p>
                         <div className="mt-4 font-bold text-center text-blue-800">
-                            <Link to="#" className="hover:decoration-solid">
+                            <Link to="/about" className="hover:decoration-solid">
                                 Learn more
                             </Link>
                             <i className="ml-2 fa-solid fa-angle-right "></i>

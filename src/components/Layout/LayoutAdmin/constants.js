@@ -21,6 +21,13 @@ export const sideBarList = [
         path: '/admin/billing',
     },
     {
+        id: 7,
+        tabName: 'Message',
+        type: 'TAB_ITEM',
+        tabIcon: <i className="fa-brands fa-rocketchat"></i>,
+        path: '/admin/message',
+    },
+    {
         id: 5,
         tabName: 'ACCOUNT PAGES',
         type: 'TABTITLE',

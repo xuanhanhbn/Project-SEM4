@@ -1,6 +1,7 @@
 import React from 'react';
 import './HomeCampaign.css';
 import Palestine11 from '~/assets/images/campaigns/palestine11_Homecard.png';
+import { Link } from 'react-router-dom';
 
 export default function HomeCampaign() {
     return (
@@ -29,10 +30,12 @@ export default function HomeCampaign() {
                             Shared meals will provide emergency food assistance to families in Palestine.
                         </p>
                         <div className="hidden mt-4 lg:mt-14 md:block">
-                            <button className="border-black lg_btn hover:bg-gray-700">read more</button>
-                            <button className="ml-2 bg-orange-200 border-orange-200 lg_btn hover:bg-orange-100 hover:border-orange-100">
+                            <Link to="/campaign-detail" className="border-black lg_btn hover:bg-gray-700">
+                                read more
+                            </Link>
+                            {/* <button className="ml-2 bg-orange-200 border-orange-200 lg_btn hover:bg-orange-100 hover:border-orange-100">
                                 Donate now
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>

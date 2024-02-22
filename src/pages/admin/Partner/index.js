@@ -1,6 +1,5 @@
 import { Space, Input } from 'antd';
 import React, { useCallback, useState } from 'react';
-
 import './style.css';
 import ModalCreatePartner from './components/ModalCreatePartner';
 import TableCommon from '~/components/TableCommon';

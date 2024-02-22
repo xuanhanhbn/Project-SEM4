@@ -1,40 +1,53 @@
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
+// import { Link, animateScroll as scroll } from 'react-scroll';
 import './Header.css';
 import UserAvatar from '../../../../assets/images/avatar/avatar.png';
+import { animateScroll as scroll } from 'react-scroll';
 
 const login = false;
 
 function Header() {
+    //State
     const [openMenuUser, setOpenMenuUser] = useState(false);
     const [openMenuMobile, setOpenMenuMobile] = useState(false);
 
+    // cuộn về đầu trang khi chuyển tab
+    const scrollToTop = () => {
+        scroll.scrollToTop();
+    };
+
+    // xử lý mở menu khi click vào avatar header
     const handleOpenMenuUser = () => {
         setOpenMenuUser(!openMenuUser);
     };
 
+    // xử lý mở menu dạng mobile
     const handleOpenMenuMobile = () => {
         setOpenMenuMobile(!openMenuMobile);
     };
 
+    // xử lý đóng menu
     const handleClose = () => {
         setOpenMenuMobile(false);
         setOpenMenuUser(false);
     };
 
+    // sự kiện scroll của header
     window.onscroll = function () {
         scrollFunction();
     };
 
+    // xử lý sự kiện scroll header
     function scrollFunction() {
         if (document.body.scrollTop > 90 || document.documentElement.scrollTop > 90) {
             document.getElementById('nav_scroll').style.height = '5.0625rem';
             document.getElementById('header').style.height = '5.0625rem';
-            document.getElementById('btn_donate').style.padding = '6px 12px';
+            // document.getElementById('btn_donate').style.padding = '6px 12px';
         } else {
             document.getElementById('nav_scroll').style.height = '6.0625rem';
             document.getElementById('header').style.height = '6.0625rem';
-            document.getElementById('btn_donate').style.padding = '12px 16px 13px';
+            // document.getElementById('btn_donate').style.padding = '12px 16px 13px';
         }
     }
 
@@ -49,7 +62,7 @@ function Header() {
                             className="btn_menu_mobile"
                             aria-controls="mobile-menu"
                             aria-expanded="false"
-                            onClick={handleOpenMenuMobile}
+                            onClick={() => handleOpenMenuMobile()}
                         >
                             <span className="absolute -inset-0.5"></span>
                             <span className="sr-only">Open main menu</span>
@@ -58,10 +71,10 @@ function Header() {
                         </button>
                     </div>
 
-                    <div className="wrapper_logo">
+                    <div className="wrapper_logo ">
                         {/* logo */}
                         <div className="flex items-center flex-shrink-0">
-                            <Link to="/">
+                            <Link onClick={scrollToTop} to="/">
                                 <img
                                     className="w-auto h-8"
                                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
@@ -74,18 +87,24 @@ function Header() {
                             <div className="flex space-x-4">
                                 <NavLink
                                     to="/about"
-                                    className={({ isActive }) => (isActive ? 'active' : 'not-active ')}
+                                    className={({ isActive }) => (isActive ? 'active ' : 'not-active ')}
                                     aria-current="page"
+                                    onClick={scrollToTop}
                                 >
                                     About Us
                                 </NavLink>
                                 <NavLink
                                     to="/campaigns"
-                                    className={({ isActive }) => (isActive ? 'active' : 'not-active')}
+                                    onClick={scrollToTop}
+                                    className={({ isActive }) => (isActive ? 'active ' : 'not-active')}
                                 >
                                     Fundraising goals
                                 </NavLink>
-                                <NavLink to="/faq" className={({ isActive }) => (isActive ? 'active' : 'not-active')}>
+                                <NavLink
+                                    onClick={scrollToTop}
+                                    to="/faq"
+                                    className={({ isActive }) => (isActive ? 'active ' : 'not-active')}
+                                >
                                     FAQs
                                 </NavLink>
                             </div>
@@ -155,16 +174,16 @@ function Header() {
                                 </div>
                             ) : null}
                         </div>
-                        <Link to="/campaigns" id="btn_donate" className="text-center btn_donate_nav">
+                        {/* <Link to="/campaigns" id="btn_donate" className="text-center btn_donate_nav">
                             Donate now
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </div>
 
             {/* menu mobile */}
             {openMenuMobile ? (
-                <div id="mobile-menu" className="mobile_menu">
+                <div id="mobile-menu" className="mobile_menu ">
                     <div className="px-2 pt-2 pb-3 space-y-1" onClick={handleClose}>
                         <Link to="/about" className="li_mobile_menu" aria-current="page">
                             About Us

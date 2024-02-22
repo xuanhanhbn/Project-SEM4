@@ -1,9 +1,9 @@
 import React from 'react';
 
 import './Billing.css';
-import masterCard from '~/assets/images/logo/mastercard.png';
-import visaCard from '~/assets/images/logo/visa.png';
-import bgCard from '~/assets/images/logo/curved14.jpg';
+// import masterCard from '~/assets/images/logo/mastercard.png';
+// import visaCard from '~/assets/images/logo/visa.png';
+// import bgCard from '~/assets/images/logo/curved14.jpg';
 import { paymentMethodData } from './constants';
 
 function BillingPage() {
