@@ -4,17 +4,21 @@ import App from '~/App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthContextProvider } from './context/AuthContext';
+import { ChatContextProvider } from './context/ChatContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient();
 
 root.render(
     <QueryClientProvider client={queryClient}>
-        <React.StrictMode>
-            {/* <GlobalStyles> */}
-            <App />
-            {/* </GlobalStyles> */}
-        </React.StrictMode>
+        <AuthContextProvider>
+            <ChatContextProvider>
+                <React.StrictMode>
+                    <App />
+                </React.StrictMode>
+            </ChatContextProvider>
+        </AuthContextProvider>
     </QueryClientProvider>,
 );
 
