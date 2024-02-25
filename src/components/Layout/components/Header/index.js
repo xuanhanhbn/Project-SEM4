@@ -4,6 +4,7 @@ import { NavLink, Link } from 'react-router-dom';
 import './Header.css';
 import UserAvatar from '../../../../assets/images/avatar/avatar.png';
 import { animateScroll as scroll } from 'react-scroll';
+import logo from '~/assets/images/logo/Hand_in_Hand-removebg.png';
 
 const login = false;
 
@@ -33,23 +34,23 @@ function Header() {
         setOpenMenuUser(false);
     };
 
-    // sự kiện scroll của header
-    window.onscroll = function () {
-        scrollFunction();
-    };
+    // // sự kiện scroll của header
+    // window.onscroll = function () {
+    //     scrollFunction();
+    // };
 
-    // xử lý sự kiện scroll header
-    function scrollFunction() {
-        if (document.body.scrollTop > 90 || document.documentElement.scrollTop > 90) {
-            document.getElementById('nav_scroll').style.height = '5.0625rem';
-            document.getElementById('header').style.height = '5.0625rem';
-            // document.getElementById('btn_donate').style.padding = '6px 12px';
-        } else {
-            document.getElementById('nav_scroll').style.height = '6.0625rem';
-            document.getElementById('header').style.height = '6.0625rem';
-            // document.getElementById('btn_donate').style.padding = '12px 16px 13px';
-        }
-    }
+    // // xử lý sự kiện scroll header
+    // function scrollFunction() {
+    //     if (document.body.scrollTop > 90 || document.documentElement.scrollTop > 90) {
+    //         document.getElementById('nav_scroll').style.height = '5.0625rem';
+    //         document.getElementById('header').style.height = '5.0625rem';
+    //         // document.getElementById('btn_donate').style.padding = '6px 12px';
+    //     } else {
+    //         document.getElementById('nav_scroll').style.height = '6.0625rem';
+    //         document.getElementById('header').style.height = '6.0625rem';
+    //         // document.getElementById('btn_donate').style.padding = '12px 16px 13px';
+    //     }
+    // }
 
     return (
         <nav id="header">
@@ -73,13 +74,9 @@ function Header() {
 
                     <div className="wrapper_logo ">
                         {/* logo */}
-                        <div className="flex items-center flex-shrink-0">
-                            <Link onClick={scrollToTop} to="/">
-                                <img
-                                    className="w-auto h-8"
-                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                    alt="Your Company"
-                                />
+                        <div className="flex items-center justify-center h-full bg-blue-400 w-36">
+                            <Link onClick={scrollToTop} className="" to="/">
+                                {/* <img className="" src={logo} alt="Your Company" /> */}
                             </Link>
                         </div>
                         {/* menu */}

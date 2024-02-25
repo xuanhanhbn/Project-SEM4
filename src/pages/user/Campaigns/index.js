@@ -3,8 +3,23 @@ import Card_img_1 from '~/assets/images/campaigns/Cover_Photo_November_12 .jpg';
 import { CampaignsData } from './constants';
 import './Campaigns.css';
 import { Link } from 'react-router-dom';
+// import { getAllPrograms } from './callApi';
+// import { useMutation, useQuery } from '@tanstack/react-query';
+// import { notify } from '~/utils/common';
+// import { useEffect } from 'react';
 
 function Campaigns() {
+    // const mutation = useMutation({
+    //     mutationFn: getAllPrograms,
+    //     onSuccess: (data) => {
+    //         console.log('data: ', data);
+    //         return notify('Success', 'success');
+    //     },
+    // });
+
+    // useEffect(() => {
+    //     mutation.mutate();
+    // }, []);
     return (
         <div id="campaigns">
             <div>
