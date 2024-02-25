@@ -51,6 +51,20 @@ function LayoutAdmin({ children }) {
 
                 <div className="admin_sidebar_list">
                     <ul className="flex flex-col pl-0 mb-0">{sideBarList.map((data) => RENDER_TAB_ITEMS(data))}</ul>
+                    <ul className="flex flex-col pl-0 mb-0">
+                        <li id="admin_sidebar_item" className="mt-0.5 w-full">
+                            <NavLink
+                                className={({ isActive }) => (isActive ? 'tab_active shadow-md tab_item' : 'tab_item')}
+                                to="/"
+                                onClick={() => setisHiddenClass(false)}
+                            >
+                                <div className="tab_item_icon">
+                                    <i className="fa-solid fa-right-from-bracket"></i>
+                                </div>
+                                <span className={isHiddenClass ? 'hidden' : ''}>Logout</span>
+                            </NavLink>
+                        </li>
+                    </ul>
                 </div>
             </aside>
             <main className={isHiddenClass ? 'admin_container xl:ml-[6.5rem]' : 'admin_container xl:ml-[17.125rem]'}>

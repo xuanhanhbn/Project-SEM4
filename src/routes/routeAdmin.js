@@ -1,13 +1,23 @@
 import BillingPage from '~/pages/admin/Billing';
 import ChatBox from '~/pages/admin/ChatBox';
 import Dashboard from '~/pages/admin/Dashboard';
+import LoginPage from '~/pages/admin/Login';
 import Partner from '~/pages/admin/Partner';
 import Program from '~/pages/admin/Program';
 import ProgramDetail from '~/pages/admin/Program/components/ProgramDetail';
 import TablePages from '~/pages/admin/Tables';
+import RegisterPage from '~/pages/admin/Register';
 
 // Public routes
 const AdminRouter = [
+    {
+        path: '/',
+        component: LoginPage,
+    },
+    {
+        path: '/register',
+        component: RegisterPage,
+    },
     {
         path: '/admin/dasboard',
         component: Dashboard,
