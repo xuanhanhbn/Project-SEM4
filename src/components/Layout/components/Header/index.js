@@ -4,6 +4,8 @@ import { NavLink, Link } from 'react-router-dom';
 import './Header.css';
 import UserAvatar from '../../../../assets/images/avatar/avatar.png';
 import { animateScroll as scroll } from 'react-scroll';
+import { auth } from '~/firebase';
+import { signOut } from 'firebase/auth';
 import logo from '~/assets/images/logo/Hand_in_Hand-removebg.png';
 
 const login = false;
@@ -165,6 +167,7 @@ function Header() {
                                         role="menuitem"
                                         tabIndex="-1"
                                         id="user-menu-item-2"
+                                        onClick={() => signOut(auth)}
                                     >
                                         Sign out
                                     </Link>

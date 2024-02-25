@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Input } from 'antd';
 import helloChat from '~/assets/images/banner/__How-To-Craft-A-Great-Chatbot-Welcome-Message-01.png';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,27 @@ import { chatUser } from './constanst';
 import { Controller, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, db, storage } from '~/firebase';
+import { notify } from '~/utils/common';
+import { ChatContext } from '~/context/ChatContext';
+import {
+    collection,
+    query,
+    where,
+    getDocs,
+    arrayUnion,
+    doc,
+    updateDoc,
+    serverTimestamp,
+    onSnapshot,
+    Timestamp,
+} from 'firebase/firestore';
+import { AuthContext } from '~/context/AuthContext';
+import MessageAdmin from './MessageAdmin';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { v4 as uuid } from 'uuid';
+import Button from '~/components/Button';
 
 const validationSearchSchema = Yup.object().shape({
     search: Yup.string().required(''),
@@ -16,9 +37,16 @@ const validationMessageSchema = Yup.object().shape({
 });
 
 function ChatBox() {
+    const { data, dispatch } = useContext(ChatContext);
+    const { currentUser } = useContext(AuthContext);
+
     //State
     const [isShowChatBox, setIsShowChatBox] = useState(false);
-    const [isMessage, setIsMessage] = useState({});
+    const [err, setErr] = useState(false);
+    const [user, setUser] = useState({});
+    const [chats, setChats] = useState([]);
+    const [messages, setMessages] = useState([]);
+    const [img, setImg] = useState(null);
 
     // quản lý form search
     const { handleSubmit, control, setValue } = useForm({
@@ -34,13 +62,56 @@ function ChatBox() {
         resolver: yupResolver(validationMessageSchema),
     });
 
-    // kiểm tra isMessage
-    const keys = Object.keys(isMessage);
+    useEffect(() => {
+        handleLoginChatBox();
+    }, []);
+
+    useEffect(() => {
+        const getChats = () => {
+            const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
+                setChats(doc.data());
+            });
+
+            return () => {
+                unsub();
+            };
+        };
+
+        currentUser.uid && getChats();
+    }, [currentUser.uid]);
+
+    const handleGetHistoryChat = () => {
+        onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
+            doc.exists() && setMessages(doc.data().messages);
+        });
+        Object.entries(chats)
+            ?.sort((a, b) => b[1].date - a[1].date)
+            .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
+    };
+
+    console.log('messages: ', messages);
+
+    // Login vào account chatbox
+    const handleLoginChatBox = async () => {
+        const email = 'admin2@gmail.com';
+        const password = 'Admin123@';
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (err) {
+            return notify(err, 'error');
+        }
+    };
 
     // xử lý mở chatbox
-    const hanldeShowChatBox = (data) => {
+    const hanldeShowChatBox = () => {
+        // await Object.entries(chats)
+        //     ?.sort((a, b) => b[1].date - a[1].date)
+        //     .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
+
+        // await onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
+        //     doc.exists() && setMessages(doc.data().messages);
+        // });
         setIsShowChatBox(true);
-        setIsMessage(data);
     };
 
     // render all user chat
@@ -56,17 +127,77 @@ function ChatBox() {
     };
 
     // xử lý tìm kiếm user chat
-    const handleSearchUser = (data) => {
-        console.log('userName', data);
-        setValue('search', '');
+    const handleSearchUser = async (data) => {
+        try {
+            const q = query(collection(db, 'users'), where('displayName', '==', data?.search));
+            const querySnapshot = await getDocs(q);
+            if (querySnapshot && querySnapshot?._snapshot?.docChanges?.length > 0) {
+                querySnapshot.forEach((doc) => {
+                    setUser(doc.data());
+                });
+                return setErr(false);
+            }
+            setErr(true);
+            return setUser({});
+        } catch (err) {
+            setErr(true);
+            return notify(err, 'error');
+        }
     };
 
     // xử lý gửi tin nhắn
-    const handleSendMessage = (data) => {
-        console.log('message', data);
-        setValueMessage('message', '');
-    };
+    const handleSendMessage = async (mess) => {
+        const text = mess?.message || '';
+        if (img) {
+            const storageRef = ref(storage, uuid());
 
+            const uploadTask = uploadBytesResumable(storageRef, img);
+
+            uploadTask.on(
+                (error) => {
+                    //TODO:Handle Error
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                        await updateDoc(doc(db, 'chats', data.chatId), {
+                            messages: arrayUnion({
+                                id: uuid(),
+                                text,
+                                senderId: currentUser.uid,
+                                date: Timestamp.now(),
+                                img: downloadURL,
+                            }),
+                        });
+                    });
+                },
+            );
+        } else {
+            await updateDoc(doc(db, 'chats', data.chatId), {
+                messages: arrayUnion({
+                    id: uuid(),
+                    text,
+                    senderId: currentUser.uid,
+                    date: Timestamp.now(),
+                }),
+            });
+        }
+
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+            [data.chatId + '.lastMessage']: {
+                text,
+            },
+            [data.chatId + '.date']: serverTimestamp(),
+        });
+
+        await updateDoc(doc(db, 'userChats', data.user.uid), {
+            [data.chatId + '.lastMessage']: {
+                text,
+            },
+            [data.chatId + '.date']: serverTimestamp(),
+        });
+
+        setImg(null);
+    };
     return (
         <div className="h-screen py-2 pr-2 ">
             <div className="flex h-full shadow-2xl bg-chat-100 rounded-2xl">
@@ -96,12 +227,19 @@ function ChatBox() {
                     </form>
                     <div>
                         <div className="mb-3 text-xs font-medium leading-5 mt-7">DIRECT MESSAGES</div>
-
-                        {chatUser.map((data) => RENDER_ALL_CHAT_USER(data))}
+                        {err && <span>User not found!</span>}
+                        {Object.keys(user)?.length > 0 && (
+                            <div className="mb-3">
+                                <Button onClick={() => hanldeShowChatBox()} className="flex items-center">
+                                    <img src={user.photoURL} className="mr-3 rounded-full w-9 h-9" alt="" />
+                                    <p className="">{user.displayName}</p>
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                {keys.length === 0 ? (
+                {!isShowChatBox ? (
                     <div className="h-full">
                         <img src={helloChat} alt="" className="w-full h-full rounded-2xl" />
                     </div>
@@ -110,37 +248,43 @@ function ChatBox() {
                         <div className={isShowChatBox ? '' : 'hidden'}>
                             <div className="flex w-full h-24 p-6 border-b border-white">
                                 <div className="flex items-center w-full ">
-                                    <img src={isMessage.avatar} className="w-10 h-10 mr-3 rounded-full " alt="" />
-                                    <p className="font-bold">{isMessage.name}</p>
+                                    <img src={user?.photoURL} className="w-10 h-10 mr-3 rounded-full " alt="" />
+                                    <p className="font-bold">{user?.displayName}</p>
                                 </div>
                                 <button className="h-auto bg-blue-900 rounded-lg md:hidden hover:bg-blue-101 w-14">
                                     <i className="text-3xl text-white fa-solid fa-caret-left"></i>
                                 </button>
                             </div>
+
                             <div className="flex flex-col flex-1 ">
                                 <div className="p-8 overflow-auto h-96">
                                     <div>
                                         <div className="flex items-end mt-6">
                                             <div className="w-10">
-                                                <img src={isMessage.avatar} alt="" className="rounded-full w-7 h-w-7" />
+                                                <img src={user?.photoURL} alt="" className="rounded-full w-7 h-w-7" />
                                             </div>
+                                            {/* FOR USER */}
                                             <div>
-                                                <div className="max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-white shadow-2xl rounded-3xl">
-                                                    <p className="my-1">
-                                                        Good morning 😊 asdasd asdasd asdas asdas asd asdas asdasd
-                                                        asdasd asdas asdas asd asdas asdasd asdasd asdas
-                                                    </p>
+                                                <div className="max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-white shadow-2xl rounded-3xl break-words">
+                                                    asdasd
                                                 </div>
+                                                {/* {messages &&
+                                                    messages?.length > 0 &&
+                                                    messages
+                                                        ?.filter((obj) => obj?.senderId !== currentUser?.uid)
+                                                        .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)} */}
                                             </div>
                                         </div>
-                                        <div className="mt-6 ">
-                                            <div className="float-right max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left shadow-2xl bg-blue-102 rounded-3xl">
-                                                <p className="my-1">
-                                                    asdasd asdasd asdas asdas asd asdas asdasd asdasd asdas asdas asd
-                                                    asdas asdasd asdasd asdas
-                                                </p>
-                                            </div>
+
+                                        {/* FOR ME */}
+                                        <div className="mt-6 float-right max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left shadow-2xl bg-blue-102 rounded-3xl break-words">
+                                            asdad
                                         </div>
+                                        {/* {messages &&
+                                            messages?.length > 0 &&
+                                            messages
+                                                ?.filter((obj) => obj?.senderId === currentUser?.uid)
+                                                .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)} */}
                                     </div>
                                 </div>
                                 <form
