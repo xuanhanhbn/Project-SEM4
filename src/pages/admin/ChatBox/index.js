@@ -265,7 +265,7 @@ function ChatBox() {
                                             </div>
                                             {/* FOR USER */}
                                             <div>
-                                                <div className="max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-white shadow-2xl rounded-3xl break-words">
+                                                <div className="max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left break-words bg-white shadow-2xl rounded-3xl">
                                                     asdasd
                                                 </div>
                                                 {/* {messages &&
@@ -277,7 +277,7 @@ function ChatBox() {
                                         </div>
 
                                         {/* FOR ME */}
-                                        <div className="mt-6 float-right max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left shadow-2xl bg-blue-102 rounded-3xl break-words">
+                                        <div className="float-right max-w-xl px-3 py-2 mt-6 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left break-words shadow-2xl bg-blue-102 rounded-3xl">
                                             asdad
                                         </div>
                                         {/* {messages &&
