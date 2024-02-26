@@ -47,6 +47,7 @@ function ChatBox() {
     const [chats, setChats] = useState([]);
     const [messages, setMessages] = useState([]);
     const [img, setImg] = useState(null);
+    const [resize, setResize] = useState('');
 
     // quản lý form search
     const { handleSubmit, control, setValue } = useForm({
@@ -113,6 +114,16 @@ function ChatBox() {
         // });
         setIsShowChatBox(true);
     };
+
+    useEffect(() => {
+        window.addEventListener('resize', function () {
+            const width = window.innerWidth;
+            // Xử lý độ rộng màn hình mới
+            setResize(width);
+        });
+    });
+
+    console.log('resize', resize);
 
     // render all user chat
     const RENDER_ALL_CHAT_USER = (item) => {
@@ -236,6 +247,7 @@ function ChatBox() {
                                 </Button>
                             </div>
                         )}
+                        {/* {chatUser.map((data) => RENDER_ALL_CHAT_USER(data))} */}
                     </div>
                 </div>
 
@@ -257,7 +269,7 @@ function ChatBox() {
                             </div>
 
                             <div className="flex flex-col flex-1 ">
-                                <div className="p-8 overflow-auto h-96">
+                                <div className="p-8 overflow-auto min-h-[24rem]">
                                     <div>
                                         <div className="flex items-end mt-6">
                                             <div className="w-10">
@@ -265,7 +277,7 @@ function ChatBox() {
                                             </div>
                                             {/* FOR USER */}
                                             <div>
-                                                <div className="max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-white shadow-2xl rounded-3xl break-words">
+                                                <div className="max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left break-words bg-white shadow-2xl rounded-3xl">
                                                     asdasd
                                                 </div>
                                                 {/* {messages &&
@@ -277,7 +289,7 @@ function ChatBox() {
                                         </div>
 
                                         {/* FOR ME */}
-                                        <div className="mt-6 float-right max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left shadow-2xl bg-blue-102 rounded-3xl break-words">
+                                        <div className="float-right max-w-xl px-3 py-2 mt-6 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left break-words shadow-2xl bg-blue-102 rounded-3xl">
                                             asdad
                                         </div>
                                         {/* {messages &&
@@ -287,9 +299,10 @@ function ChatBox() {
                                                 .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)} */}
                                     </div>
                                 </div>
+
                                 <form
                                     onSubmit={handleSubmitSendMessage(handleSendMessage)}
-                                    className="flex flex-1 pt-3 pb-6 mx-4 mt-4"
+                                    className="flex pt-3 pb-6 mx-4 mt-4 shrink-0"
                                 >
                                     <Controller
                                         control={controlMessage}

@@ -1,4 +1,5 @@
 import baseApiUrlAuth from './baseApiAuth';
+import baseApiUrlNoAuth from './baseApiNoAuth';
 
 export const getApiDefault = (url) =>
     new Promise((resolve, reject) =>
@@ -20,6 +21,22 @@ export const putApiDefault = (url, data) =>
     new Promise((resolve, reject) =>
         baseApiUrlAuth
             .put(url, data)
+            .then((res) => resolve(res))
+            .catch((err) => reject(err)),
+    );
+
+export const postApiNoAuth = (url, data) =>
+    new Promise((resolve, reject) =>
+        baseApiUrlNoAuth
+            .post(url, data)
+            .then((res) => resolve(res))
+            .catch((err) => reject(err)),
+    );
+
+export const getApiNoAuth = (url) =>
+    new Promise((resolve, reject) =>
+        baseApiUrlNoAuth
+            .get(url)
             .then((res) => resolve(res))
             .catch((err) => reject(err)),
     );

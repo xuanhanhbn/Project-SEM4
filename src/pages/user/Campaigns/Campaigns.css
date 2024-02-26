@@ -15,7 +15,7 @@
 }
 
 #campaigns .card_title {
-    @apply h-20 mb-3 text-2xl font-bold text-gray-800 cursor-pointer line-clamp-2 text-ellipsis
+    @apply h-20 mb-3 text-2xl font-bold text-black cursor-pointer line-clamp-2 text-ellipsis
 }
 
 #campaigns .card_btn {
@@ -47,7 +47,7 @@
 }
 
 #campaigns .tag_title {
-    @apply h-10 mb-6 text-2xl font-bold text-gray-800 cursor-pointer line-clamp-2 text-ellipsis
+    @apply h-10 mb-6 text-2xl font-bold text-black cursor-pointer line-clamp-2 text-ellipsis
 }
 
 #campaigns .btn_read {

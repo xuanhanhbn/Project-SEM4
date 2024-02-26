@@ -43,7 +43,7 @@
 }
 
 #header .wrapper_logo {
-    @apply flex items-center justify-start flex-1 sm:items-stretch ml-[46px]
+    @apply flex items-center justify-start h-full flex-1 ml-[46px]
 }
 
 #header .wrapper_nav {

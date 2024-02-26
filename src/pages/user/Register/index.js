@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Style.css';
 import { inputRegister, inputLogin } from './constants';
 
@@ -6,20 +6,21 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import InputToken from './components/InputTocken';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { registerApi, loginApi, getActiveApi } from './callApi';
+import { notify } from '~/utils/common';
+import axios from 'axios';
 
 // validate register form
 const validationRegisterSchema = Yup.object().shape({
-    username: Yup.string().required('User name is required'),
+    phoneNumber: Yup.string().required('Phone number is required'),
     password: Yup.string().required('Password is required'),
     email: Yup.string().required('Email is required'),
-    confirmPassword: Yup.string()
-        .required('Confirm Password is required')
-        .oneOf([Yup.ref('password')], 'Passwords do not match'),
 });
 
 // validate login form
 const validationLoginSchema = Yup.object().shape({
-    username: Yup.string().required('User name is required'),
+    email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
 });
 
@@ -44,15 +45,41 @@ function RegisterPage() {
         resolver: yupResolver(validationLoginSchema),
     });
 
+    const mutationLogin = useMutation({
+        mutationFn: loginApi,
+    });
+
     // xử lý khi click nút login
     const onSubmitLogin = (data) => {
-        console.log('dataLogin: ', data);
+        // console.log('dataLogin: ', data);
+        mutationLogin.mutate(data);
     };
+
+    const mutationRegister = useMutation({
+        mutationFn: registerApi,
+        onSuccess: (data) => {
+            console.log('data', data);
+            // mutationGetActive.mutate();
+        },
+    });
+
+    const mutationGetActive = useMutation({
+        mutationFn: getActiveApi,
+    });
+
+    // useEffect(() => {
+    //     if (istoggleFromToken) mutationGetActive.mutate();
+    // }, [istoggleFromToken]);
+
+    // let active = mutationRegister.isSuccess;
+    // console.log('active', active);
 
     // xử lý khi click nút register
     const onSubmitRegister = (data) => {
         console.log('dataRegister: ', data);
-        if (data) setIstoggleFromToken(true);
+        // if (data) setIstoggleFromToken(true);
+
+        mutationRegister.mutate(data);
     };
 
     // xử lý chuyển form login <=> register
@@ -88,6 +115,7 @@ function RegisterPage() {
                                                             {item.icon}
                                                             <input
                                                                 type={item.type}
+                                                                autoComplete="on"
                                                                 onChange={onChange}
                                                                 value={value == null ? '' : value}
                                                                 placeholder={item.placeholder}

@@ -11,7 +11,7 @@
 }
 
 #cardCustom .card_title {
-    @apply h-20 mb-3 text-2xl font-bold text-gray-800 cursor-pointer line-clamp-2 text-ellipsis
+    @apply h-20 mb-3 text-2xl font-bold text-black cursor-pointer line-clamp-2 text-ellipsis
 }
 
 #cardCustom .card_btn {
