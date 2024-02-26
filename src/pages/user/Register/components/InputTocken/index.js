@@ -100,29 +100,35 @@ const InputToken = () => {
     }, [activeOTPIndex]);
 
     return (
-        <div id="input_token">
+        <div
+            id="input_token"
+            className="flex flex-col items-center max-w-xl p-10 m-auto bg-white shadow-2xl rounded-3xl"
+        >
             <h1 className="text-2xl font-semibold text-gray-100 ">Account Verification</h1>
-            <p className="font-semibold text-gray-500">
-                Enter the verification token you received on your email into the input field below.
-            </p>
+            <div className="px-10 text-center">
+                <p className="font-semibold text-gray-500">
+                    Enter the verification token you received on your email into the input field below.
+                </p>
+            </div>
             {/* render input item */}
-            {otp.map((_, index) => (
-                <div key={index}>
-                    <input
-                        ref={index === activeOTPIndex ? inputRef : null}
-                        type="number"
-                        className="input_item spin-button-none"
-                        onChange={handleOnChangToken}
-                        onKeyDown={(e) => handleOnKeyDown(e, index)}
-                        value={otp[index]}
-                    />
-                    {index !== otp.length - 1 && <span className="w-2 py-0.5 bg-gray-400" />}
-                </div>
-            ))}
-
+            <div className="flex flex-wrap">
+                {otp.map((_, index) => (
+                    <div key={index}>
+                        <input
+                            ref={index === activeOTPIndex ? inputRef : null}
+                            type="number"
+                            className="input_item spin-button-none"
+                            onChange={handleOnChangToken}
+                            onKeyDown={(e) => handleOnKeyDown(e, index)}
+                            value={otp[index]}
+                        />
+                        {index !== otp.length - 1 && <span className="w-2 py-0.5 bg-gray-400" />}
+                    </div>
+                ))}
+            </div>
             {/* check khi nhập full mã otp mới hiển thị button submit */}
             {otp.every((value) => value !== '') ? (
-                <button onClick={() => handleSubmitToken()} className="bg-blue-100">
+                <button onClick={() => handleSubmitToken()} className="px-5 py-2 text-white bg-blue-100 rounded-lg">
                     Confirm
                 </button>
             ) : null}

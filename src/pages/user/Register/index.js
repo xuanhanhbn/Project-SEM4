@@ -17,7 +17,9 @@ import { Spin } from 'antd';
 const validationRegisterSchema = Yup.object().shape({
     phoneNumber: Yup.string().required('Phone number is required'),
     password: Yup.string().required('Password is required'),
-    email: Yup.string().required('Email is required'),
+    email: Yup.string()
+        .required('Email is required')
+        .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 'khong hop le'),
 });
 
 // validate login form
@@ -82,6 +84,7 @@ function RegisterPage() {
 
     // xử lý khi click nút register
     const onSubmitRegister = (data) => {
+        // setIstoggleFromToken(true);
         mutationRegister(data);
     };
 
