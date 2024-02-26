@@ -24,9 +24,7 @@ baseInstance.defaults.timeout = 60000;
 
 baseInstance.interceptors.response.use(
     (response) => {
-        if (response.headers.authorization) {
-            sessionStorage.setItem('accessToken', response.headers.authorization);
-        }
+        console.log('res: ', response);
         return response;
     },
     (error) => {

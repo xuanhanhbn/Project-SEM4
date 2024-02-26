@@ -4,6 +4,7 @@ import Campaigns from '~/pages/user/Campaigns';
 import Faqs from '~/pages/user/Faqs';
 import CampaignDetail from '~/pages/user/Campaigns/components/CampaignDetail';
 import RegisterPage from '~/pages/user/Register';
+import InputToken from '~/pages/user/Register/components/InputTocken';
 
 // Public routes
 const publicRoutes = [
@@ -30,6 +31,10 @@ const publicRoutes = [
     {
         path: '/register',
         component: RegisterPage,
+    },
+    {
+        path: '/active-acount',
+        component: InputToken,
     },
 ];
 const privateRoutes = [];

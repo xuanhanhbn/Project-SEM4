@@ -4,9 +4,8 @@ export async function registerApi(data) {
     const url = '/auth/register';
     try {
         const res = await postApiNoAuth(url, data);
-        if (res && res?.status === 200) {
-            return res?.data;
-        }
+        console.log('res: ', res);
+        return res;
     } catch (error) {
         return error;
     }

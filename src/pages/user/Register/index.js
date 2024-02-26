@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 import React, { useEffect, useState } from 'react';
 import './Style.css';
 import { inputRegister, inputLogin } from './constants';
@@ -10,6 +11,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { registerApi, loginApi, getActiveApi } from './callApi';
 import { notify } from '~/utils/common';
 import axios from 'axios';
+import { Spin } from 'antd';
 
 // validate register form
 const validationRegisterSchema = Yup.object().shape({
@@ -55,10 +57,14 @@ function RegisterPage() {
         mutationLogin.mutate(data);
     };
 
-    const mutationRegister = useMutation({
+    const { mutate: mutationRegister, isPending } = useMutation({
         mutationFn: registerApi,
         onSuccess: (data) => {
-            console.log('data', data);
+            if ((data && data?.status === 200) || data?.status === '200') {
+                return notify(data?.data, 'success');
+            }
+            return notify(data?.message, 'error');
+
             // mutationGetActive.mutate();
         },
     });
@@ -76,10 +82,7 @@ function RegisterPage() {
 
     // xử lý khi click nút register
     const onSubmitRegister = (data) => {
-        console.log('dataRegister: ', data);
-        // if (data) setIstoggleFromToken(true);
-
-        mutationRegister.mutate(data);
+        mutationRegister(data);
     };
 
     // xử lý chuyển form login <=> register
@@ -129,8 +132,8 @@ function RegisterPage() {
                                         </div>
                                     );
                                 })}
-                                <button type="submit" className="bg-blue-100">
-                                    Sign up
+                                <button type="submit" className="bg-blue-100" disabled={isPending}>
+                                    {isPending ? <Spin size="large" /> : <div>Sign up</div>}
                                 </button>
                                 <p>
                                     <span>Already have an account?</span>
