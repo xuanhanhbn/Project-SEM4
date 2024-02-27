@@ -12,14 +12,13 @@ import { registerApi, loginApi, getActiveApi } from './callApi';
 import { notify } from '~/utils/common';
 import axios from 'axios';
 import { Spin } from 'antd';
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 // validate register form
 const validationRegisterSchema = Yup.object().shape({
     phoneNumber: Yup.string().required('Phone number is required'),
     password: Yup.string().required('Password is required'),
-    email: Yup.string()
-        .required('Email is required')
-        .matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 'khong hop le'),
+    email: Yup.string().required('Email is required'),
 });
 
 // validate login form
@@ -32,7 +31,9 @@ function RegisterPage() {
     // State
     const [toggledFormLogin, setToggledFormLogin] = useState(false);
     const [istoggleFromToken, setIstoggleFromToken] = useState(false);
+    const [dataActive, setDataActive] = useState(false);
 
+    const navigation = useNavigate();
     const {
         control,
         handleSubmit,
@@ -49,31 +50,39 @@ function RegisterPage() {
         resolver: yupResolver(validationLoginSchema),
     });
 
-    const mutationLogin = useMutation({
+    // call api login
+    const { mutate: mutationLogin } = useMutation({
         mutationFn: loginApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                navigation('/');
+            }
+            return notify(data?.message, 'error');
+            // mutationGetActive.mutate();
+        },
     });
 
     // xử lý khi click nút login
     const onSubmitLogin = (data) => {
         // console.log('dataLogin: ', data);
-        mutationLogin.mutate(data);
+        mutationLogin(data);
     };
 
+    //call api register
     const { mutate: mutationRegister, isPending } = useMutation({
         mutationFn: registerApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                return notify(data?.data, 'success');
+                navigation('/');
             }
             return notify(data?.message, 'error');
-
             // mutationGetActive.mutate();
         },
     });
 
-    const mutationGetActive = useMutation({
-        mutationFn: getActiveApi,
-    });
+    // const mutationGetActive = useMutation({
+    //     mutationFn: getActiveApi,
+    // });
 
     // useEffect(() => {
     //     if (istoggleFromToken) mutationGetActive.mutate();
@@ -84,7 +93,7 @@ function RegisterPage() {
 
     // xử lý khi click nút register
     const onSubmitRegister = (data) => {
-        // setIstoggleFromToken(true);
+        setDataActive(data.email);
         mutationRegister(data);
     };
 

@@ -11,10 +11,10 @@ export async function registerApi(data) {
     }
 }
 
-export async function loginApi() {
+export async function loginApi(data) {
     const url = '/auth/log-in';
     try {
-        const res = await postApiNoAuth(url);
+        const res = await postApiNoAuth(url, data);
         if (res && res?.status === 200) {
             return res?.data;
         }
@@ -23,14 +23,14 @@ export async function loginApi() {
     }
 }
 
-export async function getActiveApi() {
-    const url = '/auth/active';
-    try {
-        const res = await getApiNoAuth(url);
-        if (res && res?.status === 200) {
-            return res?.data;
-        }
-    } catch (error) {
-        return error;
-    }
-}
+// export async function getActiveApi(code, email) {
+//     const url = `/auth/active?code=${code}&email=${email}`;
+//     try {
+//         const res = await getApiNoAuth(url);
+//         if (res && res?.status === 200) {
+//             return res?.data;
+//         }
+//     } catch (error) {
+//         return error;
+//     }
+// }

@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
 import { Modal, Input, Upload } from 'antd';
 import { inputCreatePartner } from './constants';
-import { beforeUpload, getBaseUploadLogo } from '~/utils/common';
+import { beforeUpload, getBase64, getBaseUploadCarousel64, getBaseUploadLogo, notify } from '~/utils/common';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Controller, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
+import { useMutation } from '@tanstack/react-query';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import './style.css';
+import { createPartnerApi } from './callApi';
 
 const { TextArea } = Input;
 
 const validationSchema = Yup.object().shape({
     // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
-    name: Yup.string().required('Company name is required'),
+    partnerName: Yup.string().required('Company name is required'),
     email: Yup.string().required('Email adress is required'),
-    phone: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Adress is required'),
-    website: Yup.string().required('Website date is required'),
-    describe: Yup.string().required('Describe is required'),
+    // phone: Yup.string().required('Phone number is required'),
+    // address: Yup.string().required('Adress is required'),
+    // website: Yup.string().required('Website date is required'),
+    description: Yup.string().required('Describe is required'),
     // finishDate: Yup.string().required('Finish date is required'),
     // target: Yup.string().required('Target is required'),
 });
@@ -29,13 +31,26 @@ function ModalCreatePartner(props) {
 
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
+    const [dataCreatePartner, setDataCreatePartner] = useState({});
 
     const {
         handleSubmit,
         control,
+        setValue,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
+    });
+
+    //call api create partner
+    const { mutate: mutationCreatpartner } = useMutation({
+        mutationFn: createPartnerApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                return notify('Success', 'success');
+            }
+            return notify(data?.message, 'error');
+        },
     });
 
     const uploadButton = (
@@ -58,22 +73,44 @@ function ModalCreatePartner(props) {
     );
 
     const handleChange = (info) => {
-        if (info.file.status === 'uploading') {
-            setLoading(true);
+        const files = info.file || {};
+        console.log('files: ', files);
+        if (files.status === 'uploading') {
+            // setLoading(true);
+
             return;
         }
-        if (info.file.status === 'done') {
+
+        if (files.status === 'done') {
             // Get this url from response in real world.
-            getBaseUploadLogo(info.file.originFileObj, (url) => {
-                setLoading(false);
-                setImageUrl(url);
+            getBase64(files.originFileObj, (url) => {
+                const blobFromFile = new Blob([files.originFileObj], { type: 'image/jpeg' });
+                const formData = new FormData();
+                formData.append('files', blobFromFile, files);
+                console.log('formData: ', formData);
             });
+            // const blobFromFile = new Blob([files.originFileObj], { type: 'image/jpeg' });
+            // const formData = new FormData();
+            // formData.append('files', blobFromFile, files);
+            // console.log('formData: ', formData);
+            // setValue('files', files?.originFileObj, { shouldValidate: true });
         }
+        setValue('files', files, { shouldValidate: true });
     };
+    // console.log(imageUrl);
 
     const onSubmit = (data) => {
-        data.logoImageUrl = imageUrl;
-        console.log(data);
+        // console.log('data: ', data);
+        // const formData = new FormData();
+        // const blobFromFile = new Blob([data?.files], { type: 'image/jpeg' });
+        // formData.append('files', blobFromFile);
+        // console.log('form: ', formData);
+        // const newData = {
+        //     ...data,
+        // };
+        // Gọi API tạo partner với formData
+        // mutationCreatpartner(data);
+        // console.log(data);
     };
 
     // render input create program
@@ -150,6 +187,7 @@ function ModalCreatePartner(props) {
                                 <img
                                     src={imageUrl}
                                     alt="avatar"
+                                    // type="file"
                                     style={{
                                         width: '70%',
                                     }}

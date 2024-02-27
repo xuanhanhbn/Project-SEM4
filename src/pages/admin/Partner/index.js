@@ -1,15 +1,19 @@
 import { Space, Input } from 'antd';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './style.css';
 import ModalCreatePartner from './components/ModalCreatePartner';
 import TableCommon from '~/components/TableCommon';
 import { columns, dataTablePartners } from './constants';
+import { useMutation } from '@tanstack/react-query';
+import { notify } from '~/utils/common';
+import { getAllPartnerApi } from './callApi';
 
 const { Search } = Input;
 
 function Partner() {
     // STATE
     const [isModalOpenCreatePartner, setIsModalOpenCreatePartner] = useState(false);
+    const [dataTable, setDataTable] = useState(null);
 
     // sử lý khi click nút create partner
     const showModalCreate = () => {
@@ -38,6 +42,17 @@ function Partner() {
         return item[field];
     }, []);
 
+    const mutation = useMutation({
+        mutationFn: getAllPartnerApi,
+        onSuccess: (data) => {
+            setDataTable(data);
+        },
+    });
+
+    useEffect(() => {
+        mutation.mutate();
+    }, []);
+
     return (
         <div id="partner">
             <h1 className="mt-3 text-xl font-bold">Partner</h1>
@@ -58,7 +73,7 @@ function Partner() {
 
             <div className="flex-none w-full max-w-full px-3 mt-6">
                 <TableCommon
-                    data={dataTablePartners || []}
+                    data={dataTable || []}
                     parseFunction={parseData}
                     columns={columns}
                     isShowPaging

@@ -238,7 +238,7 @@ function ChatBox() {
                     </form>
                     <div>
                         <div className="mb-3 text-xs font-medium leading-5 mt-7">DIRECT MESSAGES</div>
-                        {err && <span>User not found!</span>}
+                        {/* {err && <span>User not found!</span>}
                         {Object.keys(user)?.length > 0 && (
                             <div className="mb-3">
                                 <Button onClick={() => hanldeShowChatBox()} className="flex items-center">
@@ -246,8 +246,8 @@ function ChatBox() {
                                     <p className="">{user.displayName}</p>
                                 </Button>
                             </div>
-                        )}
-                        {/* {chatUser.map((data) => RENDER_ALL_CHAT_USER(data))} */}
+                        )} */}
+                        {chatUser.map((data) => RENDER_ALL_CHAT_USER(data))}
                     </div>
                 </div>
 

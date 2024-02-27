@@ -54,16 +54,29 @@
 // export default InputToken;
 
 import React, { useEffect, useRef, useState } from 'react';
+import { getActiveApi } from './callApi';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import './InputCustom.css';
+import { notify } from '~/utils/common';
 
 let currentOTPIndex = 0;
 
-const InputToken = () => {
+const InputToken = (props) => {
     //State
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const [activeOTPIndex, setActiveOTPIndex] = useState(0);
 
     const inputRef = useRef(null);
+
+    const { mutate: mutationGetActive } = useMutation({
+        mutationFn: getActiveApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                return notify(data?.data, 'success');
+            }
+            return notify(data?.message, 'error');
+        },
+    });
 
     // xử lý nhập iunput token
     const handleOnChangToken = (e) => {
@@ -92,6 +105,7 @@ const InputToken = () => {
     // xử lý ấn submit confirm button
     const handleSubmitToken = () => {
         console.log('token', otp.join(''));
+        mutationGetActive();
     };
 
     // tự động focus input item
