@@ -15,6 +15,7 @@ baseInstance.interceptors.request.use(
             if (loginData !== undefined) {
                 const loginDataParse = JSON.parse(loginData);
                 config.headers.Authorization = `Bearer ${loginDataParse?.token}`;
+                // config.headers['Content-Type'] = 'multipart/form-data';
             }
         } catch (error) {
             config.validateStatus = (status) => status < 500;

@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Input } from 'antd';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
 import avatar from '~/assets/images/avatar/avatar.png';
 import { auth, db, storage } from '~/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -21,12 +21,12 @@ const validationSchema = Yup.object().shape({
 function ChatBoxCustom(props) {
     const { closeChatBox } = props;
     const { currentUser } = useContext(AuthContext);
-    const { data } = useContext(ChatContext);
+    const { data, dispatch } = useContext(ChatContext);
 
     // console.log('currentUser: ', currentUser);
     const fakeDataChat = {
-        displayName: 'Admin',
-        email: 'admin3@gmail.com',
+        displayName: 'User',
+        email: 'admin5@gmail.com',
         password: 'Admin123@',
         image: 'https://didongviet.vn/dchannel/wp-content/uploads/2023/08/hinh-nen-3d-hinh-nen-iphone-dep-3d-didongviet@2x-576x1024.jpg',
     };
@@ -36,6 +36,7 @@ function ChatBoxCustom(props) {
     const [messages, setMessages] = useState([]);
     // const [text, setText] = useState('');
     const [img, setImg] = useState(null);
+    const [chats, setChats] = useState([]);
 
     const {
         handleSubmit,
@@ -55,6 +56,20 @@ function ChatBoxCustom(props) {
             unSub();
         };
     }, [data.chatId]);
+
+    useEffect(() => {
+        const getChats = () => {
+            const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
+                setChats(doc.data());
+            });
+
+            return () => {
+                unsub();
+            };
+        };
+
+        currentUser?.uid && getChats();
+    }, [currentUser]);
 
     // console.log(messages);
     // lưu trạng thái lần đầu và duy nhất khi bắt đầu đoạn chat
@@ -103,8 +118,20 @@ function ChatBoxCustom(props) {
                     }
                 });
             });
+            Object.entries(chats)
+                ?.sort((a, b) => b[1].date - a[1].date)
+                .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
         } catch (error) {
             return notify(error, 'error');
+        }
+    };
+
+    const handleLoginChatBox = async (email, password) => {
+        debugger;
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (err) {
+            return notify(err, 'error');
         }
     };
 

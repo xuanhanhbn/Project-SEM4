@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { Input } from 'antd';
 import helloChat from '~/assets/images/banner/__How-To-Craft-A-Great-Chatbot-Welcome-Message-01.png';
@@ -21,6 +22,8 @@ import {
     serverTimestamp,
     onSnapshot,
     Timestamp,
+    getDoc,
+    setDoc,
 } from 'firebase/firestore';
 import { AuthContext } from '~/context/AuthContext';
 import MessageAdmin from './MessageAdmin';
@@ -39,7 +42,6 @@ const validationMessageSchema = Yup.object().shape({
 function ChatBox() {
     const { data, dispatch } = useContext(ChatContext);
     const { currentUser } = useContext(AuthContext);
-
     //State
     const [isShowChatBox, setIsShowChatBox] = useState(false);
     const [err, setErr] = useState(false);
@@ -67,30 +69,31 @@ function ChatBox() {
         handleLoginChatBox();
     }, []);
 
-    // useEffect(() => {
-    //     const getChats = () => {
-    //         const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
-    //             setChats(doc.data());
-    //         });
+    useEffect(() => {
+        if (currentUser) {
+            // handleFindAllUser();
+            const getChats = () => {
+                const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
+                    setChats(doc.data());
+                });
 
-    //         return () => {
-    //             unsub();
-    //         };
-    //     };
+                return () => {
+                    unsub();
+                };
+            };
+            currentUser.uid && getChats();
+        }
+    }, [currentUser?.uid]);
 
-    //     currentUser.uid && getChats();
-    // }, [currentUser.uid]);
-
-    const handleGetHistoryChat = () => {
-        onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
+    useEffect(() => {
+        const unSub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
             doc.exists() && setMessages(doc.data().messages);
         });
-        Object.entries(chats)
-            ?.sort((a, b) => b[1].date - a[1].date)
-            .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
-    };
 
-    console.log('messages: ', messages);
+        return () => {
+            unSub();
+        };
+    }, [data.chatId]);
 
     // Login vào account chatbox
     const handleLoginChatBox = async () => {
@@ -104,38 +107,56 @@ function ChatBox() {
     };
 
     // xử lý mở chatbox
-    const hanldeShowChatBox = () => {
-        // await Object.entries(chats)
-        //     ?.sort((a, b) => b[1].date - a[1].date)
-        //     .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
+    const hanldeShowChatBox = async () => {
+        const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+        try {
+            const res = await getDoc(doc(db, 'chats', combinedId));
 
-        // await onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
-        //     doc.exists() && setMessages(doc.data().messages);
-        // });
+            if (!res.exists()) {
+                //create a chat in chats collection
+                await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+
+                //create user chats
+                await updateDoc(doc(db, 'userChats', currentUser.uid), {
+                    [combinedId + '.userInfo']: {
+                        uid: user.uid,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL,
+                    },
+                    [combinedId + '.date']: serverTimestamp(),
+                });
+
+                await updateDoc(doc(db, 'userChats', user.uid), {
+                    [combinedId + '.userInfo']: {
+                        uid: currentUser.uid,
+                        displayName: currentUser.displayName,
+                        photoURL: currentUser.photoURL,
+                    },
+                    [combinedId + '.date']: serverTimestamp(),
+                });
+            }
+        } catch (err) {}
         setIsShowChatBox(true);
     };
 
-    useEffect(() => {
-        window.addEventListener('resize', function () {
-            const width = window.innerWidth;
-            // Xử lý độ rộng màn hình mới
-            setResize(width);
-        });
-    });
-
-    console.log('resize', resize);
-
-    // render all user chat
-    const RENDER_ALL_CHAT_USER = (item) => {
-        return (
-            <div key={item.id} className="mb-3">
-                <Link onClick={() => hanldeShowChatBox(item)} to="#" className="flex items-center">
-                    <img src={item.avatar} className="mr-3 rounded-full w-9 h-9" alt="" />
-                    <p className="">{item.name}</p>
-                </Link>
-            </div>
-        );
-    };
+    // Xử lý find toàn bộ user
+    // const handleFindAllUser = async (data) => {
+    //     try {
+    //         const q = query(collection(db, 'users'), where('uid', '!=', currentUser?.uid));
+    //         const querySnapshot = await getDocs(q);
+    //         if (querySnapshot && querySnapshot?._snapshot?.docChanges?.length > 0) {
+    //             querySnapshot.forEach((doc) => {
+    //                 setUser(doc.data());
+    //             });
+    //             return setErr(false);
+    //         }
+    //         setErr(true);
+    //         return setUser({});
+    //     } catch (err) {
+    //         setErr(true);
+    //         return notify(err, 'error');
+    //     }
+    // };
 
     // xử lý tìm kiếm user chat
     const handleSearchUser = async (data) => {
@@ -241,13 +262,13 @@ function ChatBox() {
                         {/* {err && <span>User not found!</span>}
                         {Object.keys(user)?.length > 0 && (
                             <div className="mb-3">
-                                <Button onClick={() => hanldeShowChatBox()} className="flex items-center">
+                                <Link to="#" onClick={() => hanldeShowChatBox()} className="flex items-center">
                                     <img src={user.photoURL} className="mr-3 rounded-full w-9 h-9" alt="" />
                                     <p className="">{user.displayName}</p>
-                                </Button>
+                                </Link>
                             </div>
                         )} */}
-                        {chatUser.map((data) => RENDER_ALL_CHAT_USER(data))}
+                        {/* {chatUser.map((data) => RENDER_ALL_CHAT_USER(data))} */}
                     </div>
                 </div>
 
@@ -277,26 +298,21 @@ function ChatBox() {
                                             </div>
                                             {/* FOR USER */}
                                             <div>
-                                                <div className="max-w-xl px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left break-words bg-white shadow-2xl rounded-3xl">
-                                                    asdasd
-                                                </div>
-                                                {/* {messages &&
+                                                {messages &&
                                                     messages?.length > 0 &&
                                                     messages
                                                         ?.filter((obj) => obj?.senderId !== currentUser?.uid)
-                                                        .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)} */}
+                                                        .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)}
                                             </div>
                                         </div>
 
                                         {/* FOR ME */}
-                                        <div className="float-right max-w-xl px-3 py-2 mt-6 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left break-words shadow-2xl bg-blue-102 rounded-3xl">
-                                            asdad
-                                        </div>
-                                        {/* {messages &&
+
+                                        {messages &&
                                             messages?.length > 0 &&
                                             messages
                                                 ?.filter((obj) => obj?.senderId === currentUser?.uid)
-                                                .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)} */}
+                                                .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)}
                                     </div>
                                 </div>
 

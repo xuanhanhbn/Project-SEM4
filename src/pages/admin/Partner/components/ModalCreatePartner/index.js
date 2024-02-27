@@ -74,42 +74,43 @@ function ModalCreatePartner(props) {
 
     const handleChange = (info) => {
         const files = info.file || {};
-        console.log('files: ', files);
         if (files.status === 'uploading') {
             // setLoading(true);
 
             return;
         }
 
-        if (files.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(files.originFileObj, (url) => {
-                const blobFromFile = new Blob([files.originFileObj], { type: 'image/jpeg' });
-                const formData = new FormData();
-                formData.append('files', blobFromFile, files);
-                console.log('formData: ', formData);
-            });
-            // const blobFromFile = new Blob([files.originFileObj], { type: 'image/jpeg' });
-            // const formData = new FormData();
-            // formData.append('files', blobFromFile, files);
-            // console.log('formData: ', formData);
-            // setValue('files', files?.originFileObj, { shouldValidate: true });
-        }
-        setValue('files', files, { shouldValidate: true });
+        // if (files.status === 'done') {
+        //     // Get this url from response in real world.
+        //     getBase64(files.originFileObj, (url) => {
+        //         console.log('url: ',url);
+        //         const blobFromFile = new Blob([files.originFileObj], { type: 'image/jpeg' });
+        //         const formData = new FormData();
+        //         formData.append('files', blobFromFile, files);
+        //         console.log('formData: ', formData);
+        //     });
+        //     // const blobFromFile = new Blob([files.originFileObj], { type: 'image/jpeg' });
+        //     // const formData = new FormData();
+        //     // formData.append('files', blobFromFile, files);
+        //     // console.log('formData: ', formData);
+        //     // setValue('files', files?.originFileObj, { shouldValidate: true });
+        // }
+        setValue('files', files.originFileObj, { shouldValidate: true });
     };
     // console.log(imageUrl);
 
     const onSubmit = (data) => {
-        // console.log('data: ', data);
+        console.log('data: ', data);
         // const formData = new FormData();
         // const blobFromFile = new Blob([data?.files], { type: 'image/jpeg' });
         // formData.append('files', blobFromFile);
         // console.log('form: ', formData);
-        // const newData = {
-        //     ...data,
-        // };
+        const newData = {
+            ...data,
+            files: data?.files,
+        };
         // Gọi API tạo partner với formData
-        // mutationCreatpartner(data);
+        mutationCreatpartner(newData);
         // console.log(data);
     };
 
@@ -179,7 +180,7 @@ function ModalCreatePartner(props) {
                             listType="picture-card"
                             className="avatar-uploader"
                             showUploadList={false}
-                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                            // action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                             beforeUpload={beforeUpload}
                             onChange={handleChange}
                         >

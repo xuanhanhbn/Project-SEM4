@@ -1,3 +1,3 @@
 // NHỮNG FUNCTION NÀO DÙNG CHUNG THÌ SẼ VIẾT TẠI ĐÂY
 
-export const baseApi = 'http://localhost:8080/';
+export const baseApi = 'http://10.22.185.207:8081/';

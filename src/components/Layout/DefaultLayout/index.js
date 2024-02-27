@@ -29,7 +29,7 @@ function DefaultLayout({ children }) {
         };
 
         currentUser?.uid && getChats();
-    }, [currentUser]);
+    }, [currentUser?.uid]);
 
     // Kiểm tra xem đã tồn tại đoạn chat hay chưa
     const handleCheckMessageHistory = async () => {
@@ -37,7 +37,6 @@ function DefaultLayout({ children }) {
         const combinedId = currentUser.uid > adminId ? currentUser.uid + adminId : adminId + currentUser.uid;
         try {
             const res = await getDoc(doc(db, 'chats', combinedId));
-            console.log('res: ', res);
             if (!res.exists()) {
                 //create a chat in chats collection
                 await setDoc(doc(db, 'chats', combinedId), { messages: [] });
@@ -65,11 +64,10 @@ function DefaultLayout({ children }) {
             return notify(err, 'error');
         }
     };
-
     // xử lý mở chat box
     const handleChangeStateOpenChatBox = () => {
         setisOpenChatBox(!isOpenChatBox);
-        if (currentUser) {
+        if (currentUser && chats) {
             Object.entries(chats)
                 ?.sort((a, b) => b[1].date - a[1].date)
                 .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
