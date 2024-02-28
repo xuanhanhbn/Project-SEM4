@@ -10,7 +10,7 @@ import { useMutation } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import './style.css';
-import { createPartnerApi } from './callApi';
+import { createPartnerApi, uploadPartnerLogoApi } from './callApi';
 
 const { TextArea } = Input;
 
@@ -31,7 +31,7 @@ function ModalCreatePartner(props) {
 
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
-    const [dataCreatePartner, setDataCreatePartner] = useState({});
+    const [fileData, setFileData] = useState();
 
     const {
         handleSubmit,
@@ -48,6 +48,16 @@ function ModalCreatePartner(props) {
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
                 return notify('Success', 'success');
+            }
+            return notify(data?.message, 'error');
+        },
+    });
+
+    const { mutate: mutationUploadLogo } = useMutation({
+        mutationFn: uploadPartnerLogoApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                setValue('urlLogo', data.data);
             }
             return notify(data?.message, 'error');
         },
@@ -75,43 +85,17 @@ function ModalCreatePartner(props) {
     const handleChange = (info) => {
         const files = info.file || {};
         if (files.status === 'uploading') {
-            // setLoading(true);
-
             return;
         }
 
-        // if (files.status === 'done') {
-        //     // Get this url from response in real world.
-        //     getBase64(files.originFileObj, (url) => {
-        //         console.log('url: ',url);
-        //         const blobFromFile = new Blob([files.originFileObj], { type: 'image/jpeg' });
-        //         const formData = new FormData();
-        //         formData.append('files', blobFromFile, files);
-        //         console.log('formData: ', formData);
-        //     });
-        //     // const blobFromFile = new Blob([files.originFileObj], { type: 'image/jpeg' });
-        //     // const formData = new FormData();
-        //     // formData.append('files', blobFromFile, files);
-        //     // console.log('formData: ', formData);
-        //     // setValue('files', files?.originFileObj, { shouldValidate: true });
-        // }
-        setValue('files', files.originFileObj, { shouldValidate: true });
+        if (files.status === 'done') {
+        }
+        mutationUploadLogo({ files: files.originFileObj });
     };
-    // console.log(imageUrl);
 
     const onSubmit = (data) => {
         console.log('data: ', data);
-        // const formData = new FormData();
-        // const blobFromFile = new Blob([data?.files], { type: 'image/jpeg' });
-        // formData.append('files', blobFromFile);
-        // console.log('form: ', formData);
-        const newData = {
-            ...data,
-            files: data?.files,
-        };
-        // Gọi API tạo partner với formData
-        mutationCreatpartner(newData);
-        // console.log(data);
+        mutationCreatpartner(data);
     };
 
     // render input create program
@@ -176,9 +160,10 @@ function ModalCreatePartner(props) {
                         <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
 
                         <Upload
-                            name="avatar"
+                            name="urlLogo"
                             listType="picture-card"
                             className="avatar-uploader"
+                            accept="image/png, image/jpeg,image/jpg"
                             showUploadList={false}
                             // action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                             beforeUpload={beforeUpload}

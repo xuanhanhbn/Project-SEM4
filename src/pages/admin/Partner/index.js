@@ -42,15 +42,20 @@ function Partner() {
         return item[field];
     }, []);
 
-    const mutation = useMutation({
+    const { mutate: mutationGetAllPartner } = useMutation({
         mutationFn: getAllPartnerApi,
         onSuccess: (data) => {
-            setDataTable(data);
+            // console.log('data', data);
+            if ((data && data?.status === 200) || data?.status === '200') {
+                console.log('data', data);
+                return notify(data?.data, 'success');
+            }
+            return notify(data?.message, 'error');
         },
     });
 
     useEffect(() => {
-        mutation.mutate();
+        mutationGetAllPartner();
     }, []);
 
     return (
