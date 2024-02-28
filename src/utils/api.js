@@ -1,5 +1,6 @@
 import baseApiUrlAuth from './baseApiAuth';
 import baseApiUrlNoAuth from './baseApiNoAuth';
+import baseApiUploadImage from './baseApiUpload';
 
 export const getApiDefault = (url) =>
     new Promise((resolve, reject) =>
@@ -12,6 +13,14 @@ export const getApiDefault = (url) =>
 export const postApiDefault = (url, data) =>
     new Promise((resolve, reject) =>
         baseApiUrlAuth
+            .post(url, data)
+            .then((res) => resolve(res))
+            .catch((err) => reject(err)),
+    );
+
+export const postApiImageDefault = (url, data) =>
+    new Promise((resolve, reject) =>
+        baseApiUploadImage
             .post(url, data)
             .then((res) => resolve(res))
             .catch((err) => reject(err)),
