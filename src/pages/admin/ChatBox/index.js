@@ -43,7 +43,7 @@ function ChatBox() {
     const { data, dispatch } = useContext(ChatContext);
     const { currentUser } = useContext(AuthContext);
     //State
-    const [isShowChatBox, setIsShowChatBox] = useState(false);
+    const [isShowChatBox, setIsShowChatBox] = useState(true);
     const [err, setErr] = useState(false);
     const [user, setUser] = useState({});
     const [chats, setChats] = useState([]);

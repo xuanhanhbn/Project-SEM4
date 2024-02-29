@@ -53,18 +53,13 @@ function RegisterPage() {
     // call api login
     const { mutate: mutationLogin } = useMutation({
         mutationFn: loginApi,
-        onSuccess: (data) => {
-            if ((data && data?.status === 200) || data?.status === '200') {
-                navigation('/');
-            }
-            return notify(data?.message, 'error');
-            // mutationGetActive.mutate();
+        onSuccess: () => {
+            navigation('/');
         },
     });
 
     // xử lý khi click nút login
     const onSubmitLogin = (data) => {
-        // console.log('dataLogin: ', data);
         mutationLogin(data);
     };
 
@@ -73,10 +68,8 @@ function RegisterPage() {
         mutationFn: registerApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                navigation('/');
             }
             return notify(data?.message, 'error');
-            // mutationGetActive.mutate();
         },
     });
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Input, Upload } from 'antd';
 import { inputCreatePartner } from './constants';
-import { beforeUpload, getBase64, getBaseUploadCarousel64, getBaseUploadLogo, notify } from '~/utils/common';
+import { beforeUpload, notify } from '~/utils/common';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Controller, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -10,7 +10,8 @@ import { useMutation } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import './style.css';
-import { createPartnerApi, uploadPartnerLogoApi } from './callApi';
+import { createPartnerApi, updatePartnerApi, uploadPartnerLogoApi } from './callApi';
+import { useLocation } from 'react-router-dom';
 
 const { TextArea } = Input;
 
@@ -27,24 +28,53 @@ const validationSchema = Yup.object().shape({
 });
 
 function ModalCreatePartner(props) {
-    const { isModalOpen, handleOk, handleCancel } = props;
+    const { isModalOpen, handleOk, handleCancel, type } = props;
 
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
-    const [fileData, setFileData] = useState();
 
     const {
         handleSubmit,
         control,
+        reset,
         setValue,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
+    const location = useLocation();
+    const state = location.state;
+    // console.log('state: ', state);
+
+    const urlLogo = state.attachment;
+
+    useEffect(() => {
+        if (type === 'update') {
+            setValue('partnerName', state.partnerName);
+            setValue('email', state.email);
+            setValue('description', state.description);
+        }
+        if (urlLogo?.length === 0) {
+            return;
+        } else {
+            setImageUrl(urlLogo[0].url);
+        }
+    }, [state]);
+
     //call api create partner
     const { mutate: mutationCreatpartner } = useMutation({
         mutationFn: createPartnerApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                return notify('Success', 'success');
+            }
+            return notify(data?.message, 'error');
+        },
+    });
+
+    const { mutate: mutationUpdatepartner } = useMutation({
+        mutationFn: updatePartnerApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
                 return notify('Success', 'success');
@@ -58,6 +88,7 @@ function ModalCreatePartner(props) {
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
                 setValue('urlLogo', data.data);
+                setImageUrl(data.data);
             }
             return notify(data?.message, 'error');
         },
@@ -84,11 +115,13 @@ function ModalCreatePartner(props) {
 
     const handleChange = (info) => {
         const files = info.file || {};
+
         if (files.status === 'uploading') {
             return;
         }
 
         if (files.status === 'done') {
+            // console.log('files', files.originFileObj);
         }
         mutationUploadLogo({ files: files.originFileObj });
     };
@@ -96,6 +129,17 @@ function ModalCreatePartner(props) {
     const onSubmit = (data) => {
         console.log('data: ', data);
         mutationCreatpartner(data);
+        reset();
+    };
+
+    const updatePartner = (data) => {
+        const dataUpdate = {
+            updatePartnerDto: data,
+            id: state.partnerId,
+        };
+        console.log('data: ', dataUpdate);
+
+        mutationUpdatepartner(dataUpdate);
     };
 
     // render input create program
@@ -165,7 +209,7 @@ function ModalCreatePartner(props) {
                             className="avatar-uploader"
                             accept="image/png, image/jpeg,image/jpg"
                             showUploadList={false}
-                            // action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                             beforeUpload={beforeUpload}
                             onChange={handleChange}
                         >
@@ -194,10 +238,10 @@ function ModalCreatePartner(props) {
                 title="Create partner"
                 footer={false}
                 open={isModalOpen}
-                onOk={handleOk}
+                onOk={type === 'update' ? handleSubmit(updatePartner) : handleSubmit(onSubmit)}
                 onCancel={handleCancel}
             >
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={type === 'update' ? handleSubmit(updatePartner) : handleSubmit(onSubmit)}>
                     <div id="create_partner_modal" className="grid grid-cols-2 gap-4 pt-3">
                         {inputCreatePartner.map((item) => RENDER_INPUT_CREATE_PARTNER(item))}
                         <button className="col-span-2 btn_create" type="submit">

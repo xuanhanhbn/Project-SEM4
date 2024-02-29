@@ -6,7 +6,8 @@ import TableCommon from '~/components/TableCommon';
 import { columns, dataTablePartners } from './constants';
 import { useMutation } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
-import { getAllPartnerApi } from './callApi';
+import { getAllPartnerApi, getApiSearchPartner } from './callApi';
+import { Link, useLocation } from 'react-router-dom';
 
 const { Search } = Input;
 
@@ -14,6 +15,8 @@ function Partner() {
     // STATE
     const [isModalOpenCreatePartner, setIsModalOpenCreatePartner] = useState(false);
     const [dataTable, setDataTable] = useState(null);
+    const [isOpenModalUploadPartner, setIsOpenModalUploadPartner] = useState(false);
+    // const [dataUpdate, setDataUpdate] = useState({});
 
     // sử lý khi click nút create partner
     const showModalCreate = () => {
@@ -25,13 +28,23 @@ function Partner() {
         setIsModalOpenCreatePartner(false);
     };
 
+    const handleUpdatePartner = () => {
+        setIsOpenModalUploadPartner(false);
+    };
+
     // xử lý khi đóng modal
     const handleCancelModal = () => {
         setIsModalOpenCreatePartner(false);
+        setIsOpenModalUploadPartner(false);
     };
 
     // xử lý khi tìm kiếm partner
-    const onSearch = (value, _e, info) => console.log(info?.source, value);
+    const onSearch = (data) => mutationGetSearchPartner(data);
+
+    // show modal update partner
+    const openModalUpdate = () => {
+        setIsOpenModalUploadPartner(true);
+    };
 
     // render data table
     const parseData = useCallback((item, field, index) => {
@@ -39,24 +52,52 @@ function Partner() {
             return index + 1;
         }
 
+        if (field === 'partnerName') {
+            return (
+                <div>
+                    <Link
+                        onClick={() => {
+                            openModalUpdate();
+                        }}
+                        state={item}
+                    >
+                        {item.partnerName}
+                    </Link>
+                </div>
+            );
+        }
+
+        if (field === 'logo') {
+            const urlLogo = item.attachment;
+            if (urlLogo?.length === 0) {
+                return <img className="w-16 h-16" alt={item.partnerName + '_logo'} />;
+            } else {
+                return <img className="w-16 h-16" src={urlLogo[0].url} alt={item.partnerName + '_logo'} />;
+            }
+        }
+
         return item[field];
     }, []);
 
+    // call api
     const { mutate: mutationGetAllPartner } = useMutation({
         mutationFn: getAllPartnerApi,
         onSuccess: (data) => {
-            // console.log('data', data);
-            if ((data && data?.status === 200) || data?.status === '200') {
-                console.log('data', data);
-                return notify(data?.data, 'success');
-            }
-            return notify(data?.message, 'error');
+            setDataTable(data);
         },
     });
 
+    const { mutate: mutationGetSearchPartner } = useMutation({
+        mutationFn: getApiSearchPartner,
+        onSuccess: (data) => {
+            setDataTable(data);
+        },
+    });
+
+    //
     useEffect(() => {
         mutationGetAllPartner();
-    }, []);
+    }, [dataTable]);
 
     return (
         <div id="partner">
@@ -91,6 +132,16 @@ function Partner() {
                     isModalOpen={isModalOpenCreatePartner}
                     handleOk={handleSubmitModal}
                     handleCancel={handleCancelModal}
+                    type="create"
+                />
+            )}
+
+            {isOpenModalUploadPartner && (
+                <ModalCreatePartner
+                    isModalOpen={isOpenModalUploadPartner}
+                    handleOk={handleUpdatePartner}
+                    handleCancel={handleCancelModal}
+                    type="update"
                 />
             )}
         </div>
