@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from 'antd';
@@ -24,12 +25,6 @@ function ChatBoxCustom(props) {
     const { data, dispatch } = useContext(ChatContext);
 
     // console.log('currentUser: ', currentUser);
-    const fakeDataChat = {
-        displayName: 'User',
-        email: 'admin5@gmail.com',
-        password: 'Admin123@',
-        image: 'https://didongviet.vn/dchannel/wp-content/uploads/2023/08/hinh-nen-3d-hinh-nen-iphone-dep-3d-didongviet@2x-576x1024.jpg',
-    };
 
     //State
     const [isStartChat, setIsStartChat] = useState(false);
@@ -37,6 +32,8 @@ function ChatBoxCustom(props) {
     // const [text, setText] = useState('');
     const [img, setImg] = useState(null);
     const [chats, setChats] = useState([]);
+    const [err, setErr] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const {
         handleSubmit,
@@ -47,87 +44,15 @@ function ChatBoxCustom(props) {
         resolver: yupResolver(validationSchema),
     });
 
-    useEffect(() => {
-        const unSub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
-            doc.exists() && setMessages(doc.data()?.messages);
-        });
-
-        return () => {
-            unSub();
-        };
-    }, [data.chatId]);
-
-    useEffect(() => {
-        const getChats = () => {
-            const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
-                setChats(doc.data());
-            });
-
-            return () => {
-                unsub();
-            };
-        };
-
-        currentUser?.uid && getChats();
-    }, [currentUser]);
-
-    // console.log(messages);
-    // lưu trạng thái lần đầu và duy nhất khi bắt đầu đoạn chat
-    // useEffect(() => {
-    //     const isStartChatFromLocalStorage = localStorage.getItem('isStartChat');
-    //     if (isStartChatFromLocalStorage === 'true') {
-    //         setIsStartChat(true);
-    //     }
-    // }, []);
-
-    const account = 'duongtm';
     const name = 'Dương';
 
     // xử lý khi click button chatbox
     const handleStartChat = async () => {
         setIsStartChat(true);
-        const displayName = fakeDataChat.displayName;
-        const email = fakeDataChat.email;
-        const password = fakeDataChat?.password;
-        const image = fakeDataChat.image;
-        try {
-            const res = await createUserWithEmailAndPassword(auth, email, password);
-            const date = new Date().getTime();
-            const storageRef = ref(storage, `${displayName + date}`);
-
-            await uploadBytesResumable(storageRef, image).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    try {
-                        //Update profile
-                        await updateProfile(res.user, {
-                            displayName,
-                            photoURL: downloadURL,
-                        });
-                        //create user on firestore
-                        await setDoc(doc(db, 'users', res.user.uid), {
-                            uid: res.user.uid,
-                            displayName,
-                            email,
-                            photoURL: downloadURL,
-                        });
-
-                        //create empty user chats on firestore
-                        await setDoc(doc(db, 'userChats', res.user.uid), {});
-                    } catch (err) {
-                        console.log(err);
-                    }
-                });
-            });
-            Object.entries(chats)
-                ?.sort((a, b) => b[1].date - a[1].date)
-                .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
-        } catch (error) {
-            return notify(error, 'error');
-        }
+        // handleLoginChatBox()
     };
 
     const handleLoginChatBox = async (email, password) => {
-        debugger;
         try {
             await signInWithEmailAndPassword(auth, email, password);
         } catch (err) {

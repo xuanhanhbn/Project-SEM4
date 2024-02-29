@@ -9,7 +9,7 @@ import TablePages from '~/pages/admin/Tables';
 // Public routes
 const AdminRouter = [
     {
-        path: '/admin/dasboard',
+        path: '/admin/dashboard',
         component: Dashboard,
     },
     {

@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Space, Input } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import './style.css';
 import ModalCreatePartner from './components/ModalCreatePartner';
 import TableCommon from '~/components/TableCommon';
 import { columns, dataTablePartners } from './constants';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
 import { getAllPartnerApi } from './callApi';
 
@@ -42,21 +43,27 @@ function Partner() {
         return item[field];
     }, []);
 
-    const { mutate: mutationGetAllPartner } = useMutation({
-        mutationFn: getAllPartnerApi,
-        onSuccess: (data) => {
-            // console.log('data', data);
-            if ((data && data?.status === 200) || data?.status === '200') {
-                console.log('data', data);
-                return notify(data?.data, 'success');
-            }
-            return notify(data?.message, 'error');
-        },
+    const { isLoading, error, data } = useQuery({
+        queryKey: ['repoData'],
+        queryFn: () => getAllPartnerApi(),
     });
 
-    useEffect(() => {
-        mutationGetAllPartner();
-    }, []);
+    console.log('data: ', data);
+
+    // const { mutate: mutationGetAllPartner } = useMutation({
+    //     mutationFn: getAllPartnerApi,
+    //     onSuccess: (data) => {
+    //         if ((data && data?.status === 200) || data?.status === '200') {
+    //             console.log('data', data);
+    //             // return notify(data?.data, 'success');
+    //         }
+    //         return notify(data?.message, 'error');
+    //     },
+    // });
+
+    // useEffect(() => {
+    //     mutationGetAllPartner();
+    // }, []);
 
     return (
         <div id="partner">
