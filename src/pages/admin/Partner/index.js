@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Space, Input } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import './style.css';
 import ModalCreatePartner from './components/ModalCreatePartner';
 import TableCommon from '~/components/TableCommon';
 import { columns, dataTablePartners } from './constants';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
 import { getAllPartnerApi, getApiSearchPartner } from './callApi';
 import { Link, useLocation } from 'react-router-dom';
