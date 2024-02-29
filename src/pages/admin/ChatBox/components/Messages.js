@@ -20,8 +20,6 @@ function Messages() {
         };
     }, [data.chatId]);
 
-    // console.log('messages: ', messages);
-
     return (
         <div className="flex-col  flex-1 hidden h-full md:flex">
             <div>

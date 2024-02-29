@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-operators */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Style.css';
 import { inputRegister, inputLogin } from './constants';
 
@@ -7,12 +7,15 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import InputToken from './components/InputTocken';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { registerApi, loginApi, getActiveApi } from './callApi';
+import { useMutation } from '@tanstack/react-query';
+import { registerApi, loginApi } from './callApi';
 import { notify } from '~/utils/common';
-import axios from 'axios';
 import { Spin } from 'antd';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { setDoc, doc } from 'firebase/firestore';
+import { auth, db, storage } from '~/firebase';
 
 // validate register form
 const validationRegisterSchema = Yup.object().shape({
@@ -28,10 +31,16 @@ const validationLoginSchema = Yup.object().shape({
 });
 
 function RegisterPage() {
+    const baseDataLogin = {
+        email: '',
+        password: '',
+    };
     // State
     const [toggledFormLogin, setToggledFormLogin] = useState(false);
     const [istoggleFromToken, setIstoggleFromToken] = useState(false);
     const [dataActive, setDataActive] = useState(false);
+    const [dataRegister, setDataRegiser] = useState(null);
+    const [dataLogin, setDataLogin] = useState(baseDataLogin);
 
     const navigation = useNavigate();
     const {
@@ -53,13 +62,22 @@ function RegisterPage() {
     // call api login
     const { mutate: mutationLogin } = useMutation({
         mutationFn: loginApi,
-        onSuccess: () => {
-            navigation('/');
+        onSuccess: (data) => {
+            console.log('data:', data);
+            if ((data && data?.status === 200) || data?.status === '200') {
+                navigation('/');
+                handleLoginAccountChatBox();
+            }
         },
     });
 
     // xử lý khi click nút login
     const onSubmitLogin = (data) => {
+        setDataLogin((prev) => ({
+            ...prev,
+            email: data?.email || '',
+            password: data?.password || '',
+        }));
         mutationLogin(data);
     };
 
@@ -68,25 +86,64 @@ function RegisterPage() {
         mutationFn: registerApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
+                handleRegisterAccountChatBox();
             }
             return notify(data?.message, 'error');
         },
     });
 
-    // const mutationGetActive = useMutation({
-    //     mutationFn: getActiveApi,
-    // });
+    const handleLoginAccountChatBox = async () => {
+        try {
+            await signInWithEmailAndPassword(auth, dataLogin?.email, dataLogin?.password);
+        } catch (err) {
+            return err;
+        }
+    };
 
-    // useEffect(() => {
-    //     if (istoggleFromToken) mutationGetActive.mutate();
-    // }, [istoggleFromToken]);
+    const handleRegisterAccountChatBox = async () => {
+        const displayName = dataRegister?.email || '';
+        const email = dataRegister?.email;
+        const password = dataRegister?.password;
+        const file = '';
+        try {
+            //Create user
+            const res = await createUserWithEmailAndPassword(auth, email, password);
 
-    // let active = mutationRegister.isSuccess;
-    // console.log('active', active);
+            //Create a unique image name
+            const date = new Date().getTime();
+            const storageRef = ref(storage, `${displayName + date}`);
 
-    // xử lý khi click nút register
+            await uploadBytesResumable(storageRef, file).then(() => {
+                getDownloadURL(storageRef).then(async (downloadURL) => {
+                    try {
+                        //Update profile
+                        await updateProfile(res.user, {
+                            displayName,
+                            photoURL: downloadURL,
+                        });
+                        //create user on firestore
+                        await setDoc(doc(db, 'users', res.user.uid), {
+                            uid: res.user.uid,
+                            displayName,
+                            email,
+                            photoURL: downloadURL,
+                        });
+
+                        //create empty user chats on firestore
+                        await setDoc(doc(db, 'userChats', res.user.uid), {});
+                    } catch (err) {
+                        return err;
+                    }
+                });
+            });
+        } catch (err) {
+            return err;
+        }
+    };
+
     const onSubmitRegister = (data) => {
         setDataActive(data.email);
+        setDataRegiser(data);
         mutationRegister(data);
     };
 

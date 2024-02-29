@@ -2,74 +2,78 @@
 import Header from '~/components/Layout/components/Header';
 import Footer from '../components/Footer';
 import '../../GlobalStyles/GlobalStyles.css';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ChatBoxCustom from '~/components/ChatBox';
-import { auth, db, storage } from '~/firebase';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { setDoc, doc } from 'firebase/firestore';
-function DefaultLayout({ children }) {
-    const fakeDataChat = {
-        displayName: 'User1',
-        email: 'user1@gmail.com',
-        password: 'Admin123@',
-        image: 'https://didongviet.vn/dchannel/wp-content/uploads/2023/08/hinh-nen-3d-hinh-nen-iphone-dep-3d-didongviet@2x-576x1024.jpg',
-    };
+import { AuthContext } from '~/context/AuthContext';
+import { ChatContext } from '~/context/ChatContext';
+import { onSnapshot, setDoc, doc, updateDoc, serverTimestamp, getDoc } from 'firebase/firestore';
+import { db } from '~/firebase';
 
+const adminId = 'WI08Q27dOfTDfxGCZM3j42dtDQR2';
+
+function DefaultLayout({ children }) {
     // State
     const [isOpenChatBox, setisOpenChatBox] = useState(false);
+    const [chats, setChats] = useState({});
 
-    // khi vừa vào thì call đăng ký tài khoản chat
+    const { currentUser } = useContext(AuthContext);
+    const { dispatch } = useContext(ChatContext);
+
     useEffect(() => {
-        handleRegisterAccountChatBox();
-    }, []);
-
-    const handleRegisterAccountChatBox = async () => {
-        const displayName = fakeDataChat?.displayName;
-        const email = fakeDataChat?.email;
-        const password = fakeDataChat?.password;
-        const file = fakeDataChat?.image;
-        try {
-            //Create user
-            const res = await createUserWithEmailAndPassword(auth, email, password);
-
-            //Create a unique image name
-            const date = new Date().getTime();
-            const storageRef = ref(storage, `${displayName + date}`);
-
-            await uploadBytesResumable(storageRef, file).then(() => {
-                getDownloadURL(storageRef).then(async (downloadURL) => {
-                    try {
-                        //Update profile
-                        await updateProfile(res.user, {
-                            displayName,
-                            photoURL: downloadURL,
-                        });
-                        //create user on firestore
-                        await setDoc(doc(db, 'users', res.user.uid), {
-                            uid: res.user.uid,
-                            displayName,
-                            email,
-                            photoURL: downloadURL,
-                        });
-
-                        //create empty user chats on firestore
-                        await setDoc(doc(db, 'userChats', res.user.uid), {});
-                    } catch (err) {
-                        return err;
-                    }
-                });
+        const getChats = () => {
+            const unsub = onSnapshot(doc(db, 'userChats', currentUser?.uid), (doc) => {
+                setChats(doc.data());
             });
+
+            return () => {
+                unsub();
+            };
+        };
+
+        currentUser?.uid && getChats();
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (Object.keys(chats)?.length) {
+            Object.entries(chats)
+                ?.sort((a, b) => b[1].date - a[1].date)
+                .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
+        }
+    }, [chats]);
+
+    // xử lý mở chat box
+    const handleChangeStateOpenChatBox = async () => {
+        setisOpenChatBox(!isOpenChatBox);
+
+        const combinedId = currentUser?.uid > adminId ? currentUser?.uid + adminId : adminId + currentUser?.uid;
+        try {
+            const res = await getDoc(doc(db, 'chats', combinedId));
+            if (!res.exists()) {
+                //create a chat in chats collection
+                await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+
+                //create user chats
+                await updateDoc(doc(db, 'userChats', currentUser?.uid), {
+                    [combinedId + '.userInfo']: {
+                        uid: adminId,
+                        //   displayName: user.displayName,
+                        //   photoURL: user.photoURL,
+                    },
+                    [combinedId + '.date']: serverTimestamp(),
+                });
+
+                await updateDoc(doc(db, 'userChats', adminId), {
+                    [combinedId + '.userInfo']: {
+                        uid: currentUser?.uid,
+                        displayName: currentUser?.displayName,
+                        photoURL: currentUser?.photoURL,
+                    },
+                    [combinedId + '.date']: serverTimestamp(),
+                });
+            }
         } catch (err) {
             return err;
         }
-    };
-
-    const handleLoginAccountChatBox = async () => {};
-
-    // xử lý mở chat box
-    const handleChangeStateOpenChatBox = () => {
-        setisOpenChatBox(!isOpenChatBox);
     };
 
     return (

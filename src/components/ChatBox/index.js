@@ -4,7 +4,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { Input } from 'antd';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
 import avatar from '~/assets/images/avatar/avatar.png';
 import { auth, db, storage } from '~/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -21,19 +20,15 @@ const validationSchema = Yup.object().shape({
 
 function ChatBoxCustom(props) {
     const { closeChatBox } = props;
-    const { currentUser } = useContext(AuthContext);
-    const { data, dispatch } = useContext(ChatContext);
 
-    // console.log('currentUser: ', currentUser);
+    const { currentUser } = useContext(AuthContext);
+    const { data } = useContext(ChatContext);
 
     //State
     const [isStartChat, setIsStartChat] = useState(false);
+    const [text, setText] = useState('');
     const [messages, setMessages] = useState([]);
-    // const [text, setText] = useState('');
     const [img, setImg] = useState(null);
-    const [chats, setChats] = useState([]);
-    const [err, setErr] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const {
         handleSubmit,
@@ -49,73 +44,74 @@ function ChatBoxCustom(props) {
     // xử lý khi click button chatbox
     const handleStartChat = async () => {
         setIsStartChat(true);
-        // handleLoginChatBox()
     };
 
-    const handleLoginChatBox = async (email, password) => {
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-        } catch (err) {
-            return notify(err, 'error');
-        }
-    };
+    useEffect(() => {
+        const unSub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
+            return doc.exists() && setMessages(doc.data().messages);
+        });
+
+        return () => {
+            unSub();
+        };
+    }, [data.chatId]);
 
     // xử lý khi send message
-    const handleSendMeage = async (getText) => {
-        const text = getText?.message;
-        if (img) {
-            const storageRef = ref(storage, uuid());
+    const handleSendMeage = async () => {
+        try {
+            if (img) {
+                const storageRef = ref(storage, uuid());
 
-            const uploadTask = uploadBytesResumable(storageRef, img);
+                const uploadTask = uploadBytesResumable(storageRef, img);
 
-            uploadTask.on(
-                (error) => {
-                    //TODO:Handle Error
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await updateDoc(doc(db, 'chats', data.chatId), {
-                            messages: arrayUnion({
-                                id: uuid(),
-                                text,
-                                senderId: currentUser.uid,
-                                date: Timestamp.now(),
-                                img: downloadURL,
-                            }),
+                uploadTask.on(
+                    (error) => {
+                        //TODO:Handle Error
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                            await updateDoc(doc(db, 'chats', data.chatId), {
+                                messages: arrayUnion({
+                                    id: uuid(),
+                                    text,
+                                    senderId: currentUser.uid,
+                                    date: Timestamp.now(),
+                                    img: downloadURL,
+                                }),
+                            });
                         });
-                    });
-                },
-            );
-        } else {
-            await updateDoc(doc(db, 'chats', data.chatId), {
-                messages: arrayUnion({
-                    id: uuid(),
+                    },
+                );
+            } else {
+                await updateDoc(doc(db, 'chats', data.chatId), {
+                    messages: arrayUnion({
+                        id: uuid(),
+                        text,
+                        senderId: currentUser?.uid,
+                        date: Timestamp.now(),
+                    }),
+                });
+            }
+
+            await updateDoc(doc(db, 'userChats', currentUser?.uid), {
+                [data.chatId + '.lastMessage']: {
                     text,
-                    senderId: currentUser.uid,
-                    date: Timestamp.now(),
-                }),
+                },
+                [data.chatId + '.date']: serverTimestamp(),
             });
+
+            await updateDoc(doc(db, 'userChats', data?.user?.uid), {
+                [data.chatId + '.lastMessage']: {
+                    text,
+                },
+                [data.chatId + '.date']: serverTimestamp(),
+            });
+            setText('');
+            setImg(null);
+        } catch (error) {
+            return error;
         }
-
-        await updateDoc(doc(db, 'userChats', currentUser.uid), {
-            [data.chatId + '.lastMessage']: {
-                text,
-            },
-            [data.chatId + '.date']: serverTimestamp(),
-        });
-
-        await updateDoc(doc(db, 'userChats', data.user.uid), {
-            [data.chatId + '.lastMessage']: {
-                text,
-            },
-            [data.chatId + '.date']: serverTimestamp(),
-        });
-        // setText('');
-        setImg(null);
-        setValue('message', '');
     };
-
-    // console.log('messages: ', messages);
 
     return (
         <div className="h-full bg-white rounded-2xl w-72">
@@ -125,7 +121,7 @@ function ChatBoxCustom(props) {
                 </div>
                 <div className="flex justify-between flex-1 pl-10 pr-4">
                     <div className="mt-4 font-bold text-white">Admin</div>
-                    <button onClick={closeChatBox} className="h-2 mt-2">
+                    <button onClick={() => closeChatBox()} className="h-2 mt-2">
                         <i className="text-white fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -165,30 +161,21 @@ function ChatBoxCustom(props) {
                     </div>
                 </div>
             </div>
-            <form
-                onSubmit={handleSubmit(handleSendMeage)}
+            <div
                 className={
                     !isStartChat && !currentUser ? 'hidden' : 'flex items-center justify-between p-2 border-t-[1px]'
                 }
             >
-                <Controller
-                    control={control}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <Input
-                                onChange={onChange}
-                                value={value}
-                                placeholder="Enter message"
-                                className="flex-1 p-1 border-none focus:shadow-none focus-within:shadow-none rounded-2xl"
-                            />
-                        );
-                    }}
-                    name="message"
+                <Input
+                    onChange={(e) => setText(e?.target?.value)}
+                    value={text}
+                    placeholder="Enter message"
+                    className="flex-1 p-1 border-none focus:shadow-none focus-within:shadow-none rounded-2xl"
                 />
-                <button className="w-8 mx-2">
+                <button className="w-8 mx-2" onClick={() => handleSendMeage()}>
                     <i className="text-blue-100 fa-solid fa-paper-plane"></i>
                 </button>
-            </form>
+            </div>
         </div>
     );
 }

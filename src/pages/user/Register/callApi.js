@@ -15,9 +15,7 @@ export async function loginApi(data) {
     const url = '/auth/log-in';
     try {
         const res = await postApiNoAuth(url, data);
-        if (res && res?.status === 200) {
-            return res?.data;
-        }
+        return res;
     } catch (error) {
         return error;
     }

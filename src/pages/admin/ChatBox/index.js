@@ -7,7 +7,7 @@ import { auth } from '~/firebase';
 
 function ChatBox() {
     const handleLoginChat = async () => {
-        const email = 'admin@gmail.com';
+        const email = 'admin3@gmail.com.dmm';
         const password = 'Admin123@';
         try {
             await signInWithEmailAndPassword(auth, email, password);

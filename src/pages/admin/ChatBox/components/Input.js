@@ -89,27 +89,17 @@ function Input() {
     const handlePressEnter = () => handleSendMessage();
 
     return (
-        <div className="w-full">
-            <form onSubmit={handleSubmitSendMessage(handleSendMessage)} className="flex pt-3 pb-6 mx-4 mt-4 shrink-0">
-                <Controller
-                    control={controlMessage}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <InputMessage
-                                className="p-2 mx-10 bg-white border-none focus-within:shadow-none focus:shadow-none"
-                                placeholder="Basic usage"
-                                value={text}
-                                onChange={(e) => setText(e?.target?.value)}
-                                onPressEnter={handlePressEnter}
-                            />
-                        );
-                    }}
-                    name="message"
-                />
-                <button className="h-auto bg-blue-900 rounded-lg hover:bg-blue-101 w-14">
-                    <i className="text-white fa-solid fa-paper-plane-top"></i>
-                </button>
-            </form>
+        <div className="w-full flex pt-3 pb-6 mx-4 mt-4 shrink-0">
+            <InputMessage
+                className="p-2 mx-10 bg-white border-none focus-within:shadow-none focus:shadow-none"
+                placeholder="Basic usage"
+                value={text}
+                onChange={(e) => setText(e?.target?.value)}
+                onPressEnter={handlePressEnter}
+            />
+            <button className="h-auto bg-blue-900 rounded-lg hover:bg-blue-101 w-14">
+                <i className="text-white fa-solid fa-paper-plane-top"></i>
+            </button>
         </div>
     );
 }
