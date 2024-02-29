@@ -22,10 +22,3 @@ export const columns = [
         name: 'Logo',
     },
 ];
-
-export const dataTablePartners = [
-    {
-        partnerName: 'Facebook',
-        email: 'http://www.maybank.com',
-    },
-];

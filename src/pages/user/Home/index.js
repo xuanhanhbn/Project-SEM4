@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import './Home.css';
 import HomeBanner from './components/HomeBanner';
 import HomeCampaign from './components/HomeCampaign';

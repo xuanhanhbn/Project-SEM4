@@ -13,15 +13,25 @@ export async function createPartnerApi(data) {
     }
 }
 
+export async function updatePartnerApi(data) {
+    // console.log('data: ', data);
+    const url = `partner/update-partner?id=${data.id}&partnerName=${data.updatePartnerDto.partnerName}&email=${data.updatePartnerDto.email}&description=${data.updatePartnerDto.description}`;
+    try {
+        const res = await postApiDefault(url, data);
+        if (res && res?.status === 200) {
+            return res?.data;
+        }
+    } catch (error) {
+        return error;
+    }
+}
+
 export async function uploadPartnerLogoApi(data) {
-    console.log('dataAPI: ', data);
-    const url = '/partner/upload';
+    // console.log('dataAPI: ', data);
+    const url = '/attachment/upload';
     try {
         const res = await postApiImageDefault(url, data);
         return res;
-        // if (res && res?.status === 200) {
-        //     return res?.data;
-        // }
     } catch (error) {
         return error;
     }
