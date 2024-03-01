@@ -113,9 +113,11 @@ function Header() {
                     {/* User icon || singin */}
                     <div className="user_icon">
                         <div className="relative hidden ml-3 sm:block">
-                            {login === true ? (
+                            {login === false ? (
                                 <div className="border-r border-white border-solid">
-                                    <div className="cursor-pointer btn_singin">Sign in</div>
+                                    <Link to="/log-in" className="cursor-pointer btn_singin">
+                                        Sign in
+                                    </Link>
                                 </div>
                             ) : (
                                 <div className="hidden md:block">

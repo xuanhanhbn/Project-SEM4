@@ -7,6 +7,8 @@ import RegisterPage from '~/pages/user/Register';
 // import InputToken from '~/pages/user/Register/components/InputTocken';
 // import ActiveTocken from '~/pages/user/ActiveToken';
 import ActiveAccount from '~/pages/user/ActiveToken';
+import LoginPage from '~/pages/user/Login';
+import SignInPage from '~/pages/user/SignIn';
 
 // Public routes
 const publicRoutes = [
@@ -33,6 +35,14 @@ const publicRoutes = [
     {
         path: '/register',
         component: RegisterPage,
+    },
+    {
+        path: '/log-in',
+        component: LoginPage,
+    },
+    {
+        path: '/sign-in',
+        component: SignInPage,
     },
     {
         path: '/active-acount',

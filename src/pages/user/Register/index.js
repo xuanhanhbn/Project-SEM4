@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import './Style.css';
 import { inputRegister, inputLogin } from './constants';
 
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import InputToken from './components/InputTocken';
 import { useMutation } from '@tanstack/react-query';
 import { registerApi, loginApi } from './callApi';
-import { notify } from '~/utils/common';
-import { Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { beforeUpload, notify } from '~/utils/common';
+import { Input, Spin, Typography, Upload } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { setDoc, doc } from 'firebase/firestore';
@@ -19,14 +20,21 @@ import { auth, db, storage } from '~/firebase';
 
 // validate register form
 const validationRegisterSchema = Yup.object().shape({
-    phoneNumber: Yup.string().required('Phone number is required'),
+    phoneNumber: Yup.string()
+        .required('Phone number is required')
+        .matches(/^(0[3|5|7|8|9]{1})([0-9]{8})$/, 'Phone number invalid'),
     password: Yup.string().required('Password is required'),
-    email: Yup.string().required('Email is required'),
+    displayName: Yup.string().required('User name is required'),
+    email: Yup.string()
+        .required('Email is required')
+        .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
 });
 
 // validate login form
 const validationLoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required'),
+    email: Yup.string()
+        .required('Email is required')
+        .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
     password: Yup.string().required('Password is required'),
 });
 
@@ -41,6 +49,8 @@ function RegisterPage() {
     const [dataActive, setDataActive] = useState(false);
     const [dataRegister, setDataRegiser] = useState(null);
     const [dataLogin, setDataLogin] = useState(baseDataLogin);
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState();
 
     const navigation = useNavigate();
     const {
@@ -79,6 +89,38 @@ function RegisterPage() {
             password: data?.password || '',
         }));
         mutationLogin(data);
+    };
+
+    const uploadButton = (
+        <button
+            style={{
+                border: 0,
+                background: 'none',
+            }}
+            type="button"
+        >
+            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div
+                style={{
+                    marginTop: 8,
+                }}
+            >
+                Upload
+            </div>
+        </button>
+    );
+
+    const handleChange = (info) => {
+        const files = info.file || {};
+
+        if (files.status === 'uploading') {
+            return;
+        }
+
+        if (files.status === 'done') {
+            // console.log('files', files.originFileObj);
+        }
+        // mutationUploadAvatar({ files: files.originFileObj });
     };
 
     //call api register
@@ -166,33 +208,95 @@ function RegisterPage() {
                             className={istoggleFromToken ? 'hidden' : ''}
                         >
                             <div className="form_lgrs sign-up_lgrs">
-                                {/* Render input register */}
                                 {inputRegister.map((item) => {
                                     const { field } = item;
                                     const message = errors[field] && errors[field].message;
-                                    return (
-                                        <div key={item.field}>
-                                            <Controller
-                                                control={control}
-                                                render={({ field: { onChange, value } }) => {
-                                                    return (
-                                                        <div className="input-group_lgrs">
-                                                            {item.icon}
-                                                            <input
-                                                                type={item.type}
-                                                                autoComplete="on"
-                                                                onChange={onChange}
-                                                                value={value == null ? '' : value}
-                                                                placeholder={item.placeholder}
+
+                                    if (item.type === 'password') {
+                                        return (
+                                            <div key={item.field}>
+                                                <Controller
+                                                    control={control}
+                                                    render={({ field: { onChange, value } }) => {
+                                                        return (
+                                                            <div className="text-left w-80">
+                                                                <Typography.Title level={5}>
+                                                                    {item.placeholder}
+                                                                </Typography.Title>
+                                                                <Input.Password
+                                                                    className="py-4 "
+                                                                    type={item.type}
+                                                                    autoComplete="on"
+                                                                    onChange={onChange}
+                                                                    value={value == null ? '' : value}
+                                                                    placeholder={item.placeholder}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }}
+                                                    name={item.field}
+                                                />
+                                                <div className="mt-0 mb-3 text-red-600"> {message}</div>
+                                            </div>
+                                        );
+                                    } else if (item.type === 'INPUT_UPLOAD') {
+                                        return (
+                                            <div key={item.field}>
+                                                <>
+                                                    <Upload
+                                                        name="urlLogo"
+                                                        listType="picture-card"
+                                                        className="avatar-uploader"
+                                                        accept="image/png, image/jpeg,image/jpg"
+                                                        showUploadList={false}
+                                                        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                                                        beforeUpload={beforeUpload}
+                                                        onChange={handleChange}
+                                                    >
+                                                        {imageUrl ? (
+                                                            <img
+                                                                src={imageUrl}
+                                                                alt="avatar"
+                                                                // type="file"
+                                                                style={{
+                                                                    width: '70%',
+                                                                }}
                                                             />
-                                                        </div>
-                                                    );
-                                                }}
-                                                name={item.field}
-                                            />
-                                            <div className="mt-0 mb-3 text-red-600"> {message}</div>
-                                        </div>
-                                    );
+                                                        ) : (
+                                                            uploadButton
+                                                        )}
+                                                    </Upload>
+                                                </>
+                                            </div>
+                                        );
+                                    } else {
+                                        return (
+                                            <div key={item.field}>
+                                                <Controller
+                                                    control={control}
+                                                    render={({ field: { onChange, value } }) => {
+                                                        return (
+                                                            <div className="text-left w-80">
+                                                                <Typography.Title level={5}>
+                                                                    {item.placeholder}
+                                                                </Typography.Title>
+                                                                <Input
+                                                                    className="py-4 "
+                                                                    type={item.type}
+                                                                    autoComplete="on"
+                                                                    onChange={onChange}
+                                                                    value={value == null ? '' : value}
+                                                                    placeholder={item.placeholder}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }}
+                                                    name={item.field}
+                                                />
+                                                <div className="mt-0 mb-3 text-red-600"> {message}</div>
+                                            </div>
+                                        );
+                                    }
                                 })}
                                 <button type="submit" className="bg-blue-100" disabled={isPending}>
                                     {isPending ? <Spin size="large" /> : <div>Sign up</div>}
@@ -217,32 +321,65 @@ function RegisterPage() {
                             className="form-wrapper_lgrs align-items-center_lgrs"
                         >
                             <div className="form_lgrs sign-in_lgrs">
-                                {/* Render input Login */}
                                 {inputLogin.map((item) => {
                                     const { field } = item;
                                     const message = errorsLogin[field] && errorsLogin[field].message;
-                                    return (
-                                        <div key={item.field}>
-                                            <Controller
-                                                control={controlLogin}
-                                                render={({ field: { onChange, value } }) => {
-                                                    return (
-                                                        <div className="input-group_lgrs">
-                                                            {item.icon}
-                                                            <input
-                                                                type={item.type}
-                                                                onChange={onChange}
-                                                                value={value == null ? '' : value}
-                                                                placeholder={item.placeholder}
-                                                            />
-                                                        </div>
-                                                    );
-                                                }}
-                                                name={item.field}
-                                            />
-                                            <div className="mt-0 mb-3 text-red-600"> {message}</div>
-                                        </div>
-                                    );
+                                    if (item.type === 'password') {
+                                        return (
+                                            <div key={item.field}>
+                                                <Controller
+                                                    control={controlLogin}
+                                                    render={({ field: { onChange, value } }) => {
+                                                        return (
+                                                            <div className="text-left ">
+                                                                <Typography.Title level={5}>
+                                                                    {item.placeholder}
+                                                                </Typography.Title>
+                                                                <Input.Password
+                                                                    className="py-4 "
+                                                                    type={item.type}
+                                                                    autoComplete="on"
+                                                                    onChange={onChange}
+                                                                    value={value == null ? '' : value}
+                                                                    placeholder={item.placeholder}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }}
+                                                    name={item.field}
+                                                />
+                                                <div className="mt-0 mb-3 text-red-600"> {message}</div>
+                                            </div>
+                                        );
+                                    } else {
+                                        return (
+                                            <div key={item.field}>
+                                                <Controller
+                                                    control={controlLogin}
+                                                    render={({ field: { onChange, value } }) => {
+                                                        return (
+                                                            <div className="text-left ">
+                                                                <Typography.Title level={5}>
+                                                                    {item.placeholder}
+                                                                </Typography.Title>
+                                                                <Input
+                                                                    className="py-4 "
+                                                                    novalidate
+                                                                    type={item.type}
+                                                                    autoComplete="on"
+                                                                    onChange={onChange}
+                                                                    value={value == null ? '' : value}
+                                                                    placeholder={item.placeholder}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }}
+                                                    name={item.field}
+                                                />
+                                                <div className="mt-0 mb-3 text-red-600"> {message}</div>
+                                            </div>
+                                        );
+                                    }
                                 })}
 
                                 <button type="submit" className="bg-orange-200">
@@ -260,20 +397,6 @@ function RegisterPage() {
                             </div>
                         </form>
                         <div className="form-wrapper_lgrs"></div>
-                    </div>
-                </div>
-                <div className="row_lgrs content-row_lgrs">
-                    <div className="flex-col_lgrs col_lgrs align-items-center_lgrs">
-                        <div className="text_lgrs sign-in_lgrs">
-                            <h2>Welcome</h2>
-                        </div>
-                        <div className="img_lgrs sign-in_lgrs"></div>
-                    </div>
-                    <div className="flex-col_lgrs col_lgrs align-items-center_lgrs">
-                        <div className="img_lgrs sign-up_lgrs"></div>
-                        <div className="text_lgrs sign-up_lgrs">
-                            <h2>Join with us</h2>
-                        </div>
                     </div>
                 </div>
             </div>
