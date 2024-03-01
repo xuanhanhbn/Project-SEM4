@@ -18,7 +18,9 @@ const { TextArea } = Input;
 const validationSchema = Yup.object().shape({
     // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
     partnerName: Yup.string().required('Company name is required'),
-    email: Yup.string().required('Email adress is required'),
+    email: Yup.string()
+        .required('Email adress is required')
+        .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
     // phone: Yup.string().required('Phone number is required'),
     // address: Yup.string().required('Adress is required'),
     // website: Yup.string().required('Website date is required'),
@@ -201,7 +203,7 @@ function ModalCreatePartner(props) {
             return (
                 <div key={item.field} className="flex flex-col col-span-2">
                     <>
-                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
+                        <label className="mb-2 text-xs font-bold ">{item.lable}</label>
 
                         <Upload
                             name="urlLogo"

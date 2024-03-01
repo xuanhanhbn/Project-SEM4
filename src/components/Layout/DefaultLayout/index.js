@@ -10,6 +10,7 @@ import { onSnapshot, setDoc, doc, updateDoc, serverTimestamp, getDoc } from 'fir
 import { db } from '~/firebase';
 
 const adminId = 'WI08Q27dOfTDfxGCZM3j42dtDQR2';
+const login = false;
 
 function DefaultLayout({ children }) {
     // State
@@ -33,13 +34,13 @@ function DefaultLayout({ children }) {
         currentUser?.uid && getChats();
     }, [currentUser]);
 
-    useEffect(() => {
-        if (Object.keys(chats)?.length) {
-            Object.entries(chats)
-                ?.sort((a, b) => b[1].date - a[1].date)
-                .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
-        }
-    }, [chats]);
+    // useEffect(() => {
+    //     if (Object.keys(chats)?.length) {
+    //         Object.entries(chats)
+    //             ?.sort((a, b) => b[1].date - a[1].date)
+    //             .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
+    //     }
+    // }, [chats]);
 
     // xử lý mở chat box
     const handleChangeStateOpenChatBox = async () => {
@@ -83,17 +84,20 @@ function DefaultLayout({ children }) {
                 <div>{children}</div>
             </div>
             <Footer />
-            <button
-                onClick={() => handleChangeStateOpenChatBox()}
-                className={
-                    isOpenChatBox === true
-                        ? 'hidden'
-                        : 'z-[999] fixed right-4 bottom-12 rounded-full w-10 h-10 bg-sky-400 items-center  flex justify-center'
-                }
-            >
-                <span className="absolute z-10 inline-flex w-8 h-8 rounded-full opacity-75 animate-ping bg-sky-400"></span>
-                <i className="z-20 text-white fa-brands fa-facebook-messenger"></i>
-            </button>
+            <div className={login === true ? '' : 'hidden'}>
+                <button
+                    onClick={() => handleChangeStateOpenChatBox()}
+                    className={
+                        isOpenChatBox === true
+                            ? 'hidden'
+                            : 'z-[999] fixed right-4 bottom-12 rounded-full w-10 h-10 bg-sky-400 items-center  flex justify-center'
+                    }
+                >
+                    <span className="absolute z-10 inline-flex w-8 h-8 rounded-full opacity-75 animate-ping bg-sky-400"></span>
+                    <i className="z-20 text-white fa-brands fa-facebook-messenger"></i>
+                </button>
+            </div>
+
             {isOpenChatBox === false ? null : (
                 <div className="z-[999] fixed right-4 bottom-2 shadow-2xl rounded-2xl">
                     <ChatBoxCustom closeChatBox={() => handleChangeStateOpenChatBox()} />
