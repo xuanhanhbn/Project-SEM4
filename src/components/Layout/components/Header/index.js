@@ -8,7 +8,7 @@ import { auth } from '~/firebase';
 import { signOut } from 'firebase/auth';
 import logo from '~/assets/images/logo/Hand_in_Hand-removebg.png';
 
-const login = false;
+const login = true;
 
 function Header() {
     //State
@@ -164,6 +164,15 @@ function Header() {
                                         History and tax receipts
                                     </Link>
                                     <Link
+                                        to="/change-password"
+                                        className="li_user_menu"
+                                        role="menuitem"
+                                        tabIndex="-1"
+                                        id="user-menu-item-1"
+                                    >
+                                        Change password
+                                    </Link>
+                                    <Link
                                         to="#"
                                         className="li_user_menu"
                                         role="menuitem"
@@ -171,7 +180,7 @@ function Header() {
                                         id="user-menu-item-2"
                                         onClick={() => signOut(auth)}
                                     >
-                                        Sign out
+                                        Log out
                                     </Link>
                                 </div>
                             ) : null}

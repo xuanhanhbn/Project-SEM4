@@ -25,6 +25,7 @@ const validationSchema = Yup.object().shape({
     // address: Yup.string().required('Adress is required'),
     // website: Yup.string().required('Website date is required'),
     description: Yup.string().required('Describe is required'),
+    avatarUrl: Yup.string().required('Describe is required'),
     // finishDate: Yup.string().required('Finish date is required'),
     // target: Yup.string().required('Target is required'),
 });

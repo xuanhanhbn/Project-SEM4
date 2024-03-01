@@ -131,9 +131,19 @@ function LoginPage() {
                                             render={({ field: { onChange, value } }) => {
                                                 return (
                                                     <div className="text-left ">
-                                                        <Typography.Title level={5}>
-                                                            {item.placeholder}
-                                                        </Typography.Title>
+                                                        <div className="flex justify-between">
+                                                            <Typography.Title level={5}>
+                                                                {item.placeholder}
+                                                            </Typography.Title>
+                                                            <div className="text-sm">
+                                                                <Link
+                                                                    to="/forgot-password"
+                                                                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                                                                >
+                                                                    Forgot password?
+                                                                </Link>
+                                                            </div>
+                                                        </div>
                                                         <Input.Password
                                                             className="py-4 "
                                                             type={item.type}
@@ -161,6 +171,7 @@ function LoginPage() {
                                                         <Typography.Title level={5}>
                                                             {item.placeholder}
                                                         </Typography.Title>
+
                                                         <Input
                                                             className="py-4 "
                                                             noValidate
@@ -192,7 +203,7 @@ function LoginPage() {
 
                     <p className="mt-10 text-sm text-center text-black">
                         Don't have an account?
-                        <Link to="/sign-in" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                        <Link to="/sign-up" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                             Sign up here
                         </Link>
                     </p>

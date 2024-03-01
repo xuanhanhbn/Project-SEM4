@@ -4,11 +4,12 @@ import Campaigns from '~/pages/user/Campaigns';
 import Faqs from '~/pages/user/Faqs';
 import CampaignDetail from '~/pages/user/Campaigns/components/CampaignDetail';
 import RegisterPage from '~/pages/user/Register';
-// import InputToken from '~/pages/user/Register/components/InputTocken';
-// import ActiveTocken from '~/pages/user/ActiveToken';
 import ActiveAccount from '~/pages/user/ActiveToken';
 import LoginPage from '~/pages/user/Login';
-import SignInPage from '~/pages/user/SignIn';
+import SignUpPage from '~/pages/user/SignUp';
+import ResetPasswordPage from '~/pages/user/ResetPassword';
+import ForgotPasswordPage from '~/pages/user/ForgotPassword';
+import ChangePassword from '~/pages/user/ChangePassword';
 
 // Public routes
 const publicRoutes = [
@@ -41,12 +42,24 @@ const publicRoutes = [
         component: LoginPage,
     },
     {
-        path: '/sign-in',
-        component: SignInPage,
+        path: '/sign-up',
+        component: SignUpPage,
     },
     {
         path: '/active-acount',
         component: ActiveAccount,
+    },
+    {
+        path: '/reset-password',
+        component: ResetPasswordPage,
+    },
+    {
+        path: '/forgot-password',
+        component: ForgotPasswordPage,
+    },
+    {
+        path: '/change-password',
+        component: ChangePassword,
     },
 ];
 const privateRoutes = [];
