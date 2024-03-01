@@ -1,4 +1,4 @@
-import { Input, Typography } from 'antd';
+import { Input, Spin, Typography } from 'antd';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,9 +6,12 @@ import { inputLogin } from './constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useMutation } from '@tanstack/react-query';
-import { loginApi } from './callApi';
+import { getMeApi, loginApi } from './callApi';
 import { signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '~/firebase';
+import { notify } from '~/utils/common';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
 
 // validate login form
 const validationLoginSchema = Yup.object().shape({
@@ -19,6 +22,15 @@ const validationLoginSchema = Yup.object().shape({
 });
 
 function LoginPage() {
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+
     const baseDataLogin = {
         email: '',
         password: '',
@@ -43,14 +55,30 @@ function LoginPage() {
     };
 
     // call api login
-    const { mutate: mutationLogin } = useMutation({
+    const { mutate: mutationLogin, isPending } = useMutation({
         mutationFn: loginApi,
         onSuccess: (data) => {
-            console.log('data:', data);
             if ((data && data?.status === 200) || data?.status === '200') {
-                navigation('/');
+                localStorage.setItem('loginPage', JSON.stringify(data?.data));
+                // navigation('/');
+                getMe();
                 handleLoginAccountChatBox();
             }
+            return notify(data?.response?.data, 'error');
+        },
+    });
+
+    const { mutate: getMe } = useMutation({
+        mutationFn: getMeApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                setUserData(data?.data);
+                if (data?.role === 'ADMIN') {
+                    return navigation('/admin/dashboard');
+                }
+                return navigation('/');
+            }
+            return notify('error', 'error');
         },
     });
 
@@ -184,8 +212,9 @@ function LoginPage() {
                             <button
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                disabled={isPending}
                             >
-                                Sign in
+                                {isPending ? <Spin size="large" /> : <div> Sign in</div>}
                             </button>
                         </div>
                     </form>

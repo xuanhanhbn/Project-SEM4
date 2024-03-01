@@ -109,6 +109,7 @@ function ChatBoxCustom(props) {
             setText('');
             setImg(null);
         } catch (error) {
+            console.log('error: ', error);
             return error;
         }
     };
@@ -172,7 +173,7 @@ function ChatBoxCustom(props) {
                     placeholder="Enter message"
                     className="flex-1 p-1 border-none focus:shadow-none focus-within:shadow-none rounded-2xl"
                 />
-                <button className="w-8 mx-2" onClick={() => handleSendMeage()}>
+                <button className="w-8 mx-2" onClick={handleSendMeage}>
                     <i className="text-blue-100 fa-solid fa-paper-plane"></i>
                 </button>
             </div>

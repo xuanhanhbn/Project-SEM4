@@ -32,6 +32,7 @@ function SignInPage() {
     const [imageUrl, setImageUrl] = useState();
     const [dataRegister, setDataRegiser] = useState(null);
     const [dataActive, setDataActive] = useState(false);
+
     const {
         control,
         handleSubmit,
@@ -78,16 +79,20 @@ function SignInPage() {
         }
 
         if (files.status === 'done') {
-            // console.log('files', files.originFileObj);
+            setDataRegiser((prev) => ({
+                ...prev,
+                image: files.originFileObj,
+            }));
         }
         mutationUploadAvatar({ files: files.originFileObj });
     };
 
     const handleRegisterAccountChatBox = async () => {
+        console.log('dataRegister: ', dataRegister);
         const displayName = dataRegister?.email || '';
         const email = dataRegister?.email;
         const password = dataRegister?.password;
-        const file = '';
+        const file = dataRegister?.image;
         try {
             //Create user
             const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -136,7 +141,6 @@ function SignInPage() {
     });
 
     const onSubmitRegister = (data) => {
-        console.log('data: ', data);
         setDataActive(data.email);
         setDataRegiser(data);
         mutationRegister(data);
