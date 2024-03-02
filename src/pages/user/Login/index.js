@@ -63,6 +63,7 @@ function LoginPage() {
                 // navigation('/');
                 getMe();
                 handleLoginAccountChatBox();
+                return notify('Login Success', 'success');
             }
             return notify(data?.response?.data, 'error');
         },
@@ -73,7 +74,7 @@ function LoginPage() {
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
                 setUserData(data?.data);
-                if (data?.role === 'ADMIN') {
+                if (data?.data?.role === 'ADMIN') {
                     return navigation('/admin/dashboard');
                 }
                 return navigation('/');

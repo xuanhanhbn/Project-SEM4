@@ -137,6 +137,7 @@ function SignUpPage() {
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
                 handleRegisterAccountChatBox();
+                return notify(data?.data, 'success');
             }
             return notify(data?.message, 'error');
         },
