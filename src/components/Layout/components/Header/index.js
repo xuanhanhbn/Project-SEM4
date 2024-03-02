@@ -6,11 +6,22 @@ import UserAvatar from '../../../../assets/images/avatar/avatar.png';
 import { animateScroll as scroll } from 'react-scroll';
 import { auth } from '~/firebase';
 import { signOut } from 'firebase/auth';
-import logo from '~/assets/images/logo/Hand_in_Hand-removebg.png';
-
-const login = true;
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
+import { useMutation } from '@tanstack/react-query';
+import { notify } from '~/utils/common';
+import { logoutApi } from './callApi';
 
 function Header() {
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+
     //State
     const [openMenuUser, setOpenMenuUser] = useState(false);
     const [openMenuMobile, setOpenMenuMobile] = useState(false);
@@ -36,23 +47,22 @@ function Header() {
         setOpenMenuUser(false);
     };
 
-    // // sự kiện scroll của header
-    // window.onscroll = function () {
-    //     scrollFunction();
-    // };
+    const handleSignOut = () => {
+        mutationLogout();
+    };
 
-    // // xử lý sự kiện scroll header
-    // function scrollFunction() {
-    //     if (document.body.scrollTop > 90 || document.documentElement.scrollTop > 90) {
-    //         document.getElementById('nav_scroll').style.height = '5.0625rem';
-    //         document.getElementById('header').style.height = '5.0625rem';
-    //         // document.getElementById('btn_donate').style.padding = '6px 12px';
-    //     } else {
-    //         document.getElementById('nav_scroll').style.height = '6.0625rem';
-    //         document.getElementById('header').style.height = '6.0625rem';
-    //         // document.getElementById('btn_donate').style.padding = '12px 16px 13px';
-    //     }
-    // }
+    const { mutate: mutationLogout } = useMutation({
+        mutationFn: logoutApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                localStorage.removeItem('loginPage');
+                setUserData(null);
+                signOut(auth);
+                return notify('Logout Success', 'success');
+            }
+            return notify(data?.response?.data, 'error');
+        },
+    });
 
     return (
         <nav id="header">
@@ -113,7 +123,7 @@ function Header() {
                     {/* User icon || singin */}
                     <div className="user_icon">
                         <div className="relative hidden ml-3 sm:block">
-                            {login === false ? (
+                            {!userData ? (
                                 <div className="border-r border-white border-solid">
                                     <Link to="/login" className="cursor-pointer btn_singin">
                                         Sign in
@@ -178,7 +188,7 @@ function Header() {
                                         role="menuitem"
                                         tabIndex="-1"
                                         id="user-menu-item-2"
-                                        onClick={() => signOut(auth)}
+                                        onClick={() => handleSignOut()}
                                     >
                                         Log out
                                     </Link>

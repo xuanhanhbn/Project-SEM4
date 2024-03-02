@@ -143,6 +143,7 @@ function RegisterPage() {
     };
 
     const handleRegisterAccountChatBox = async () => {
+        console.log('dataRegister: ', dataRegister);
         const displayName = dataRegister?.email || '';
         const email = dataRegister?.email;
         const password = dataRegister?.password;
@@ -184,9 +185,10 @@ function RegisterPage() {
     };
 
     const onSubmitRegister = (data) => {
+        console.log('data: ', data);
         setDataActive(data.email);
         setDataRegiser(data);
-        mutationRegister(data);
+        // mutationRegister(data);
     };
 
     // xử lý chuyển form login <=> register

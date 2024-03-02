@@ -40,10 +40,12 @@ const publicRoutes = [
     {
         path: '/login',
         component: LoginPage,
+        layout: null,
     },
     {
         path: '/sign-up',
         component: SignUpPage,
+        layout: null,
     },
     {
         path: '/active-acount',

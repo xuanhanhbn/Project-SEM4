@@ -10,7 +10,7 @@ import { onSnapshot, setDoc, doc, updateDoc, serverTimestamp, getDoc } from 'fir
 import { db } from '~/firebase';
 
 const adminId = 'WI08Q27dOfTDfxGCZM3j42dtDQR2';
-const login = false;
+const login = true;
 
 function DefaultLayout({ children }) {
     // State
@@ -34,13 +34,13 @@ function DefaultLayout({ children }) {
         currentUser?.uid && getChats();
     }, [currentUser]);
 
-    // useEffect(() => {
-    //     if (Object.keys(chats)?.length) {
-    //         Object.entries(chats)
-    //             ?.sort((a, b) => b[1].date - a[1].date)
-    //             .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
-    //     }
-    // }, [chats]);
+    useEffect(() => {
+        if (Object.keys(chats)?.length && isOpenChatBox) {
+            Object.entries(chats)
+                ?.sort((a, b) => b[1].date - a[1].date)
+                .map((chat) => dispatch({ type: 'CHANGE_USER', payload: chat[1]?.userInfo }));
+        }
+    }, [isOpenChatBox]);
 
     // xử lý mở chat box
     const handleChangeStateOpenChatBox = async () => {

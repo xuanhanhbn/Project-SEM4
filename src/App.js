@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from '~/routes';
 import { DefaultLayout, LayoutAdmin } from '~/components/Layout';
@@ -6,13 +6,30 @@ import '../src/components/GlobalStyles/font-awesome-6.4.2-pro-main/css/all.css';
 import { AdminRouter } from './routes/routeAdmin';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuthStore from './store/zustand';
+import { shallow } from 'zustand/shallow';
 
 function App() {
-    const type = 'user';
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+
+    const [type, setType] = useState('USER');
+
+    useEffect(() => {
+        if (userData && userData?.role) {
+            setType(userData?.role);
+        }
+    }, [userData]);
 
     // Xử lý check type
     const handleReturnRouter = () => {
-        if (type === 'user') {
+        if (type === 'USER') {
             return publicRoutes;
         } else {
             return AdminRouter;
@@ -20,7 +37,7 @@ function App() {
     };
 
     const handleReturnLayout = () => {
-        if (type === 'user') {
+        if (type === 'USER') {
             return DefaultLayout;
         } else {
             return LayoutAdmin;
