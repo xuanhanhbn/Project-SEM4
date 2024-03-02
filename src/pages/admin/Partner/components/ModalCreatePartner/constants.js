@@ -55,7 +55,7 @@ export const inputCreatePartner = [
     //     type: 'INPUT',
     // },
     {
-        field: 'avatarUrl',
+        field: 'urlLogo',
         lable: 'Logo image',
         placeholder: '',
         type: 'INPUT_UPLOAD',

@@ -138,7 +138,6 @@ function SignUpPage() {
     });
 
     const onSubmitRegister = (data) => {
-        console.log('data: ', data);
         setDataActive(data.email);
         setDataRegiser(data);
         mutationRegister(data);

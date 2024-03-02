@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import './style.css';
 import { createPartnerApi, updatePartnerApi, uploadPartnerLogoApi } from './callApi';
 import { useLocation } from 'react-router-dom';
+import { getAllPartnerApi } from '../../callApi';
 
 const { TextArea } = Input;
 
@@ -25,7 +26,7 @@ const validationSchema = Yup.object().shape({
     // address: Yup.string().required('Adress is required'),
     // website: Yup.string().required('Website date is required'),
     description: Yup.string().required('Describe is required'),
-    avatarUrl: Yup.string().required('Describe is required'),
+    // urlLogo: Yup.string().required('Describe is required'),
     // finishDate: Yup.string().required('Finish date is required'),
     // target: Yup.string().required('Target is required'),
 });
@@ -50,7 +51,7 @@ function ModalCreatePartner(props) {
     const state = location.state;
     // console.log('state: ', state);
 
-    const urlLogo = state.attachment;
+    const urlLogo = state?.attachment;
 
     useEffect(() => {
         if (type === 'update') {
@@ -61,7 +62,8 @@ function ModalCreatePartner(props) {
         if (urlLogo?.length === 0) {
             return;
         } else {
-            setImageUrl(urlLogo[0].url);
+            const url = urlLogo ? urlLogo[0].url : null;
+            setImageUrl(url);
         }
     }, [state]);
 
@@ -76,22 +78,29 @@ function ModalCreatePartner(props) {
         },
     });
 
+    //call api upload partner
     const { mutate: mutationUpdatepartner } = useMutation({
         mutationFn: updatePartnerApi,
         onSuccess: (data) => {
+            // console.log('data: ',data);
             if ((data && data?.status === 200) || data?.status === '200') {
-                return notify('Success', 'success');
+                // return notify('Success', 'success');
+                handleCancel();
             }
             return notify(data?.message, 'error');
         },
     });
 
+    //call api upload logo
     const { mutate: mutationUploadLogo } = useMutation({
         mutationFn: uploadPartnerLogoApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                setValue('urlLogo', data.data);
-                setImageUrl(data.data);
+                console.log('data: ', data?.data[0]);
+                setValue('urlLogo', data?.data[0]);
+
+                setImageUrl(data?.data[0]);
+                // console.log(imageUrl);
             }
             return notify(data?.message, 'error');
         },
@@ -128,6 +137,17 @@ function ModalCreatePartner(props) {
         }
         mutationUploadLogo({ files: files.originFileObj });
     };
+
+    // call api
+    const { mutate: mutationGetAllPartner } = useMutation({
+        mutationFn: getAllPartnerApi,
+        onSuccess: (data) => {
+            // console.log('data: ',data);
+            if ((data && data?.status === 200) || data?.status === '200') {
+            }
+            return notify(data?.message, 'error');
+        },
+    });
 
     const onSubmit = (data) => {
         console.log('data: ', data);

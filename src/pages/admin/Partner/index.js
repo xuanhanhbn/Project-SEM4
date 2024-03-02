@@ -17,7 +17,7 @@ function Partner() {
     const [isModalOpenCreatePartner, setIsModalOpenCreatePartner] = useState(false);
     const [dataTable, setDataTable] = useState(null);
     const [isOpenModalUploadPartner, setIsOpenModalUploadPartner] = useState(false);
-    // const [dataUpdate, setDataUpdate] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     // sử lý khi click nút create partner
     const showModalCreate = () => {
@@ -69,11 +69,12 @@ function Partner() {
         }
 
         if (field === 'logo') {
-            const urlLogo = item.attachment;
+            const urlLogo = item?.attachment;
+
             if (urlLogo?.length === 0) {
                 return <img className="w-16 h-16" alt={item.partnerName + '_logo'} />;
             } else {
-                return <img className="w-16 h-16" src={urlLogo[0].url} alt={item.partnerName + '_logo'} />;
+                return <img className="w-16 h-16" src={urlLogo[0]?.url} alt={item.partnerName + '_logo'} />;
             }
         }
 
@@ -84,21 +85,30 @@ function Partner() {
     const { mutate: mutationGetAllPartner } = useMutation({
         mutationFn: getAllPartnerApi,
         onSuccess: (data) => {
-            setDataTable(data);
+            // console.log('data: ',data);
+            if ((data && data?.status === 200) || data?.status === '200') {
+                console.log('get all data: ', data);
+
+                return setDataTable(data?.data);
+            }
+            return notify(data?.message, 'error');
         },
     });
 
     const { mutate: mutationGetSearchPartner } = useMutation({
         mutationFn: getApiSearchPartner,
         onSuccess: (data) => {
-            setDataTable(data);
+            if ((data && data?.status === 200) || data?.status === '200') {
+                setDataTable(data);
+            }
+            return notify(data?.message, 'error');
         },
     });
 
     //
     useEffect(() => {
         mutationGetAllPartner();
-    }, [dataTable]);
+    }, []);
 
     return (
         <div id="partner">
