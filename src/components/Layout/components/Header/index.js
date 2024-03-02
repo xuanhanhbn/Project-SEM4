@@ -115,7 +115,7 @@ function Header() {
                         <div className="relative hidden ml-3 sm:block">
                             {login === false ? (
                                 <div className="border-r border-white border-solid">
-                                    <Link to="/log-in" className="cursor-pointer btn_singin">
+                                    <Link to="/login" className="cursor-pointer btn_singin">
                                         Sign in
                                     </Link>
                                 </div>

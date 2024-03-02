@@ -38,7 +38,7 @@ const publicRoutes = [
         component: RegisterPage,
     },
     {
-        path: '/log-in',
+        path: '/login',
         component: LoginPage,
     },
     {

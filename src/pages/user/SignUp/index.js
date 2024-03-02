@@ -269,7 +269,7 @@ function SignUpPage() {
                                     <p className="text-sm font-light text-black dark:text-gray-400">
                                         Already have an account?
                                         <Link
-                                            to="/log-in"
+                                            to="/login"
                                             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                                         >
                                             Login here

@@ -33,7 +33,7 @@ function ResetPasswordPage() {
         mutationFn: resetPasswordApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                navigation('/log-in');
+                navigation('/login');
             }
             return notify(data?.message, 'error');
         },
