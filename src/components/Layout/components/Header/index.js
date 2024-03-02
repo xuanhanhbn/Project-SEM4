@@ -123,7 +123,7 @@ function Header() {
                     {/* User icon || singin */}
                     <div className="user_icon">
                         <div className="relative hidden ml-3 sm:block">
-                            {!userData ? (
+                            {Object.keys(userData)?.length < 1 ? (
                                 <div className="border-r border-white border-solid">
                                     <Link to="/log-in" className="cursor-pointer btn_singin">
                                         Sign in
