@@ -22,12 +22,13 @@ const validationRegisterSchema = Yup.object().shape({
         .matches(/^(0[3|5|7|8|9]{1})([0-9]{8})$/, 'Phone number invalid'),
     password: Yup.string().required('Password is required'),
     displayName: Yup.string().required('User name is required'),
+    avatarUrl: Yup.string().required('Avatar is required'),
     email: Yup.string()
         .required('Email is required')
         .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
 });
 
-function SignInPage() {
+function SignUpPage() {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
     const [dataRegister, setDataRegiser] = useState(null);
@@ -36,6 +37,7 @@ function SignInPage() {
     const {
         control,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(validationRegisterSchema),
@@ -64,7 +66,7 @@ function SignInPage() {
         mutationFn: uploadAvatarApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                // setValue('urlLogo', data.data);
+                setValue('avatarUrl', data.data);
                 setImageUrl(data.data);
             }
             return notify(data?.message, 'error');
@@ -273,7 +275,7 @@ function SignInPage() {
                                     <p className="text-sm font-light text-black dark:text-gray-400">
                                         Already have an account?
                                         <Link
-                                            to="/log-in"
+                                            to="/login"
                                             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                                         >
                                             Login here
@@ -289,4 +291,4 @@ function SignInPage() {
     );
 }
 
-export default SignInPage;
+export default SignUpPage;

@@ -125,7 +125,7 @@ function Header() {
                         <div className="relative hidden ml-3 sm:block">
                             {Object.keys(userData)?.length < 1 ? (
                                 <div className="border-r border-white border-solid">
-                                    <Link to="/log-in" className="cursor-pointer btn_singin">
+                                    <Link to="/login" className="cursor-pointer btn_singin">
                                         Sign in
                                     </Link>
                                 </div>
@@ -174,6 +174,15 @@ function Header() {
                                         History and tax receipts
                                     </Link>
                                     <Link
+                                        to="/change-password"
+                                        className="li_user_menu"
+                                        role="menuitem"
+                                        tabIndex="-1"
+                                        id="user-menu-item-1"
+                                    >
+                                        Change password
+                                    </Link>
+                                    <Link
                                         to="#"
                                         className="li_user_menu"
                                         role="menuitem"
@@ -181,7 +190,7 @@ function Header() {
                                         id="user-menu-item-2"
                                         onClick={() => handleSignOut()}
                                     >
-                                        Sign out
+                                        Log out
                                     </Link>
                                 </div>
                             ) : null}

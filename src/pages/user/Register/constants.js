@@ -22,7 +22,7 @@ export const inputRegister = [
         type: 'text',
     },
     {
-        field: 'avatarUrl',
+        field: 'urlLogo',
         lable: 'Avatar image',
         placeholder: '',
         type: 'INPUT_UPLOAD',
