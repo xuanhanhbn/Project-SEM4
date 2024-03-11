@@ -96,7 +96,6 @@ function ModalCreatePartner(props) {
         mutationFn: uploadPartnerLogoApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                console.log('data: ', data?.data[0]);
                 setValue('urlLogo', data?.data[0]);
 
                 setImageUrl(data?.data[0]);

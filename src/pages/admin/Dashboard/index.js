@@ -105,35 +105,6 @@ function Dashboard() {
                             className="shadow-md rounded-2xl"
                         />
                     </div>
-                    {/* <div className="w-full max-w-full px-3 mt-6 lg:w-1/3 lg:flex-none">
-                        <div className="list_completed_donate">
-                            <div className="list_completed_header">
-                                <div className="flex flex-wrap -mx-3">
-                                    <div className="flex items-center flex-none w-1/2 max-w-full px-3">
-                                        <h6 className="mb-0">Conversations</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex-auto p-4 pb-0">
-                                <ul className="flex flex-col pl-0 mb-0 rounded-lg">
-                                    <li className="mess_box_container">
-                                        <div className="mess_box_header">
-                                            <img
-                                                src={messAvater}
-                                                alt="kal"
-                                                className="w-full shadow-soft-2xl rounded-xl"
-                                            />
-                                        </div>
-                                        <div className="flex flex-col items-start justify-center">
-                                            <h6 className="mb-0 text-sm leading-normal">Sophie B.</h6>
-                                            <p className="mb-0 text-xs leading-tight">Hi! I need more information..</p>
-                                        </div>
-                                        <button className="mess_rep_btn">Reply</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
             </div>
         </div>

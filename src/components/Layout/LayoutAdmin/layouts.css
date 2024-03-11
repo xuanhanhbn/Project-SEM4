@@ -72,3 +72,13 @@
 #admin_sidebar_tab_title .sidebar_tab_title {
     @apply pl-6 ml-2 mb-2 font-bold leading-5 uppercase text-xs opacity-60
 }
+
+/* #adminLayout {
+    .ant-dropdown .ant-dropdown-menu :first-child {
+        background-color: red;
+    }
+}
+
+.ant-dropdown-menu :first-child {
+    background-color: red;
+} */

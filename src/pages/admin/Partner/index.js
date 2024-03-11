@@ -105,24 +105,21 @@ function Partner() {
         },
     });
 
-    //
-    useEffect(() => {
-        mutationGetAllPartner();
-    }, []);
+    // //
+    // useEffect(() => {
+    //     mutationGetAllPartner();
+    // }, []);
 
     return (
         <div id="partner">
             <h1 className="mt-3 text-xl font-bold">Partner</h1>
             <div className="search_box">
-                <Space direction="vertical">
-                    <Search
-                        placeholder="input search partner"
-                        allowClear
-                        enterButton="Search"
-                        size="large"
-                        onSearch={onSearch}
-                    />
-                </Space>
+                <div className="flex items-center justify-center h-12 px-4 text-black bg-white border rounded-md border-gray-104">
+                    <i className="mr-1 fa-regular fa-magnifying-glass"></i>
+                    <Space direction="vertical">
+                        <Search placeholder="input search partner" allowClear size="large" onSearch={onSearch} />
+                    </Space>
+                </div>
                 <button className="btn_create" onClick={() => showModalCreate()}>
                     Create partner
                 </button>
