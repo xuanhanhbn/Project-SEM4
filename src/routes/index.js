@@ -36,6 +36,7 @@ const publicRoutes = [
     {
         path: '/register',
         component: RegisterPage,
+        layout: null,
     },
     {
         path: '/login',
@@ -54,14 +55,17 @@ const publicRoutes = [
     {
         path: '/reset-password',
         component: ResetPasswordPage,
+        layout: null,
     },
     {
         path: '/forgot-password',
         component: ForgotPasswordPage,
+        layout: null,
     },
     {
         path: '/change-password',
         component: ChangePassword,
+        layout: null,
     },
 ];
 const privateRoutes = [];
