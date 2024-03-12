@@ -425,14 +425,22 @@ function ModalCreateProgram(props) {
             <Modal
                 style={{ top: 0 }}
                 title="New Program"
+                footer={false}
                 className="relative"
                 open={onOpenCreateModal}
                 onOk={type === 'update' ? handleSubmit(updateProgram) : handleSubmit(onSubmit)}
                 onCancel={handleCancelModalCreate}
             >
-                <div id="create_program_modal" className="grid grid-cols-2 gap-4 pt-3">
+                <form
+                    onSubmit={type === 'edit' ? handleSubmit(updateProgram) : handleSubmit(onSubmit)}
+                    id="create_program_modal"
+                    className="grid grid-cols-2 gap-4 pt-3"
+                >
                     {inputCreateProgram.map((item) => RENDER_INPUT_CREATE_PROGRAM(item))}
-                </div>
+                    <button className="col-span-2 btn_create" type="submit">
+                        submit
+                    </button>
+                </form>
             </Modal>
         </>
     );

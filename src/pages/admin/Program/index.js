@@ -107,15 +107,12 @@ function Program() {
                 </div>
             </div>
             <div className="flex justify-end max-w-full px-3">
-                <Space direction="vertical">
-                    <Search
-                        placeholder="input search program"
-                        allowClear
-                        enterButton="Search"
-                        size="large"
-                        onSearch={onSearch}
-                    />
-                </Space>
+                <div className="flex items-center justify-center h-12 px-4 text-black bg-white border rounded-md border-gray-104">
+                    <i className="mr-1 fa-regular fa-magnifying-glass"></i>
+                    <Space direction="vertical">
+                        <Search placeholder="input search program" allowClear size="large" onSearch={onSearch} />
+                    </Space>
+                </div>
             </div>
             <div className="flex-none w-full max-w-full px-3 mt-6">
                 <TableCommon

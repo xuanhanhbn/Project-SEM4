@@ -4,7 +4,7 @@ export const sideBarList = [
         tabName: 'Dashboard',
         type: 'TAB_ITEM',
         tabIcon: <i className="fa-duotone fa-chart-simple "></i>,
-        path: '/admin/dasboard',
+        path: '/admin/dashboard',
     },
     // {
     //     id: 3,

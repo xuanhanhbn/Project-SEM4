@@ -95,148 +95,120 @@ function LoginPage() {
 
     return (
         <div>
-            <div className="flex flex-col justify-center min-h-full px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <img
-                        className="w-auto h-10 mx-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
-                    />
-                    <h2 className="mt-10 text-2xl font-bold leading-9 tracking-tight text-center text-black">
-                        Sign in to your account
-                    </h2>
-                </div>
-
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form onSubmit={handleSubmitLogin(onSubmitLogin)} className="space-y-6" action="#" method="POST">
-                        {/* <div>
-                            <label for="email" className="block text-sm font-medium leading-6 text-black">
-                                Email address
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autocomplete="email"
-                                    required
-                                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <div className="flex items-center justify-between">
-                                <label for="password" className="block text-sm font-medium leading-6 text-black">
-                                    Password
-                                </label>
-                                <div className="text-sm">
-                                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                        Forgot password?
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="mt-2">
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autocomplete="current-password"
-                                    required
-                                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
-                        </div>
-
-                         */}
-                        {inputLogin.map((item) => {
-                            const { field } = item;
-                            const message = errorsLogin[field] && errorsLogin[field].message;
-                            if (item.type === 'password') {
-                                return (
-                                    <div key={item.field}>
-                                        <Controller
-                                            control={controlLogin}
-                                            render={({ field: { onChange, value } }) => {
-                                                return (
-                                                    <div className="text-left ">
-                                                        <div className="flex justify-between">
-                                                            <Typography.Title level={5}>
-                                                                {item.placeholder}
-                                                            </Typography.Title>
-                                                            <div className="text-sm">
-                                                                <Link
-                                                                    to="/forgot-password"
-                                                                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                                                                >
-                                                                    Forgot password?
-                                                                </Link>
-                                                            </div>
-                                                        </div>
-                                                        <Input.Password
-                                                            className="py-4 "
-                                                            type={item.type}
-                                                            autoComplete="on"
-                                                            onChange={onChange}
-                                                            value={value == null ? '' : value}
-                                                            placeholder={item.placeholder}
-                                                        />
-                                                    </div>
-                                                );
-                                            }}
-                                            name={item.field}
-                                        />
-                                        <div className="mt-0 mb-3 text-red-600"> {message}</div>
-                                    </div>
-                                );
-                            } else {
-                                return (
-                                    <div key={item.field}>
-                                        <Controller
-                                            control={controlLogin}
-                                            render={({ field: { onChange, value } }) => {
-                                                return (
-                                                    <div className="text-left ">
-                                                        <Typography.Title level={5}>
-                                                            {item.placeholder}
-                                                        </Typography.Title>
-
-                                                        <Input
-                                                            className="py-4 "
-                                                            noValidate
-                                                            type={item.type}
-                                                            autoComplete="on"
-                                                            onChange={onChange}
-                                                            value={value == null ? '' : value}
-                                                            placeholder={item.placeholder}
-                                                        />
-                                                    </div>
-                                                );
-                                            }}
-                                            name={item.field}
-                                        />
-                                        <div className="mt-0 mb-3 text-red-600"> {message}</div>
-                                    </div>
-                                );
-                            }
-                        })}
-                        <div>
-                            <button
-                                type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                disabled={isPending}
+            <div>
+                <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto mt-10 lg:py-0">
+                    <Link
+                        to="/"
+                        className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+                    >
+                        <img
+                            className="w-8 h-8 mr-2"
+                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                            alt="logo"
+                        />
+                    </Link>
+                    <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                            <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl dark:text-white">
+                                Sign in to your account
+                            </h1>
+                            <form
+                                onSubmit={handleSubmitLogin(onSubmitLogin)}
+                                className="space-y-4 md:space-y-6"
+                                action="#"
                             >
-                                {isPending ? <Spin size="large" /> : <div> Sign in</div>}
-                            </button>
-                        </div>
-                    </form>
+                                {inputLogin.map((item) => {
+                                    const { field } = item;
+                                    const message = errorsLogin[field] && errorsLogin[field].message;
+                                    if (item.type === 'password') {
+                                        return (
+                                            <div key={item.field}>
+                                                <Controller
+                                                    control={controlLogin}
+                                                    render={({ field: { onChange, value } }) => {
+                                                        return (
+                                                            <div className="text-left ">
+                                                                <div className="flex justify-between">
+                                                                    <Typography.Title level={5}>
+                                                                        {item.placeholder}{' '}
+                                                                        <span className="text-red-200">*</span>
+                                                                    </Typography.Title>
+                                                                    <div className="text-sm">
+                                                                        <Link
+                                                                            to="/forgot-password"
+                                                                            className="font-semibold text-indigo-600 hover:text-indigo-500"
+                                                                        >
+                                                                            Forgot password?
+                                                                        </Link>
+                                                                    </div>
+                                                                </div>
+                                                                <Input.Password
+                                                                    className="py-4 "
+                                                                    type={item.type}
+                                                                    autoComplete="on"
+                                                                    onChange={onChange}
+                                                                    value={value == null ? '' : value}
+                                                                    placeholder={item.placeholder}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }}
+                                                    name={item.field}
+                                                />
+                                                <div className="mt-0 mb-3 text-red-600"> {message}</div>
+                                            </div>
+                                        );
+                                    } else {
+                                        return (
+                                            <div key={item.field}>
+                                                <Controller
+                                                    control={controlLogin}
+                                                    render={({ field: { onChange, value } }) => {
+                                                        return (
+                                                            <div className="text-left ">
+                                                                <Typography.Title level={5}>
+                                                                    {item.placeholder}{' '}
+                                                                    <span className="text-red-200">*</span>
+                                                                </Typography.Title>
 
-                    <p className="mt-10 text-sm text-center text-black">
-                        Don't have an account?
-                        <Link to="/sign-up" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                            Sign up here
-                        </Link>
-                    </p>
+                                                                <Input
+                                                                    className="py-4 "
+                                                                    noValidate
+                                                                    type={item.type}
+                                                                    autoComplete="on"
+                                                                    onChange={onChange}
+                                                                    value={value == null ? '' : value}
+                                                                    placeholder={item.placeholder}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }}
+                                                    name={item.field}
+                                                />
+                                                <div className="mt-0 mb-3 text-red-600"> {message}</div>
+                                            </div>
+                                        );
+                                    }
+                                })}
+                                <button
+                                    type="submit"
+                                    disabled={isPending}
+                                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                >
+                                    {isPending ? <Spin size="large" /> : <div>Sign in</div>}
+                                </button>
+                                <p className="mt-10 text-sm text-center text-black">
+                                    Don't have an account?
+                                    <Link
+                                        to="/sign-up"
+                                        className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                                    >
+                                        Sign up here
+                                    </Link>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

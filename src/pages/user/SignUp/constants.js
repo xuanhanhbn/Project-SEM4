@@ -11,8 +11,19 @@ export const inputRegister = [
         type: 'text',
     },
     {
+        field: 'birthDate',
+        placeholder: 'Date of birth',
+
+        type: 'BIRTH_DATE',
+    },
+    {
         field: 'password',
         placeholder: 'Password',
+        type: 'password',
+    },
+    {
+        field: 'confirmPassword',
+        placeholder: 'Confirm password',
         type: 'password',
     },
     {

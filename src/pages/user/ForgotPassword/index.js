@@ -56,7 +56,9 @@ function ForgotPasswordPage() {
                     <form onSubmit={handleSubmit(onSubmit)} className="my-10">
                         <div className="flex flex-col space-y-5">
                             <label htmlFor="email">
-                                <p className="pb-2 font-medium text-slate-700">Email address</p>
+                                <p className="pb-2 font-medium text-slate-700">
+                                    Email address <span className="text-red-200">*</span>
+                                </p>
 
                                 <Controller
                                     control={control}

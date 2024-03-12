@@ -58,7 +58,9 @@ function ResetPasswordPage() {
                                 const message = errors[field] && errors[field].message;
                                 return (
                                     <label key={item.id} htmlFor="password">
-                                        <p className="pb-2 font-medium text-slate-700">{item.label}</p>
+                                        <p className="pb-2 font-medium text-slate-700">
+                                            {item.label} <span className="text-red-200">*</span>
+                                        </p>
 
                                         <Controller
                                             control={control}
