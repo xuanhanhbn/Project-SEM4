@@ -8,7 +8,7 @@ import { columns, dataTablePartners } from './constants';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
 import { getAllPartnerApi, getApiSearchPartner } from './callApi';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const { Search } = Input;
 
@@ -18,6 +18,8 @@ function Partner() {
     const [dataTable, setDataTable] = useState(null);
     const [isOpenModalUploadPartner, setIsOpenModalUploadPartner] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const navigation = useNavigate();
 
     // sử lý khi click nút create partner
     const showModalCreate = () => {
@@ -56,14 +58,12 @@ function Partner() {
         if (field === 'partnerName') {
             return (
                 <div>
-                    <Link
-                        onClick={() => {
-                            openModalUpdate();
-                        }}
-                        state={item}
+                    <button
+                        onClick={() => navigation('/admin/partner/detail', { state: item })}
+                        // state={item}
                     >
                         {item.partnerName}
-                    </Link>
+                    </button>
                 </div>
             );
         }
@@ -105,10 +105,10 @@ function Partner() {
         },
     });
 
-    // //
-    // useEffect(() => {
-    //     mutationGetAllPartner();
-    // }, []);
+    //
+    useEffect(() => {
+        mutationGetAllPartner();
+    }, []);
 
     return (
         <div id="partner">
@@ -144,14 +144,14 @@ function Partner() {
                 />
             )}
 
-            {isOpenModalUploadPartner && (
+            {/* {isOpenModalUploadPartner && (
                 <ModalCreatePartner
                     isModalOpen={isOpenModalUploadPartner}
                     handleOk={handleUpdatePartner}
                     handleCancel={handleCancelModal}
                     type="update"
                 />
-            )}
+            )} */}
         </div>
     );
 }

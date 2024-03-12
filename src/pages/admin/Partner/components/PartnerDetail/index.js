@@ -9,6 +9,8 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import TextArea from 'antd/es/input/TextArea';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '~/assets/images/logo/16889553131686049166paypal.png';
 
 const validationSchema = Yup.object().shape({
     // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
@@ -37,6 +39,12 @@ const validationChangePasswordSchema = Yup.object().shape({
 function PartnerDetailPage() {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
+
+    const location = useLocation();
+    const data = location?.state;
+
+    console.log('data: ', data);
+    const urlLogo = data?.attachment[0]?.url;
 
     const {
         handleSubmit,
@@ -277,8 +285,88 @@ function PartnerDetailPage() {
         }
     };
     return (
-        <div className="px-5 py-8 bg-white shadow-xl rounded-2xl">
-            <Tabs defaultActiveKey="1" items={tabItems.map((item) => RENDER_TAB_ITEMS(item))} onChange={onChange} />
+        <div>
+            <div className="w-full px-6 mx-auto">
+                <div className="flex flex-wrap -mx-3">
+                    <div className="w-full max-w-full px-3 mt-6 md:w-7/12 md:flex-none">
+                        <div className="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-md shadow-soft-xl rounded-2xl bg-clip-border">
+                            <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
+                                <h6 className="mb-0">Partner Information</h6>
+                            </div>
+                            <div className="flex-auto p-4 pt-6">
+                                <ul className="flex flex-col pl-0 mb-0 rounded-lg">
+                                    <li className="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50">
+                                        <div className="flex flex-col">
+                                            {/* <h6 className="mb-4 text-sm leading-normal">Oliver Liam</h6> */}
+                                            <span className="mb-2 text-xs leading-tight">
+                                                Company Name:
+                                                <span className="font-semibold text-slate-700 sm:ml-2">
+                                                    {data.partnerName}
+                                                </span>
+                                            </span>
+                                            <span className="mb-2 text-xs leading-tight">
+                                                Email Address:
+                                                <span className="font-semibold text-slate-700 sm:ml-2">
+                                                    {data.email}
+                                                </span>
+                                            </span>
+                                            <span className="text-xs leading-tight">
+                                                Bank Account Number:
+                                                <span className="font-semibold text-slate-700 sm:ml-2">FRB1235476</span>
+                                            </span>
+                                        </div>
+                                        <div className="ml-auto text-right">
+                                            {/* logo */}
+                                            <img src={urlLogo} className="w-16" alt="fb_logo" />
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="relative flex flex-col min-w-0 mt-4 break-words bg-white border-0 shadow-md shadow-soft-xl rounded-2xl bg-clip-border">
+                            <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
+                                <h6 className="mb-0">Partner Description</h6>
+                            </div>
+                            <div className="flex-auto p-4 pt-6">
+                                <ul className="flex flex-col pl-0 mb-0 rounded-lg">
+                                    <li className="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50">
+                                        {data.description}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="w-full max-w-full px-3 mt-6 md:w-5/12 md:flex-none">
+                        <div className="relative flex flex-col h-full min-w-0 mb-6 break-words bg-white border-0 shadow-md shadow-soft-xl rounded-2xl bg-clip-border">
+                            <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
+                                <div className="flex flex-wrap -mx-3">
+                                    <div className="max-w-full px-3 md:w-1/2 md:flex-none">
+                                        <h6 className="mb-0">List Program</h6>
+                                    </div>
+                                    <Link className="flex items-center justify-end max-w-full px-3 hover:text-blue-500 md:w-1/2 md:flex-none">
+                                        <i class="fa-solid mr-2 fa-list"></i>
+                                        <small className="font-medium">View All</small>
+                                    </Link>
+                                </div>
+                            </div>
+                            <div className="flex-auto p-4 pb-0">
+                                <ul className="flex flex-col pl-0 mb-0 rounded-lg">
+                                    <li className="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-t-inherit text-inherit rounded-xl">
+                                        <div className="flex flex-col">
+                                            <h6 className="mb-1 text-sm font-semibold leading-normal text-slate-700">
+                                                Project name
+                                            </h6>
+                                            <span className="text-xs leading-tight">#MS-415646</span>
+                                        </div>
+                                        <div className="flex items-center text-sm leading-normal">$18000</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

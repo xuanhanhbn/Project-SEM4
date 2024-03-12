@@ -4,6 +4,13 @@ import './layouts.css';
 import { sideBarList } from './constants';
 import logo from '~/assets/images/avatar/avatar.png';
 import { Button, Dropdown, Space } from 'antd';
+import { useMutation } from '@tanstack/react-query';
+import { logoutApi } from './callApi';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
+import { signOut } from 'firebase/auth';
+import { notify } from '~/utils/common';
+import { auth } from '~/firebase';
 
 // const items = [
 //     {
@@ -39,6 +46,15 @@ import { Button, Dropdown, Space } from 'antd';
 function LayoutAdmin({ children }) {
     const [isHiddenClass, setisHiddenClass] = useState(false);
     const [isHiddenMenu, setisHiddenMenu] = useState(false);
+
+    // const { userData, setUserData, cleanup } = useAuthStore(
+    //     (state) => ({
+    //         userData: state.userData || '',
+    //         setUserData: state.setUserData,
+    //         cleanup: state.cleanup,
+    //     }),
+    //     shallow,
+    // );
 
     // render sidebar item
     const RENDER_TAB_ITEMS = (item) => {
@@ -76,6 +92,23 @@ function LayoutAdmin({ children }) {
     //             <div>sadsad</div>
     //         </div>
     //     );
+    // };
+
+    // const { mutate: mutationLogout } = useMutation({
+    //     mutationFn: logoutApi,
+    //     onSuccess: (data) => {
+    //         if ((data && data?.status === 200) || data?.status === '200') {
+    //             localStorage.removeItem('loginPage');
+    //             setUserData(null);
+    //             signOut(auth);
+    //             return notify('Logout Success', 'success');
+    //         }
+    //         return notify(data?.response?.data, 'error');
+    //     },
+    // });
+
+    // const handleSignOut = () => {
+    //     mutationLogout();
     // };
 
     return (
@@ -133,17 +166,18 @@ function LayoutAdmin({ children }) {
                                         <i className="mr-4 text-lg fa-duotone fa-diagram-project"></i>
                                         Program
                                     </Link>
-                                    <Link
+                                    {/* <Link
                                         to="/admin/partner/detail"
                                         onClick={() => setisHiddenMenu((prev) => !prev)}
                                         className="w-full px-6 py-2 my-px text-sm transition-all duration-300 ease-in-out hover:pl-9 hover:bg-item-200 delay-0 hover:text-item-100"
                                     >
                                         <i className="mr-4 text-lg fa-light fa-user"></i>
                                         Profile
-                                    </Link>
+                                    </Link> */}
                                 </div>
                                 <Link
                                     to=""
+                                    // onClick={() => handleSignOut()}
                                     className="flex items-center justify-center px-4 py-5 text-sm font-medium text-center bg-gray-102 text-gray-103 "
                                 >
                                     <i className="mr-2 fa-solid fa-arrow-right-from-bracket"></i> Sign Out
