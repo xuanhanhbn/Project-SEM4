@@ -3,9 +3,9 @@ import ImageGallery from 'react-image-gallery';
 
 import './programDetail.css';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import ModalCreateProgram from '../ModalCreateProgram';
-import ChatBoxCustom from './ChatBox';
+// import ChatBoxCustom from './ChatBox';
 
 const images = [
     {
@@ -61,7 +61,7 @@ const images = [
 export default function ProgramDetail() {
     // state
     const [isOpenModalEditProject, setIsOpenModalEditProject] = useState(false);
-    const [isOpenChatBox, setisOpenChatBox] = useState(false);
+    // const [isOpenChatBox, setisOpenChatBox] = useState(false);
 
     // // xử lý open modal edit program
     const showModalEditProgram = () => {
@@ -81,44 +81,44 @@ export default function ProgramDetail() {
     };
 
     // xử lý mở chat box
-    const handleChangeStateOpenChatBox = async () => {
-        setisOpenChatBox(!isOpenChatBox);
+    // const handleChangeStateOpenChatBox = async () => {
+    //     setisOpenChatBox(!isOpenChatBox);
 
-        // const combinedId = currentUser?.uid > adminId ? currentUser?.uid + adminId : adminId + currentUser?.uid;
-        // try {
-        //     const res = await getDoc(doc(db, 'chats', combinedId));
-        //     if (!res.exists()) {
-        //         //create a chat in chats collection
-        //         await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+    //     const combinedId = currentUser?.uid > adminId ? currentUser?.uid + adminId : adminId + currentUser?.uid;
+    //     try {
+    //         const res = await getDoc(doc(db, 'chats', combinedId));
+    //         if (!res.exists()) {
+    //             //create a chat in chats collection
+    //             await setDoc(doc(db, 'chats', combinedId), { messages: [] });
 
-        //         //create user chats
-        //         await updateDoc(doc(db, 'userChats', currentUser?.uid), {
-        //             [combinedId + '.userInfo']: {
-        //                 uid: adminId,
-        //                 //   displayName: user.displayName,
-        //                 //   photoURL: user.photoURL,
-        //             },
-        //             [combinedId + '.date']: serverTimestamp(),
-        //         });
+    //             //create user chats
+    //             await updateDoc(doc(db, 'userChats', currentUser?.uid), {
+    //                 [combinedId + '.userInfo']: {
+    //                     uid: adminId,
+    //                     //   displayName: user.displayName,
+    //                     //   photoURL: user.photoURL,
+    //                 },
+    //                 [combinedId + '.date']: serverTimestamp(),
+    //             });
 
-        //         await updateDoc(doc(db, 'userChats', adminId), {
-        //             [combinedId + '.userInfo']: {
-        //                 uid: currentUser?.uid,
-        //                 displayName: currentUser?.displayName,
-        //                 photoURL: currentUser?.photoURL,
-        //             },
-        //             [combinedId + '.date']: serverTimestamp(),
-        //         });
-        //     }
-        // } catch (err) {
-        //     return err;
-        // }
-    };
+    //             await updateDoc(doc(db, 'userChats', adminId), {
+    //                 [combinedId + '.userInfo']: {
+    //                     uid: currentUser?.uid,
+    //                     displayName: currentUser?.displayName,
+    //                     photoURL: currentUser?.photoURL,
+    //                 },
+    //                 [combinedId + '.date']: serverTimestamp(),
+    //             });
+    //         }
+    //     } catch (err) {
+    //         return err;
+    //     }
+    // };
 
     return (
         <div id="programDetail">
             <div className="fixed z-50 right-2 bottom-5">
-                <button
+                {/* <button
                     onClick={() => handleChangeStateOpenChatBox()}
                     className={
                         isOpenChatBox === true
@@ -128,7 +128,7 @@ export default function ProgramDetail() {
                 >
                     <span className="absolute z-10 inline-flex w-8 h-8 rounded-full opacity-75 animate-ping bg-sky-400"></span>
                     <i className="z-20 text-white fa-brands fa-facebook-messenger"></i>
-                </button>
+                </button> */}
             </div>
             <div>
                 <h1 className="mb-12 text-4xl font-bold leading-10 ">Help in the Democratic Republic of the Congo</h1>
@@ -212,11 +212,11 @@ export default function ProgramDetail() {
                 />
             )}
 
-            {isOpenChatBox === false ? null : (
+            {/* {isOpenChatBox === false ? null : (
                 <div className="z-[999] fixed right-4 bottom-2 shadow-2xl rounded-2xl">
                     <ChatBoxCustom closeChatBox={() => handleChangeStateOpenChatBox()} />
                 </div>
-            )}
+            )} */}
         </div>
     );
 }
