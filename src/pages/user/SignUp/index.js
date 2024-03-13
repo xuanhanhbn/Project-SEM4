@@ -14,6 +14,8 @@ import { beforeUpload, notify } from '~/utils/common';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
+import './Signup.css';
+import dayjs from 'dayjs';
 
 // validate register form
 const validationRegisterSchema = Yup.object().shape({
@@ -46,7 +48,7 @@ function SignUpPage() {
     } = useForm({
         resolver: yupResolver(validationRegisterSchema),
     });
-    console.log('errors: ', errors);
+    // console.log('errors: ', errors);
     const uploadButton = (
         <button
             style={{
@@ -96,7 +98,7 @@ function SignUpPage() {
     };
 
     const handleRegisterAccountChatBox = async () => {
-        console.log('dataRegister: ', dataRegister);
+        // console.log('dataRegister: ', dataRegister);
         const displayName = dataRegister?.email || '';
         const email = dataRegister?.email;
         const password = dataRegister?.password;
@@ -150,11 +152,15 @@ function SignUpPage() {
     });
 
     const onSubmitRegister = (data) => {
-        // console.log('dataSignUp: ', data);
+        const originalDateString = data.bod;
+        const dateObject = dayjs(originalDateString);
+        const formattedDate = dateObject.format('YYYY/MM/DD');
+        data.bod = formattedDate;
+        console.log('dataSignUp: ', data);
 
         setDataActive(data.email);
         setDataRegiser(data);
-        // console.log('data: ', data);
+        // // console.log('data: ', data);
         mutationRegister(data);
     };
 
@@ -234,7 +240,12 @@ function SignUpPage() {
                                         {item.placeholder} <span className="text-red-200">*</span>
                                     </Typography.Title>
                                     <Space direction="vertical" className="w-full">
-                                        <DatePicker onChange={onChange} selected={value} className="w-full py-4" />
+                                        <DatePicker
+                                            // format={dateFormat}
+                                            onChange={onChange}
+                                            selected={field.value}
+                                            className="w-full py-4"
+                                        />
                                     </Space>
                                 </div>
                             );
@@ -275,9 +286,9 @@ function SignUpPage() {
     };
     return (
         <div>
-            <div className="mt-10 bg-gray-50 dark:bg-gray-900">
+            <div id="signup_page">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
-                    <Link
+                    {/* <Link
                         to="/"
                         className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
                     >
@@ -286,14 +297,16 @@ function SignUpPage() {
                             src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                             alt="logo"
                         />
-                    </Link>
-                    <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    </Link> */}
+                    <div className="w-full bg-white rounded-lg shadow-2xl dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                        <div className="p-6 space-y-4 sm:p-8">
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl dark:text-white">
                                 Create an account
                             </h1>
                             <form onSubmit={handleSubmit(onSubmitRegister)} className="space-y-4 md:space-y-6">
-                                {inputRegister.map((data) => RENDER_INPUT_SIGN_UP(data))}
+                                <div className="grid-cols-2 gap-4 md:grid">
+                                    {inputRegister.map((data) => RENDER_INPUT_SIGN_UP(data))}
+                                </div>
                                 <button
                                     type="submit"
                                     disabled={isPending}

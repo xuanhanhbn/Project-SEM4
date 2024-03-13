@@ -21,13 +21,13 @@ export const inputCreatePartner = [
     {
         field: 'paypalAccount',
         lable: 'Paypal Account ',
-        placeholder: '111111111111',
+        placeholder: '****-****-****-****',
         type: 'INPUT',
     },
     {
         field: 'vnpayAccount',
         lable: 'VNPay Account',
-        placeholder: '111111111111',
+        placeholder: '****-****-****-****',
         type: 'INPUT',
     },
     {
