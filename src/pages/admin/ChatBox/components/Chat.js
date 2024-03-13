@@ -4,9 +4,9 @@ import Input from './Input';
 
 function Chat() {
     return (
-        <div className="bg-chat-100 h-full relative">
+        <div className="relative h-full bg-chat-100">
             <Messages />
-            <div className="absolute bottom-[50px] justify-center w-full">
+            <div className="absolute justify-center w-full bottom-2">
                 <Input />
             </div>
         </div>

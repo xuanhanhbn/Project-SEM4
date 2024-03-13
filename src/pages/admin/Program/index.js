@@ -18,12 +18,12 @@ function Program() {
     // xử lý khi ấn submit modal
     const handleSubmitModal = (data) => {
         setIsOpenModalCreateProject(false);
-        console.log('data', data);
+        // console.log('data', data);
     };
     // xử lý khi ấn cancel modal
     const handleCancelModal = () => {
         setIsOpenModalCreateProject(false);
-        console.log('click cancel btn');
+        // console.log('click cancel btn');
     };
 
     const onSearch = (value) => {

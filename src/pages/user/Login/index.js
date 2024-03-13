@@ -72,12 +72,16 @@ function LoginPage() {
     const { mutate: getMe } = useMutation({
         mutationFn: getMeApi,
         onSuccess: (data) => {
-            if ((data && data?.status === 200) || data?.status === '200') {
+            if (data && data?.status == 200) {
                 setUserData(data?.data);
-                if (data?.data?.role === 'ADMIN') {
-                    return navigation('/admin/dashboard');
+                if (data?.data?.role === 'USER') {
+                    return navigation('/');
                 }
-                return navigation('/');
+
+                if (data?.data?.role === 'PARTNER' && !data?.data.updateAt) {
+                    return navigation('/admin/change-password');
+                }
+                return navigation('/admin/dashboard');
             }
             return notify('error', 'error');
         },

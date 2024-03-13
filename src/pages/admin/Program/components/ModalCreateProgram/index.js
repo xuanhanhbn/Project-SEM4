@@ -83,7 +83,7 @@ function ModalCreateProgram(props) {
         data.finishDate = moment(data.finishDate).format('YYYY/MM/DD');
         data.carouselImageUrl = fileList;
         data.bannerImageUrl = imageUrl;
-        console.log('data', data);
+        // console.log('data', data);
     };
 
     // xử lý update program

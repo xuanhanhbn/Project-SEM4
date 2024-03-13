@@ -21,7 +21,7 @@ const validationRegisterSchema = Yup.object().shape({
         .required('Phone number is required')
         .matches(/^(0[3|5|7|8|9]{1})([0-9]{8})$/, 'Phone number invalid'),
     password: Yup.string().required('Password is required'),
-    birthDate: Yup.string().required('Date of birth is required'),
+    // bod: Yup.string().required('Date of birth is required'),
     confirmPassword: Yup.string()
         .required('Password is required')
         .oneOf([Yup.ref('password')], 'Passwords do not match'),
@@ -46,7 +46,7 @@ function SignUpPage() {
     } = useForm({
         resolver: yupResolver(validationRegisterSchema),
     });
-
+    console.log('errors: ', errors);
     const uploadButton = (
         <button
             style={{
@@ -151,8 +151,10 @@ function SignUpPage() {
 
     const onSubmitRegister = (data) => {
         // console.log('dataSignUp: ', data);
+
         setDataActive(data.email);
         setDataRegiser(data);
+        // console.log('data: ', data);
         mutationRegister(data);
     };
 
@@ -232,11 +234,7 @@ function SignUpPage() {
                                         {item.placeholder} <span className="text-red-200">*</span>
                                     </Typography.Title>
                                     <Space direction="vertical" className="w-full">
-                                        <DatePicker
-                                            onChange={onChange}
-                                            selected={field.value}
-                                            className="w-full py-4"
-                                        />
+                                        <DatePicker onChange={onChange} selected={value} className="w-full py-4" />
                                     </Space>
                                 </div>
                             );
@@ -294,11 +292,7 @@ function SignUpPage() {
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl dark:text-white">
                                 Create an account
                             </h1>
-                            <form
-                                onSubmit={handleSubmit(onSubmitRegister)}
-                                className="space-y-4 md:space-y-6"
-                                action="#"
-                            >
+                            <form onSubmit={handleSubmit(onSubmitRegister)} className="space-y-4 md:space-y-6">
                                 {inputRegister.map((data) => RENDER_INPUT_SIGN_UP(data))}
                                 <button
                                     type="submit"

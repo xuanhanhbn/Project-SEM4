@@ -10,12 +10,12 @@ export const inputRegister = [
 
         type: 'text',
     },
-    {
-        field: 'birthDate',
-        placeholder: 'Date of birth',
+    // {
+    //     field: 'bod',
+    //     placeholder: 'Date of birth',
 
-        type: 'BIRTH_DATE',
-    },
+    //     type: 'BIRTH_DATE',
+    // },
     {
         field: 'password',
         placeholder: 'Password',
