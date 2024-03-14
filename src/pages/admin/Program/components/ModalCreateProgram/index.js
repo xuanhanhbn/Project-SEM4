@@ -280,7 +280,7 @@ function ModalCreateProgram(props) {
                                 return (
                                     <Space direction="vertical">
                                         <DatePicker
-                                            disabled={type === 'create' && endDateProgram ? true : false}
+                                            disabled={type === 'create' && !endDateProgram ? true : false}
                                             onChange={(date) => onChangeEndDate(date, field)}
                                             selected={field.value}
                                             className="input-height"

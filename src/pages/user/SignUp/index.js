@@ -28,7 +28,7 @@ const validationRegisterSchema = Yup.object().shape({
         .required('Password is required')
         .oneOf([Yup.ref('password')], 'Passwords do not match'),
     displayName: Yup.string().required('User name is required'),
-    avatarUrl: Yup.string().required('Avatar is required'),
+    // avatarUrl: Yup.string().required('Avatar is required'),
     email: Yup.string()
         .required('Email is required')
         .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
@@ -147,7 +147,8 @@ function SignUpPage() {
                 handleRegisterAccountChatBox();
                 return notify(data?.data, 'success');
             }
-            return notify(data?.message, 'error');
+
+            return notify(data?.response?.data, 'error');
         },
     });
 
@@ -156,7 +157,7 @@ function SignUpPage() {
         const dateObject = dayjs(originalDateString);
         const formattedDate = dateObject.format('YYYY/MM/DD');
         data.bod = formattedDate;
-        console.log('dataSignUp: ', data);
+        // console.log('dataSignUp: ', data);
 
         setDataActive(data.email);
         setDataRegiser(data);
@@ -199,9 +200,7 @@ function SignUpPage() {
             return (
                 <div key={item.field}>
                     <>
-                        <Typography.Title level={5}>
-                            {item.lable} <span className="text-red-200">*</span>
-                        </Typography.Title>
+                        <Typography.Title level={5}>{item.lable}</Typography.Title>
                         <Upload
                             name="urlLogo"
                             listType="picture-card"

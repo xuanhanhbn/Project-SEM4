@@ -80,6 +80,8 @@ function PartnerDetailPage() {
         }
     };
 
+    console.log('datauer: ', dataDetail);
+
     useEffect(() => {
         dataPartnerDetail(data);
     }, []);
@@ -342,7 +344,11 @@ function PartnerDetailPage() {
                                                 </span>
                                             </span>
                                             <span className="text-xs leading-tight">
-                                                Bank Account Number:
+                                                Paypal Number:
+                                                <span className="font-semibold text-slate-700 sm:ml-2">FRB1235476</span>
+                                            </span>
+                                            <span className="text-xs leading-tight">
+                                                Vnpay Number:
                                                 <span className="font-semibold text-slate-700 sm:ml-2">FRB1235476</span>
                                             </span>
                                         </div>

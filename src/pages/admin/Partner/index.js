@@ -99,7 +99,7 @@ function Partner() {
         mutationFn: getApiSearchPartner,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                setDataTable(data);
+                setDataTable(data?.data);
             }
             return notify(data?.message, 'error');
         },

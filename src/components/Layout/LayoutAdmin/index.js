@@ -157,8 +157,8 @@ function LayoutAdmin({ children }) {
             <div className="fixed top-0 z-50 flex items-center justify-end w-full h-20 bg-white shadow-lg px-7">
                 <div className="mr-3">
                     <img
-                        src={userData?.avatarUrl === null ? defaultAvatar : userData?.avatarUrl}
-                        className="rounded-full w-11"
+                        src={userData?.avatarUrl ? userData?.avatarUrl?.url : defaultAvatar}
+                        className="w-10 h-10 rounded-full"
                         alt="admin_logo"
                     />
                 </div>
