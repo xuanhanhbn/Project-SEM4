@@ -11,10 +11,16 @@ export const inputRegister = [
         type: 'text',
     },
     {
-        field: 'birthDate',
+        field: 'bod',
         placeholder: 'Date of birth',
 
         type: 'BIRTH_DATE',
+    },
+    {
+        field: 'phoneNumber',
+        placeholder: 'Phone Number',
+
+        type: 'text',
     },
     {
         field: 'password',
@@ -26,12 +32,7 @@ export const inputRegister = [
         placeholder: 'Confirm password',
         type: 'password',
     },
-    {
-        field: 'phoneNumber',
-        placeholder: 'Phone Number',
 
-        type: 'text',
-    },
     {
         field: 'avatarUrl',
         lable: 'Avatar image',

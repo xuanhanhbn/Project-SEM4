@@ -137,16 +137,16 @@ function ModalCreatePartner(props) {
         mutationUploadLogo({ files: files.originFileObj });
     };
 
-    // call api
-    const { mutate: mutationGetAllPartner } = useMutation({
-        mutationFn: getAllPartnerApi,
-        onSuccess: (data) => {
-            // console.log('data: ',data);
-            if ((data && data?.status === 200) || data?.status === '200') {
-            }
-            return notify(data?.message, 'error');
-        },
-    });
+    // // call api
+    // const { mutate: mutationGetAllPartner } = useMutation({
+    //     mutationFn: getAllPartnerApi,
+    //     onSuccess: (data) => {
+    //         // console.log('data: ',data);
+    //         if ((data && data?.status === 200) || data?.status === '200') {
+    //         }
+    //         return notify(data?.message, 'error');
+    //     },
+    // });
 
     const onSubmit = (data) => {
         console.log('data: ', data);

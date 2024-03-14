@@ -23,7 +23,7 @@ const ActiveAccount = (props) => {
     const { location } = useLocation();
 
     // Use dataRegister here
-    console.log('dataRegister', location);
+    // console.log('dataRegister', location);
 
     const { mutate: mutationGetActive } = useMutation({
         mutationFn: getActiveApi,

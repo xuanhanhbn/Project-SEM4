@@ -73,7 +73,7 @@ function RegisterPage() {
     const { mutate: mutationLogin } = useMutation({
         mutationFn: loginApi,
         onSuccess: (data) => {
-            console.log('data:', data);
+            // console.log('data:', data);
             if ((data && data?.status === 200) || data?.status === '200') {
                 navigation('/');
                 handleLoginAccountChatBox();
@@ -143,7 +143,7 @@ function RegisterPage() {
     };
 
     const handleRegisterAccountChatBox = async () => {
-        console.log('dataRegister: ', dataRegister);
+        // console.log('dataRegister: ', dataRegister);
         const displayName = dataRegister?.email || '';
         const email = dataRegister?.email;
         const password = dataRegister?.password;
@@ -185,7 +185,7 @@ function RegisterPage() {
     };
 
     const onSubmitRegister = (data) => {
-        console.log('data: ', data);
+        // console.log('data: ', data);
         setDataActive(data.email);
         setDataRegiser(data);
         // mutationRegister(data);

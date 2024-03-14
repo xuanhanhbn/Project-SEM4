@@ -6,6 +6,7 @@ import PartnerDetailPage from '~/pages/admin/Partner/components/PartnerDetail';
 import Program from '~/pages/admin/Program';
 import ProgramDetail from '~/pages/admin/Program/components/ProgramDetail';
 import TablePages from '~/pages/admin/Tables';
+import ChangePassword from '~/pages/user/ChangePassword';
 
 // Public routes
 const AdminRouter = [
@@ -26,6 +27,11 @@ const AdminRouter = [
         component: Partner,
     },
     {
+        path: '/admin/change-password',
+        component: ChangePassword,
+        layout: null,
+    },
+    {
         path: '/admin/partner/detail',
         component: PartnerDetailPage,
     },
@@ -33,10 +39,10 @@ const AdminRouter = [
         path: '/admin/message',
         component: ChatBox,
     },
-    {
-        path: '/admin/billing',
-        component: BillingPage,
-    },
+    // {
+    //     path: '/admin/billing',
+    //     component: BillingPage,
+    // },
     {
         path: '/admin/tables',
         component: TablePages,

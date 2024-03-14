@@ -18,18 +18,18 @@ export const inputCreatePartner = [
     //     pattern: '[0-9]{3}-[0-9]{2}-[0-9]{3}',
     //     type: 'INPUT_NUMBER',
     // },
-    // {
-    //     field: 'address',
-    //     lable: 'Address',
-    //     placeholder: 'House number, Street, Neighborhood, Ward, District, City',
-    //     type: 'INPUT',
-    // },
-    // {
-    //     field: 'website',
-    //     lable: 'Website',
-    //     placeholder: 'http://www.maybank.com',
-    //     type: 'INPUT',
-    // },
+    {
+        field: 'paypalAccount',
+        lable: 'Paypal Account ',
+        placeholder: '****-****-****-****',
+        type: 'INPUT',
+    },
+    {
+        field: 'vnpayAccount',
+        lable: 'VNPay Account',
+        placeholder: '****-****-****-****',
+        type: 'INPUT',
+    },
     {
         field: 'description',
         lable: 'Description',

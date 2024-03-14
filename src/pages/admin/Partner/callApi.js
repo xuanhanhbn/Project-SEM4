@@ -18,7 +18,7 @@ export async function getApiSearchPartner(data) {
     try {
         const res = await getApiDefault(url, data);
         if (res && res?.status === 200) {
-            return res?.data;
+            return res;
         }
     } catch (error) {
         return error;

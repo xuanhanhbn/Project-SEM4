@@ -104,7 +104,7 @@ const InputToken = (props) => {
 
     // xử lý ấn submit confirm button
     const handleSubmitToken = () => {
-        console.log('token', otp.join(''));
+        // console.log('token', otp.join(''));
         mutationGetActive();
     };
 

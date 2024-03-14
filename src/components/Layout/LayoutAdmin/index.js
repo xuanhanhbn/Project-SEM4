@@ -11,6 +11,7 @@ import { shallow } from 'zustand/shallow';
 import { signOut } from 'firebase/auth';
 import { notify } from '~/utils/common';
 import { auth } from '~/firebase';
+import defaultAvatar from '~/assets/images/avatar/default-avatar.jpg';
 
 // const items = [
 //     {
@@ -46,6 +47,15 @@ import { auth } from '~/firebase';
 function LayoutAdmin({ children }) {
     const [isHiddenClass, setisHiddenClass] = useState(false);
     const [isHiddenMenu, setisHiddenMenu] = useState(false);
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+    // console.log('useData: ', userData);
 
     // const { userData, setUserData, cleanup } = useAuthStore(
     //     (state) => ({
@@ -59,6 +69,37 @@ function LayoutAdmin({ children }) {
     // render sidebar item
     const RENDER_TAB_ITEMS = (item) => {
         if (item.type === 'TAB_ITEM') {
+            if (item.tabName === 'Dashboard') {
+                if (userData?.role === 'PARTNER') {
+                    return null;
+                }
+                return (
+                    <li id="admin_sidebar_item" key={item.id} className="mt-0.5 w-full">
+                        <NavLink
+                            className={({ isActive }) => (isActive ? 'tab_active shadow-md tab_item' : 'tab_item')}
+                            to={item.path}
+                            onClick={() => setisHiddenClass(false)}
+                        >
+                            <div className="tab_item_icon">{item.tabIcon}</div>
+                            <span className={isHiddenClass ? 'hidden' : ''}>{item.tabName}</span>
+                        </NavLink>
+                    </li>
+                );
+            }
+            if (item.tabName === 'Partner') {
+                return (
+                    <li id="admin_sidebar_item" key={item.id} className="mt-0.5 w-full">
+                        <NavLink
+                            className={({ isActive }) => (isActive ? 'tab_active shadow-md tab_item' : 'tab_item')}
+                            to={userData?.role === 'PARTNER' ? '/admin/partner/detail' : '/admin/partner'}
+                            onClick={item.id === 7 ? () => hiddenTabName() : () => setisHiddenClass(false)}
+                        >
+                            <div className="tab_item_icon">{item.tabIcon}</div>
+                            <span className={isHiddenClass ? 'hidden' : ''}>{item.tabName}</span>
+                        </NavLink>
+                    </li>
+                );
+            }
             return (
                 <li id="admin_sidebar_item" key={item.id} className="mt-0.5 w-full">
                     <NavLink
@@ -115,7 +156,11 @@ function LayoutAdmin({ children }) {
         <div id="adminLayout">
             <div className="fixed top-0 z-50 flex items-center justify-end w-full h-20 bg-white shadow-lg px-7">
                 <div className="mr-3">
-                    <img src={logo} className="rounded-full w-11" alt="admin_logo" />
+                    <img
+                        src={userData?.avatarUrl ? userData?.avatarUrl?.url : defaultAvatar}
+                        className="w-10 h-10 rounded-full"
+                        alt="admin_logo"
+                    />
                 </div>
                 <div>
                     <div className="flex items-center justify-between h-full ">
@@ -123,7 +168,7 @@ function LayoutAdmin({ children }) {
                             onClick={() => setisHiddenMenu((prev) => !prev)}
                             className="flex items-center font-medium bg-transparent border-none shadow-none cursor-pointer"
                         >
-                            Admin
+                            {userData?.displayName}
                             {!isHiddenMenu ? (
                                 <i className="mt-1 ml-1 text-gray-500 fa-regular fa-angle-down"></i>
                             ) : (
@@ -133,11 +178,15 @@ function LayoutAdmin({ children }) {
                         {isHiddenMenu && (
                             <div className="min-w-[18.75rem] absolute top-20 flex flex-col right-7 bg-white shadow-2xl">
                                 <div className="flex items-center px-6 py-5 m-2 rounded-lg pointer-events-none bg-gray-102">
-                                    <img src={logo} className="w-8 mr-4 rounded-full" alt="admin_logo" />
+                                    <img
+                                        src={userData?.avatarUrl === null ? defaultAvatar : userData?.avatarUrl}
+                                        className="w-8 mr-4 rounded-full"
+                                        alt="admin_logo"
+                                    />
                                     <div>
-                                        <div className="text-sm font-medium text-black">Admin name</div>
+                                        <div className="text-sm font-medium text-black">{userData?.displayName}</div>
                                         <span className="text-sm font-normal leading-6 text-gray-500">
-                                            admin@gmail.com
+                                            {userData?.email}
                                         </span>
                                     </div>
                                 </div>
@@ -145,18 +194,22 @@ function LayoutAdmin({ children }) {
                                     <Link
                                         to="/admin/dashboard"
                                         onClick={() => setisHiddenMenu((prev) => !prev)}
-                                        className="w-full px-6 py-2 my-px text-sm transition-all duration-300 ease-in-out hover:pl-9 hover:bg-item-200 delay-0 hover:text-item-100"
+                                        className={
+                                            userData?.role === 'PARTNER'
+                                                ? 'hidden'
+                                                : 'w-full px-6 py-2 my-px text-sm transition-all duration-300 ease-in-out hover:pl-9 hover:bg-item-200 delay-0 hover:text-item-100'
+                                        }
                                     >
                                         <i className="mr-4 text-lg fa-duotone fa-chart-simple "></i>
                                         Dashboard
                                     </Link>
                                     <Link
-                                        to="/admin/billing"
+                                        to="/admin/message"
                                         onClick={() => setisHiddenMenu((prev) => !prev)}
                                         className="w-full px-6 py-2 my-px text-sm transition-all duration-300 ease-in-out hover:pl-9 hover:bg-item-200 delay-0 hover:text-item-100"
                                     >
                                         <i className="mr-4 text-lg fa-duotone fa-credit-card"></i>
-                                        Billing
+                                        Message
                                     </Link>
                                     <Link
                                         to="/admin/program"

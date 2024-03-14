@@ -11,6 +11,7 @@ import { shallow } from 'zustand/shallow';
 import { useMutation } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
 import { logoutApi } from './callApi';
+import dfAvatar from '~/assets/images/avatar/default-avatar.jpg';
 
 function Header() {
     const { userData, setUserData, cleanup } = useAuthStore(
@@ -21,6 +22,7 @@ function Header() {
         }),
         shallow,
     );
+    console.log('userData: ', userData);
 
     //State
     const [openMenuUser, setOpenMenuUser] = useState(false);
@@ -133,7 +135,7 @@ function Header() {
                                 <div className="hidden md:block">
                                     <button
                                         type="button"
-                                        className="btn_user_menu"
+                                        className="flex items-center hover:bg-blue-400 btn_user_menu"
                                         id="user-menu-button"
                                         aria-expanded="false"
                                         aria-haspopup="true"
@@ -141,7 +143,12 @@ function Header() {
                                     >
                                         <span className="absolute -inset-1.5"></span>
                                         <span className="sr-only">Open user menu</span>
-                                        <img className="w-8 h-8 rounded-full" alt="" src={UserAvatar} />
+                                        <img
+                                            className="w-8 h-8 mr-2 rounded-full"
+                                            alt=""
+                                            src={userData?.avatarUrl ? userData?.avatarUrl.url : dfAvatar}
+                                        />
+                                        <div className="mr-2 font-bold">{userData?.displayName}</div>
                                     </button>
                                 </div>
                             )}

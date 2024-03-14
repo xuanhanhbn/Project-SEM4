@@ -31,17 +31,15 @@ function App() {
     const handleReturnRouter = () => {
         if (type === 'USER') {
             return publicRoutes;
-        } else {
-            return AdminRouter;
         }
+        return AdminRouter;
     };
 
     const handleReturnLayout = () => {
         if (type === 'USER') {
             return DefaultLayout;
-        } else {
-            return LayoutAdmin;
         }
+        return LayoutAdmin;
     };
 
     return (

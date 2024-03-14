@@ -1,12 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { inputChangePassword } from './constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
-import { changePasswordApi } from './callApi';
+import { changePasswordApi, loginApi } from './callApi';
 import { notify } from '~/utils/common';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
 
 // validate change password form
 const validationChangePasswordSchema = Yup.object().shape({
@@ -18,6 +20,16 @@ const validationChangePasswordSchema = Yup.object().shape({
 });
 
 function ChangePassword() {
+    const [newPassword, setnewPassword] = useState('');
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+
     const {
         control,
         handleSubmit,
@@ -26,19 +38,54 @@ function ChangePassword() {
         resolver: yupResolver(validationChangePasswordSchema),
     });
 
+    const navigation = useNavigate();
+
+    // const handleLoginAccountChatBox = async () => {
+    //     try {
+    //         await signInWithEmailAndPassword(auth, dataLogin?.email, dataLogin?.password);
+    //     } catch (err) {
+    //         return err;
+    //     }
+    // };
+
+    // call api login
+    const { mutate: mutationLogin } = useMutation({
+        mutationFn: loginApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                // handleLoginAccountChatBox();
+                if (data?.data?.role === 'USER') {
+                    return navigation('/');
+                }
+
+                if (data?.data?.role === 'PARTNER') {
+                    return navigation('/admin/partner/detail');
+                }
+                return navigation('/admin/dashboard');
+            }
+            return notify(data?.response?.data, 'error');
+        },
+    });
+
     //call api register
     const { mutate: mutationChangePassword, isPending } = useMutation({
         mutationFn: changePasswordApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                // navigation('/log-in');
+                const loginData = {
+                    email: userData.email,
+                    password: newPassword,
+                };
+                mutationLogin(loginData);
+                // navigation('/');
+                return notify('Change password success', 'success');
             }
-            return notify(data?.message, 'error');
+            return notify(data?.response.data, 'error');
         },
     });
 
     const onSubmit = (data) => {
-        console.log('data: ', data);
+        setnewPassword(data.newPassword);
         mutationChangePassword(data);
     };
     return (

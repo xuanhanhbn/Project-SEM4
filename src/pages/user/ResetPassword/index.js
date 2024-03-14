@@ -19,7 +19,7 @@ const validationResetPasswordSchema = Yup.object().shape({
 function ResetPasswordPage() {
     const location = useLocation();
     const state = location.state;
-    console.log('emailaaa: ', state);
+    // console.log('emailaaa: ', state);
     const {
         control,
         handleSubmit,
@@ -40,7 +40,7 @@ function ResetPasswordPage() {
     });
 
     const onSubmit = (data) => {
-        console.log('data: ', data);
+        // console.log('data: ', data);
         data.email = state.email;
         mutationResetPassword(data);
     };

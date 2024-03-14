@@ -1,4 +1,38 @@
-export const columns = [
+export const columnsAdminTable = [
+    {
+        field: 'index',
+        maxWidth: 170,
+        name: 'STT',
+        align: 'center',
+    },
+    {
+        field: 'programName',
+        maxWidth: 170,
+        name: 'Program',
+    },
+    // {
+    //     field: 'status',
+    //     maxWidth: 170,
+    //     name: 'Status',
+    // },
+    {
+        field: 'partner',
+        maxWidth: 170,
+        name: 'Partner',
+    },
+    {
+        field: 'target',
+        maxWidth: 170,
+        name: 'Target',
+    },
+    {
+        field: 'action',
+        maxWidth: 50,
+        name: '',
+    },
+];
+
+export const columnsPartnerTable = [
     {
         field: 'index',
         maxWidth: 170,
@@ -15,87 +49,27 @@ export const columns = [
         maxWidth: 170,
         name: 'Status',
     },
-    {
-        field: 'partner',
-        maxWidth: 170,
-        name: 'Partner',
-    },
+    // {
+    //     field: 'partner',
+    //     maxWidth: 170,
+    //     name: 'Partner',
+    // },
     {
         field: 'target',
         maxWidth: 170,
         name: 'Target',
     },
+    // {
+    //     field: 'action',
+    //     maxWidth: 170,
+    //     name: '',
+    // },
 ];
 
 export const dataTablePrograms = [
     {
         programName: '1Program name',
         partner: 'FaceBook 1',
-        target: '$10000',
-    },
-    {
-        programName: '2Program name',
-        partner: 'ABook 2',
-        target: '$10000',
-    },
-    {
-        programName: '2Program name',
-        partner: 'ABook 2',
-        target: '$10000',
-    },
-    {
-        programName: '3Program name',
-        partner: 'BBook 3',
-        target: '$10000',
-    },
-    {
-        programName: '3Program name',
-        partner: 'BBook 3',
-        target: '$10000',
-    },
-    {
-        programName: '3Program name',
-        partner: 'BBook 3',
-        target: '$10000',
-    },
-    {
-        programName: '3Program name',
-        partner: 'CBook 4',
-        target: '$10000',
-    },
-    {
-        programName: '4Program name',
-        partner: 'CBook 4',
-        target: '$10000',
-    },
-    {
-        programName: '4Program name',
-        partner: 'CBook 4',
-        target: '$10000',
-    },
-    {
-        programName: '4Program name',
-        partner: 'CBook 4',
-        target: '$10000',
-    },
-    {
-        programName: '4Program name',
-        partner: 'DBook 5',
-        target: '$10000',
-    },
-    {
-        programName: '4Program name',
-        partner: 'DBook 5',
-        target: '$10000',
-    },
-    {
-        programName: '5Program name',
-        partner: 'DBook 5',
-        target: '$10000',
-    },
-    {
-        programName: '5Program name',
-        partner: 'DBook 5',
         target: '$10000',
     },
 ];

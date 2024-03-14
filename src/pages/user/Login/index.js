@@ -12,6 +12,7 @@ import { auth, db, storage } from '~/firebase';
 import { notify } from '~/utils/common';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
+import './Login.css';
 
 // validate login form
 const validationLoginSchema = Yup.object().shape({
@@ -72,12 +73,16 @@ function LoginPage() {
     const { mutate: getMe } = useMutation({
         mutationFn: getMeApi,
         onSuccess: (data) => {
-            if ((data && data?.status === 200) || data?.status === '200') {
+            if (data && data?.status == 200) {
                 setUserData(data?.data);
-                if (data?.data?.role === 'ADMIN') {
-                    return navigation('/admin/dashboard');
+                if (data?.data?.role === 'USER') {
+                    return navigation('/');
                 }
-                return navigation('/');
+
+                if (data?.data?.role === 'PARTNER' && !data?.data.updateAt) {
+                    return navigation('/admin/change-password');
+                }
+                return navigation('/admin/dashboard');
             }
             return notify('error', 'error');
         },
@@ -94,10 +99,10 @@ function LoginPage() {
     };
 
     return (
-        <div>
+        <div id="login_page">
             <div>
-                <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto mt-10 lg:py-0">
-                    <Link
+                <div className="flex flex-col items-center justify-center px-6 py-20 mx-auto ">
+                    {/* <Link
                         to="/"
                         className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
                     >
@@ -106,8 +111,8 @@ function LoginPage() {
                             src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                             alt="logo"
                         />
-                    </Link>
-                    <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                    </Link> */}
+                    <div className="w-full bg-white rounded-lg shadow-2xl dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl dark:text-white">
                                 Sign in to your account

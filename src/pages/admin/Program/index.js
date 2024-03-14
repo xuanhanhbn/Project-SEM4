@@ -5,33 +5,91 @@ import './Program.css';
 import ProjectImage from '~/assets/images/campaigns/Palestine-6.png';
 import ModalCreateProgram from './components/ModalCreateProgram';
 import TableCommon from '~/components/TableCommon';
-import { columns, dataTablePrograms } from './constants';
-import { Space, Input } from 'antd';
+import { columnsAdminTable, columnsPartnerTable, dataTablePrograms } from './constants';
+import { Space, Input, Button, Modal } from 'antd';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
+
+const { TextArea } = Input;
 
 const status = 'inProcess';
 const { Search } = Input;
 function Program() {
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
     // State
     const [isOpenModalCreateProject, setIsOpenModalCreateProject] = useState(false);
     const [listSearchDataTable, setListSearchDataTable] = useState([]);
+    const [isRefuse, setIsRefuse] = useState(false);
+    const [isMessage, setIsMessage] = useState('');
 
     // xử lý khi ấn submit modal
     const handleSubmitModal = (data) => {
         setIsOpenModalCreateProject(false);
-        console.log('data', data);
+        // console.log('data', data);
     };
     // xử lý khi ấn cancel modal
     const handleCancelModal = () => {
         setIsOpenModalCreateProject(false);
-        console.log('click cancel btn');
+        // console.log('click cancel btn');
     };
 
     const onSearch = (value) => {
         setListSearchDataTable(dataTablePrograms.filter((data) => data.programName.toLowerCase().includes(value)));
     };
 
-    // render data table
+    const acceptedProgram = () => {
+        console.log('accepted');
+    };
+
+    const refuseProgram = () => {
+        console.log('message: ', isMessage);
+        setIsMessage('');
+        setIsRefuse(false);
+    };
+
+    const showModal = () => {
+        setIsRefuse(true);
+    };
+
+    const handleCancel = () => {
+        setIsRefuse(false);
+    };
+
+    // roll admin lấy danh sách program
     const parseData = useCallback((item, field, index) => {
+        if (field === 'index') {
+            return index + 1;
+        }
+
+        if (field === 'programName') {
+            return <Link to="/admin/program/detail">{item.programName}</Link>;
+        }
+
+        if (field === 'action') {
+            return (
+                <div className="flex flex-col">
+                    <Button onClick={() => acceptedProgram()} type="primary" className="px-0 mb-1" ghost>
+                        Accepted
+                    </Button>
+                    <Button onClick={() => showModal()} type="primary" danger ghost>
+                        Refuse
+                    </Button>
+                </div>
+            );
+        }
+
+        return item[field];
+    }, []);
+
+    // roll partner lấy danh sách program
+    const parseParnerData = useCallback((item, field, index) => {
         if (field === 'index') {
             return index + 1;
         }
@@ -59,7 +117,7 @@ function Program() {
         <div id="program_page">
             <h1 className="mt-3 text-xl font-bold">Program</h1>
 
-            <div className="flex-none w-full max-w-full px-3 mt-6">
+            <div className={userData?.role === 'ADMIN' ? 'hidden' : 'flex-none w-full max-w-full px-3 mt-6'}>
                 <div className="program_container">
                     <div className="p-4 pb-0 mb-0 bg-white rounded-t-2xl">
                         <h6 className="mb-4">New Projects</h6>
@@ -118,7 +176,7 @@ function Program() {
                 <TableCommon
                     data={listSearchDataTable.length > 0 ? listSearchDataTable : dataTablePrograms || []}
                     parseFunction={parseData}
-                    columns={columns}
+                    columns={userData?.role === 'ADMIN' ? columnsAdminTable : columnsPartnerTable}
                     isShowPaging
                     className="shadow-md rounded-2xl"
                 />
@@ -131,6 +189,33 @@ function Program() {
                     handleCancelModalCreate={handleCancelModal}
                     type="create"
                 />
+            )}
+
+            {isRefuse && (
+                <Modal
+                    footer={false}
+                    title="Refuse Program"
+                    open={isRefuse}
+                    // onOk={refuseProgram}
+                    onCancel={handleCancel}
+                >
+                    <div>
+                        <TextArea
+                            placeholder="Enter the reason for rejection"
+                            allowClear
+                            onChange={(e) => setIsMessage(e.target.value)}
+                        />
+                        <Button
+                            disabled={isMessage ? false : true}
+                            onClick={() => refuseProgram()}
+                            type="primary"
+                            className="mt-3 "
+                            ghost
+                        >
+                            Send Message
+                        </Button>
+                    </div>
+                </Modal>
             )}
         </div>
     );

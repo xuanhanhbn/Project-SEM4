@@ -140,7 +140,7 @@ export default function CampaignDetail() {
     const [prams] = useSearchParams();
     const status = prams.get('status');
 
-    console.log('status', status);
+    // console.log('status', status);
 
     // xử lý open modal
     const showModal = () => {
@@ -155,25 +155,25 @@ export default function CampaignDetail() {
     // xử lý khi click submit modal
     const handleSubmitModal = () => {
         setIsOpenModal(false);
-        console.log('click ok btn');
+        // console.log('click ok btn');
     };
 
     // xử lý khi click submit modal share mail
     const handleSubmitModalShareMail = () => {
         setIsOpenModalShareMail(false);
-        console.log('click ok btn');
+        // console.log('click ok btn');
     };
 
     // xử lý khi click đóng modal
     const handleCancelModal = () => {
         setIsOpenModal(false);
-        console.log('click cancel btn');
+        // console.log('click cancel btn');
     };
 
     // xử lý khi click đóng modal share mail
     const handleCancelModalShareMail = () => {
         setIsOpenModalShareMail(false);
-        console.log('click cancel btn');
+        // console.log('click cancel btn');
     };
 
     return (

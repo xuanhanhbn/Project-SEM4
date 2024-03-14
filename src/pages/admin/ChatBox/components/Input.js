@@ -89,7 +89,7 @@ function Input() {
     const handlePressEnter = () => handleSendMessage();
 
     return (
-        <div className="w-full flex pt-3 pb-6 mx-4 mt-4 shrink-0">
+        <div className="flex w-11/12 pt-3 pb-6 mx-4 mt-4 shrink-0">
             <InputMessage
                 className="p-2 mx-10 bg-white border-none focus-within:shadow-none focus:shadow-none"
                 placeholder="Basic usage"

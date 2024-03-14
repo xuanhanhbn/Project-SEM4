@@ -71,13 +71,13 @@ export default function ProgramDetail() {
     // // xử lý khi click submit edit program
     const handleSubmitModal = () => {
         setIsOpenModalEditProject(false);
-        console.log('click ok btn');
+        // console.log('click ok btn');
     };
 
     // xử lý khi click đóng modal
     const handleCancelModal = () => {
         setIsOpenModalEditProject(false);
-        console.log('click cancel btn');
+        // console.log('click cancel btn');
     };
 
     // xử lý mở chat box
