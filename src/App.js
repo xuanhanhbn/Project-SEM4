@@ -23,8 +23,9 @@ function App() {
 
     useEffect(() => {
         if (userData && userData?.role) {
-            setType(userData?.role);
+            return setType(userData?.role);
         }
+        return setType('USER');
     }, [userData]);
 
     // Xử lý check type

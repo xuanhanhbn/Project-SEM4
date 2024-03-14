@@ -12,7 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import { registerApi, loginApi } from './callApi';
 import { beforeUpload, notify } from '~/utils/common';
 import { Input, Spin, Typography, Upload } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { setDoc, doc } from 'firebase/firestore';
@@ -45,8 +45,7 @@ function RegisterPage() {
     };
     // State
     const [toggledFormLogin, setToggledFormLogin] = useState(false);
-    const [istoggleFromToken, setIstoggleFromToken] = useState(false);
-    const [dataActive, setDataActive] = useState(false);
+    // const [dataActive, setDataActive] = useState(false);
     const [dataRegister, setDataRegiser] = useState(null);
     const [dataLogin, setDataLogin] = useState(baseDataLogin);
     const [loading, setLoading] = useState(false);
@@ -186,7 +185,7 @@ function RegisterPage() {
 
     const onSubmitRegister = (data) => {
         // console.log('data: ', data);
-        setDataActive(data.email);
+        // setDataActive(data.email);
         setDataRegiser(data);
         // mutationRegister(data);
     };
@@ -204,11 +203,7 @@ function RegisterPage() {
             >
                 <div className="row_lgrs ">
                     <div className="flex-col_lgrs col_lgrs align-items-center_lgrs sign-up_lgrs">
-                        <form
-                            onSubmit={handleSubmit(onSubmitRegister)}
-                            // className={istoggleFromToken ? 'hidden' : 'form-wrapper_lgrs align-items-center_lgrs'}
-                            className={istoggleFromToken ? 'hidden' : ''}
-                        >
+                        <form onSubmit={handleSubmit(onSubmitRegister)}>
                             <div className="form_lgrs sign-up_lgrs">
                                 {inputRegister.map((item) => {
                                     const { field } = item;
@@ -311,11 +306,6 @@ function RegisterPage() {
                                 </p>
                             </div>
                         </form>
-                        <div className={!istoggleFromToken ? 'hidden' : 'form-wrapper_lgrs align-items-center_lgrs'}>
-                            <div className="text-center form_lgrs sign-up_lgrs">
-                                <InputToken />
-                            </div>
-                        </div>
                     </div>
                     <div className="flex-col_lgrs col_lgrs align-items-center_lgrs sign-in_lgrs">
                         <form

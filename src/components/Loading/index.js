@@ -1,26 +1,12 @@
 /* eslint-disable react/prop-types */
+import { Spin } from 'antd';
 import React from 'react';
-import { Backdrop, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 99999999,
-        color: '#fff',
-    },
-}));
+import './style.css';
 
 const Loading = (props) => {
     const { isLoading } = props;
-    const classes = useStyles();
 
-    return (
-        <div>
-            <Backdrop open={isLoading} className={classes.backdrop}>
-                <CircularProgress color="inherit" />
-            </Backdrop>
-        </div>
-    );
+    return <div className={isLoading ? 'loading' : ''}>{isLoading ? <Spin size="large" /> : <></>}</div>;
 };
 
 export default Loading;

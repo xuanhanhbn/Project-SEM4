@@ -6,19 +6,19 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '~/firebase';
 
 function ChatBox() {
-    const handleLoginChat = async () => {
-        const email = 'admin3@gmail.com.dmm';
-        const password = 'Admin123@';
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-        } catch (err) {
-            return err;
-        }
-    };
+    // const handleLoginChat = async () => {
+    //     const email = 'admin3@gmail.com.dmm';
+    //     const password = 'Admin123@';
+    //     try {
+    //         await signInWithEmailAndPassword(auth, email, password);
+    //     } catch (err) {
+    //         return err;
+    //     }
+    // };
 
-    useEffect(() => {
-        handleLoginChat();
-    }, []);
+    // useEffect(() => {
+    //     handleLoginChat();
+    // }, []);
 
     return (
         <div className="flex h-screen py-2 pr-2 ">

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './layouts.css';
 import { sideBarList } from './constants';
-import logo from '~/assets/images/avatar/avatar.png';
-import { Button, Dropdown, Space } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import { logoutApi } from './callApi';
 import useAuthStore from '~/store/zustand';
@@ -13,38 +11,8 @@ import { notify } from '~/utils/common';
 import { auth } from '~/firebase';
 import defaultAvatar from '~/assets/images/avatar/default-avatar.jpg';
 
-// const items = [
-//     {
-//         key: '11',
-//         label: <div className="pointer-events-none">aaaaaaaaaaaa</div>,
-//     },
-//     {
-//         key: '1',
-//         label: (
-//             <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-//                 1st menu item
-//             </a>
-//         ),
-//     },
-//     {
-//         key: '2',
-//         label: (
-//             <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-//                 2nd menu item
-//             </a>
-//         ),
-//     },
-//     {
-//         key: '3',
-//         label: (
-//             <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-//                 3rd menu item
-//             </a>
-//         ),
-//     },
-// ];
-
 function LayoutAdmin({ children }) {
+    const navigation = useNavigate();
     const [isHiddenClass, setisHiddenClass] = useState(false);
     const [isHiddenMenu, setisHiddenMenu] = useState(false);
     const { userData, setUserData, cleanup } = useAuthStore(
@@ -55,16 +23,6 @@ function LayoutAdmin({ children }) {
         }),
         shallow,
     );
-    // console.log('useData: ', userData);
-
-    // const { userData, setUserData, cleanup } = useAuthStore(
-    //     (state) => ({
-    //         userData: state.userData || '',
-    //         setUserData: state.setUserData,
-    //         cleanup: state.cleanup,
-    //     }),
-    //     shallow,
-    // );
 
     // render sidebar item
     const RENDER_TAB_ITEMS = (item) => {
@@ -127,30 +85,24 @@ function LayoutAdmin({ children }) {
         setisHiddenClass(true);
     };
 
-    // const RENDER_DROPDOWN_ITEM = () => {
-    //     return (
-    //         <div className="min-w-[300px]">
-    //             <div>sadsad</div>
-    //         </div>
-    //     );
-    // };
+    const handleSignOut = () => {
+        mutationLogout();
+    };
 
-    // const { mutate: mutationLogout } = useMutation({
-    //     mutationFn: logoutApi,
-    //     onSuccess: (data) => {
-    //         if ((data && data?.status === 200) || data?.status === '200') {
-    //             localStorage.removeItem('loginPage');
-    //             setUserData(null);
-    //             signOut(auth);
-    //             return notify('Logout Success', 'success');
-    //         }
-    //         return notify(data?.response?.data, 'error');
-    //     },
-    // });
-
-    // const handleSignOut = () => {
-    //     mutationLogout();
-    // };
+    const { mutate: mutationLogout } = useMutation({
+        mutationFn: logoutApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                localStorage.removeItem('loginPage');
+                localStorage.removeItem('globalStore');
+                setUserData(null);
+                signOut(auth);
+                navigation('/');
+                return notify('Logout Success', 'success');
+            }
+            return notify(data?.response?.data, 'error');
+        },
+    });
 
     return (
         <div id="adminLayout">
@@ -230,7 +182,7 @@ function LayoutAdmin({ children }) {
                                 </div>
                                 <Link
                                     to=""
-                                    // onClick={() => handleSignOut()}
+                                    onClick={() => handleSignOut()}
                                     className="flex items-center justify-center px-4 py-5 text-sm font-medium text-center bg-gray-102 text-gray-103 "
                                 >
                                     <i className="mr-2 fa-solid fa-arrow-right-from-bracket"></i> Sign Out
