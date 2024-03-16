@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // import { Input, Tabs, Upload } from 'antd';
 import {
@@ -24,254 +25,117 @@ import { shallow } from 'zustand/shallow';
 import { todayCardData } from './constants';
 import { Line } from 'react-chartjs-2';
 import TableCommon from '~/components/TableCommon';
-import { useLocation } from 'react-router-dom';
-
-const validationSchema = Yup.object().shape({
-    // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
-    partnerName: Yup.string().required('Company name is required'),
-    email: Yup.string()
-        .required('Email adress is required')
-        .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
-    // phone: Yup.string().required('Phone number is required'),
-    // address: Yup.string().required('Adress is required'),
-    // website: Yup.string().required('Website date is required'),
-    description: Yup.string().required('Describe is required'),
-    // urlLogo: Yup.string().required('Describe is required'),
-    // finishDate: Yup.string().required('Finish date is required'),
-    // target: Yup.string().required('Target is required'),
-});
-
-// // validate change password form
-// const validationChangePasswordSchema = Yup.object().shape({
-//     // oldPassword: Yup.string().required('Password is required'),
-//     newPassword: Yup.string().required('Password is required'),
-//     confirmPassword: Yup.string()
-//         .required('Password is required')
-//         .oneOf([Yup.ref('newPassword')], 'Passwords do not match'),
-// });
-
-function PartnerDetailPage() {
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { createProgramApi, getPartnerDetailApi } from './callApi';
+import { notify } from '~/utils/common';
+import Loading from '~/components/Loading';
+import { Input, Progress, Space } from 'antd';
+import './style.css';
+import ModalCreateProgram from '../ModalCreateProgram';
+function PartnerDetailPage(props) {
     // const [loading, setLoading] = useState(false);
     // const [imageUrl, setImageUrl] = useState();
     const [dataDetail, setDataDetail] = useState(null);
-    const [urlLogo, setUrlLogo] = useState(null);
+    const [isOpenModalCreateProgram, setIsOpenModalCreateProgram] = useState(false);
+    const { Search } = Input;
 
-    const { userData, setUserData, cleanup } = useAuthStore(
-        (state) => ({
-            userData: state.userData || '',
-            setUserData: state.setUserData,
-            cleanup: state.cleanup,
-        }),
-        shallow,
-    );
+    const params = useParams();
 
-    const location = useLocation();
-    const data = location?.state;
-
-    // lấy data theo role
-    const dataPartnerDetail = (data) => {
-        if (userData?.role === 'PARTNER') {
-            setDataDetail(userData);
-            setUrlLogo(userData.avatarUrl);
+    useEffect(() => {
+        if (params && params?.partnerId) {
+            return mutationGetSearchPartner(params?.partnerId);
         }
-        if (userData?.role === 'ADMIN') {
-            setDataDetail(data);
-            setUrlLogo(data?.attachment[0]?.url);
+    }, [params]);
+
+    const { mutate: mutationGetSearchPartner, isPending } = useMutation({
+        mutationFn: getPartnerDetailApi,
+        onSuccess: (res) => {
+            if ((res && res?.status === 200) || res?.status === '200') {
+                return setDataDetail(res?.data);
+            }
+            return notify(res?.message, 'error');
+        },
+    });
+
+    const { mutate: mutationCreateProgram } = useMutation({
+        mutationFn: createProgramApi,
+        onSuccess: (res) => {
+            console.log('res: ', res);
+            if ((res && res?.status === 200) || res?.status === '200') {
+                setIsOpenModalCreateProgram(false);
+                mutationGetSearchPartner(params?.partnerId);
+                return notify('Create Program Success', 'success');
+            }
+            return notify(res?.message, 'error');
+        },
+    });
+
+    const handleCreateProgram = (data) => mutationCreateProgram(data);
+
+    const handleReturnData = (item) => {
+        if (item?.field === 'totalMoney') {
+            if (dataDetail && dataDetail?.programs?.length > 0) {
+                let tong = 0;
+                // Duyệt qua từng phần tử trong mảng và tính tổng
+                for (let i = 0; i < dataDetail?.programs?.length; i++) {
+                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+                    if (dataDetail?.programs[i].hasOwnProperty('totalMoney')) {
+                        tong += dataDetail?.programs[i].totalMoney;
+                    }
+                }
+                return `${tong} $`;
+            }
+            return 0;
+        }
+
+        if (item?.field === 'totalDonateForPaypal') {
+            if (dataDetail && dataDetail?.programs?.length > 0) {
+                let tong = 0;
+                // Duyệt qua từng phần tử trong mảng và tính tổng
+                for (let i = 0; i < dataDetail?.programs?.length; i++) {
+                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+                    if (dataDetail?.programs[i].hasOwnProperty('donateByPaypal')) {
+                        tong += dataDetail?.programs[i].donateByPaypal;
+                    }
+                }
+                return `${tong} $`;
+            }
+            return 0;
+        }
+
+        if (item?.field === 'totalDonateForVnPay') {
+            if (dataDetail && dataDetail?.programs?.length > 0) {
+                let tong = 0;
+                // Duyệt qua từng phần tử trong mảng và tính tổng
+                for (let i = 0; i < dataDetail?.programs?.length; i++) {
+                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+                    if (dataDetail?.programs[i].hasOwnProperty('donateByVNPay')) {
+                        tong += dataDetail?.programs[i].donateByVNPay;
+                    }
+                }
+                return `${tong} $`;
+            }
+            return 0;
+        }
+
+        if (item?.field === 'totalFollowers') {
+            return 0;
         }
     };
 
-    console.log('datauer: ', dataDetail);
-
-    useEffect(() => {
-        dataPartnerDetail(data);
-    }, []);
-
-    const {
-        handleSubmit,
-        control,
-        reset,
-        setValue,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(validationSchema),
-    });
-
-    // const {
-    //     control: controlChangePassword,
-    //     handleSubmit: handleChangePassword,
-    //     formState: { errors: errorsChangePassword },
-    // } = useForm({
-    //     resolver: yupResolver(validationChangePasswordSchema),
-    // });
-
-    // // handle change upload image logo
-    // const handleChange = (info) => {
-    //     const files = info.file || {};
-
-    //     if (files.status === 'uploading') {
-    //         return;
-    //     }
-
-    //     if (files.status === 'done') {
-    //         // console.log('files', files.originFileObj);
-    //     }
-    //     // mutationUploadLogo({ files: files.originFileObj });
-    // };
-
-    // // handle change tabs
-    // const onChange = (key) => {
-    //     // console.log(key);
-    // };
-
-    // // handle update partner info
-    // const updatePartner = (data) => {
-    //     console.log('data: ', data);
-
-    //     // mutationUpdatepartner(dataUpdate);
-    // };
-
-    // // handle submit change password
-    // const changePassword = (data) => {
-    //     console.log('data: ', data);
-
-    //     // mutationUpdatepartner(dataUpdate);
-    // };
-
-    // // button upload logo
-    // const uploadButton = (
-    //     <button
-    //         style={{
-    //             border: 0,
-    //             background: 'none',
-    //         }}
-    //         type="button"
-    //     >
-    //         {loading ? <LoadingOutlined /> : <PlusOutlined />}
-    //         <div
-    //             style={{
-    //                 marginTop: 8,
-    //             }}
-    //         >
-    //             Upload
-    //         </div>
-    //     </button>
-    // );
-
-    // // render input create program
-    // const RENDER_INPUT_UPDATE_PROFILE = (item) => {
-    //     if (item.type === 'INPUT') {
-    //         const { field } = item;
-    //         const message = errors[field] && errors[field].message;
-    //         return (
-    //             <div key={item.field} className="flex flex-col col-span-2">
-    //                 <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-    //                 <Controller
-    //                     control={control}
-    //                     render={({ field: { onChange, value } }) => {
-    //                         return (
-    //                             <Input
-    //                                 onChange={onChange}
-    //                                 value={value}
-    //                                 className="h-10"
-    //                                 placeholder={item.placeholder}
-    //                             />
-    //                         );
-    //                     }}
-    //                     name={item.field}
-    //                 />
-    //                 {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-    //             </div>
-    //         );
-    //     }
-
-    //     if (item.type === 'INPUT_AREA') {
-    //         const { field } = item;
-    //         const message = errors[field] && errors[field].message;
-    //         return (
-    //             <div key={item.field} className="flex flex-col col-span-2">
-    //                 <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-    //                 <Controller
-    //                     control={control}
-    //                     render={({ field: { onChange, value } }) => {
-    //                         return (
-    //                             <TextArea
-    //                                 autoSize={{
-    //                                     minRows: 3,
-    //                                     maxRows: 5,
-    //                                 }}
-    //                                 onChange={onChange}
-    //                                 value={value}
-    //                                 placeholder="Short description about partner."
-    //                             />
-    //                         );
-    //                     }}
-    //                     name={item.field}
-    //                 />
-    //                 {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-    //             </div>
-    //         );
-    //     }
-
-    //     if (item.type === 'INPUT_UPLOAD') {
-    //         return (
-    //             <div key={item.field} className="flex flex-col col-span-2">
-    //                 <>
-    //                     <label className="mb-2 text-xs font-bold ">{item.lable}</label>
-
-    //                     <Upload
-    //                         name="urlLogo"
-    //                         listType="picture-card"
-    //                         className="avatar-uploader"
-    //                         accept="image/png, image/jpeg,image/jpg"
-    //                         showUploadList={false}
-    //                         action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-    //                         beforeUpload={beforeUpload}
-    //                         onChange={handleChange}
-    //                     >
-    //                         {imageUrl ? (
-    //                             <img
-    //                                 src={imageUrl}
-    //                                 alt="avatar"
-    //                                 // type="file"
-    //                                 style={{
-    //                                     width: '70%',
-    //                                 }}
-    //                             />
-    //                         ) : (
-    //                             uploadButton
-    //                         )}
-    //                     </Upload>
-    //                 </>
-    //             </div>
-    //         );
-    //     }
-    // };
-
-    // // render input change password
-    // const RENDER_INPUT_CHANGE_PASSWORD = (item) => {
-    //     const { field } = item;
-    //     const message = errorsChangePassword[field] && errorsChangePassword[field].message;
-    //     return (
-    //         <div key={item.field} className="flex flex-col col-span-2">
-    //             <label className="mb-2 text-xs font-bold ">{item.label}:</label>
-    //             <Controller
-    //                 control={controlChangePassword}
-    //                 render={({ field: { onChange, value } }) => {
-    //                     return (
-    //                         <Input.Password
-    //                             onChange={onChange}
-    //                             value={value}
-    //                             className="h-10"
-    //                             placeholder={item.placeholder}
-    //                         />
-    //                     );
-    //                 }}
-    //                 name={item.field}
-    //             />
-    //             {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-    //         </div>
-    //     );
-    // };
+    const handleCaculator = (item) => {
+        const target = item?.target || 0;
+        const total = item?.totalMoney || 0;
+        if (target && total) {
+            const result = (total / target) * 100;
+            if (result >= 100) {
+                return 100;
+            }
+            return result;
+        }
+        return 0;
+    };
 
     // render thẻ thông số theo ngày
     const RENDER_TODAY_CARD = (data) => {
@@ -285,7 +149,7 @@ function PartnerDetailPage() {
                                     <p className="mb-0 font-sans text-sm font-semibold leading-normal">
                                         {data.cardName}
                                     </p>
-                                    <h5 className="mb-0 font-bold">{data.todayAmount}</h5>
+                                    <h5 className="mb-0 font-bold">{handleReturnData(data)}</h5>
                                 </div>
                             </div>
                             <div className="px-3 text-right basis-1/3">
@@ -302,25 +166,27 @@ function PartnerDetailPage() {
 
     // render data table
     const parseData = useCallback((item, field, index) => {
-        if (field === 'completion') {
+        if (field === 'actions') {
             return (
-                <div id="completion">
-                    <div>
-                        <div>
-                            <span className="text-xs font-semibold leading-tight">60%</span>
-                        </div>
-                    </div>
-                    <div className="flex m-0 overflow-visible text-xs bg-gray-200 rounded-lg">
-                        <div className="completion_"></div>
-                    </div>
-                </div>
+                <Link to={`/admin/program/detail/${item?.programId}`}>
+                    <i className="fa-sharp fa-solid fa-eye"></i>
+                </Link>
             );
+        }
+        if (field === 'status') {
+            if (item.status === 'Active') return <div style={{ color: 'green', fontWeight: 800 }}>{item[field]}</div>;
+            return <div style={{ color: 'red', fontWeight: 800 }}>{item[field]}</div>;
+        }
+        if (field === 'completion') {
+            return <Progress percent={handleCaculator(item)} />;
         }
 
         return item[field];
     }, []);
+
     return (
-        <div>
+        <div id="partner-detail-container">
+            <Loading isLoading={isPending} />
             <div className="w-full px-6 mx-auto">
                 <div className="flex flex-wrap -mx-3">
                     <div className="w-full max-w-full px-3 mt-6 mb-8 md:flex-none">
@@ -345,16 +211,29 @@ function PartnerDetailPage() {
                                             </span>
                                             <span className="text-xs leading-tight">
                                                 Paypal Number:
-                                                <span className="font-semibold text-slate-700 sm:ml-2">FRB1235476</span>
+                                                <span className="font-semibold text-slate-700 sm:ml-2">
+                                                    {dataDetail?.paypalAccount}
+                                                </span>
                                             </span>
                                             <span className="text-xs leading-tight">
                                                 Vnpay Number:
-                                                <span className="font-semibold text-slate-700 sm:ml-2">FRB1235476</span>
+                                                <span className="font-semibold text-slate-700 sm:ml-2">
+                                                    {dataDetail?.vnpayAccount}
+                                                </span>
                                             </span>
                                         </div>
                                         <div className="ml-auto text-right">
                                             {/* logo */}
-                                            <img src={urlLogo} className="w-16" alt="fb_logo" />
+                                            <img
+                                                src={
+                                                    dataDetail?.attachment?.length > 0
+                                                        ? dataDetail?.attachment[0]?.url
+                                                        : ''
+                                                }
+                                                al
+                                                className="w-16"
+                                                alt="fb_logo"
+                                            />
                                         </div>
                                     </li>
                                     <li className="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50">
@@ -392,10 +271,26 @@ function PartnerDetailPage() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-wrap w-full ">
+                    <div className="w-full mt-4">
+                        <div className="flex justify-end max-w-full px-3">
+                            {/* <div className="flex items-center justify-center h-12 px-4 text-black bg-white border rounded-md border-gray-104"> */}
+                            {/* <i className="mr-1 fa-regular fa-magnifying-glass"></i> */}
+                            <Space direction="vertical">
+                                <Search placeholder="Search program" allowClear size="large" />
+                            </Space>
+                            {/* </div> */}
+                            <div>
+                                <button
+                                    onClick={() => setIsOpenModalCreateProgram(true)}
+                                    className="btn-create-program"
+                                >
+                                    Create Program
+                                </button>
+                            </div>
+                        </div>
                         <div className="flex-1 pl-3 mt-6 ">
                             <TableCommon
-                                data={fakeDataTable || []}
+                                data={dataDetail?.programs || []}
                                 parseFunction={parseData}
                                 columns={columns}
                                 isShowPaging
@@ -405,6 +300,14 @@ function PartnerDetailPage() {
                     </div>
                 </div>
             </div>
+            {isOpenModalCreateProgram && (
+                <ModalCreateProgram
+                    isOpen={isOpenModalCreateProgram}
+                    handleCreate={handleCreateProgram}
+                    handleCancelModalCreate={() => setIsOpenModalCreateProgram(false)}
+                    type="create"
+                />
+            )}
         </div>
     );
 }

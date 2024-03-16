@@ -7,8 +7,10 @@ import TableCommon from '~/components/TableCommon';
 import { columns, dataTablePartners } from './constants';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
-import { getAllPartnerApi, getApiSearchPartner } from './callApi';
+import { createPartnerApi, getAllPartnerApi, getApiSearchPartner } from './callApi';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import Loading from '~/components/Loading';
 
 const { Search } = Input;
 
@@ -19,7 +21,9 @@ function Partner() {
     const [isOpenModalUploadPartner, setIsOpenModalUploadPartner] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const navigation = useNavigate();
+    useEffect(() => {
+        mutationGetAllPartner();
+    }, []);
 
     // sử lý khi click nút create partner
     const showModalCreate = () => {
@@ -54,41 +58,32 @@ function Partner() {
         if (field === 'index') {
             return index + 1;
         }
-
-        if (field === 'partnerName') {
+        if (field === 'createdAt') {
+            if (item[field]) {
+                return moment(item[field])?.format('YYYY-MM-DD');
+            }
+            return '';
+        }
+        if (field === 'status') {
+            if (item.status === 'Active') return <div style={{ color: 'green', fontWeight: 800 }}>{item[field]}</div>;
+            return <div style={{ color: 'red', fontWeight: 800 }}>{item[field]}</div>;
+        }
+        if (field === 'actions') {
             return (
-                <div>
-                    <button
-                        onClick={() => navigation('/admin/partner/detail', { state: item })}
-                        // state={item}
-                    >
-                        {item.partnerName}
-                    </button>
-                </div>
+                <Link to={`/admin/partner/detail/${item?.partnerId}`}>
+                    <i className="fa-sharp fa-solid fa-eye"></i>
+                </Link>
             );
         }
-
-        if (field === 'logo') {
-            const urlLogo = item?.attachment;
-
-            if (urlLogo?.length === 0) {
-                return <img className="w-16 h-16" alt={item.partnerName + '_logo'} />;
-            } else {
-                return <img className="w-16 h-16" src={urlLogo[0]?.url} alt={item.partnerName + '_logo'} />;
-            }
-        }
-
         return item[field];
     }, []);
 
     // call api
-    const { mutate: mutationGetAllPartner } = useMutation({
+    const { mutate: mutationGetAllPartner, isPending } = useMutation({
         mutationFn: getAllPartnerApi,
         onSuccess: (data) => {
             // console.log('data: ',data);
             if ((data && data?.status === 200) || data?.status === '200') {
-                console.log('get all data: ', data);
-
                 return setDataTable(data?.data);
             }
             return notify(data?.message, 'error');
@@ -105,19 +100,33 @@ function Partner() {
         },
     });
 
-    //
-    useEffect(() => {
-        mutationGetAllPartner();
-    }, []);
+    //call api create partner
+    const { mutate: mutationCreatePartner } = useMutation({
+        mutationFn: createPartnerApi,
+        onSuccess: (res) => {
+            if ((res && res?.status === 201) || res?.status === '201') {
+                mutationGetAllPartner();
+                handleCancelModal();
+                return notify('Create Partner Success', 'success');
+            } else {
+                return notify(res?.response?.data, 'warning');
+            }
+        },
+    });
+
+    const handleCreatePartner = (data) => {
+        return mutationCreatePartner(data);
+    };
 
     return (
         <div id="partner">
+            <Loading isLoading={isPending} />
             <h1 className="mt-3 text-xl font-bold">Partner</h1>
             <div className="search_box">
                 <div className="flex items-center justify-center h-12 px-4 text-black bg-white border rounded-md border-gray-104">
                     <i className="mr-1 fa-regular fa-magnifying-glass"></i>
                     <Space direction="vertical">
-                        <Search placeholder="input search partner" allowClear size="large" onSearch={onSearch} />
+                        <Search placeholder="Input search partner" allowClear size="large" onSearch={onSearch} />
                     </Space>
                 </div>
                 <button className="btn_create" onClick={() => showModalCreate()}>
@@ -138,7 +147,7 @@ function Partner() {
             {isModalOpenCreatePartner && (
                 <ModalCreatePartner
                     isModalOpen={isModalOpenCreatePartner}
-                    handleOk={handleSubmitModal}
+                    handleOk={handleCreatePartner}
                     handleCancel={handleCancelModal}
                     type="create"
                 />

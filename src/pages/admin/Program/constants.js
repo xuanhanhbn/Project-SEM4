@@ -1,25 +1,41 @@
 export const columnsAdminTable = [
     {
         field: 'index',
-        maxWidth: 170,
+        maxWidth: 50,
         name: 'STT',
         align: 'center',
     },
     {
         field: 'programName',
-        maxWidth: 170,
+        maxWidth: 100,
         name: 'Program',
     },
-    // {
-    //     field: 'status',
-    //     maxWidth: 170,
-    //     name: 'Status',
-    // },
     {
-        field: 'partner',
+        field: 'partnerName',
         maxWidth: 170,
-        name: 'Partner',
+        name: 'Partner Name',
     },
+    {
+        field: 'startDonateDate',
+        maxWidth: 80,
+        name: 'Start Date',
+    },
+    {
+        field: 'endDonateDate',
+        maxWidth: 80,
+        name: 'End Donate Date',
+    },
+    {
+        field: 'finishDate',
+        maxWidth: 80,
+        name: 'Finish Date',
+    },
+    {
+        field: 'status',
+        maxWidth: 170,
+        name: 'Status',
+    },
+
     {
         field: 'target',
         maxWidth: 170,
@@ -28,7 +44,7 @@ export const columnsAdminTable = [
     {
         field: 'action',
         maxWidth: 50,
-        name: '',
+        name: 'Actions',
     },
 ];
 

@@ -19,7 +19,7 @@ const AdminRouter = [
         component: Program,
     },
     {
-        path: '/admin/program/detail',
+        path: '/admin/program/detail/:programId',
         component: ProgramDetail,
     },
     {
@@ -32,7 +32,7 @@ const AdminRouter = [
         layout: null,
     },
     {
-        path: '/admin/partner/detail',
+        path: '/admin/partner/detail/:partnerId',
         component: PartnerDetailPage,
     },
     {

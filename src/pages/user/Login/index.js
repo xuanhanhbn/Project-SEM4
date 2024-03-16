@@ -71,16 +71,18 @@ function LoginPage() {
 
     const { mutate: getMe } = useMutation({
         mutationFn: getMeApi,
-        onSuccess: (data) => {
-            if (data && data?.status === 200) {
-                setUserData(data?.data);
-                if (data?.data?.role === 'USER') {
+        onSuccess: (res) => {
+            if (res && res?.status === 200) {
+                setUserData(res?.data);
+                if (res?.data?.role === 'USER') {
                     handleLoginAccountChatBox();
                     return navigation('/');
                 }
-
-                if (data?.data?.role === 'PARTNER' && !data?.data.updateAt) {
-                    return navigation('/admin/change-password');
+                if (res?.data?.role === 'PARTNER') {
+                    if (!res?.data.updatedAt) {
+                        return navigation('/admin/change-password');
+                    }
+                    return navigation(`/admin/partner/detail/${res?.data?.partnerId}`);
                 }
                 handleLoginAccountChatBox();
                 return navigation('/admin/dashboard');

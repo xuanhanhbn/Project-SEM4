@@ -33,6 +33,7 @@ import { getDetailProgram, onDonateProgram } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
 import { Progress } from 'antd';
+import moment from 'moment';
 
 const images = [
     {
@@ -263,6 +264,9 @@ export default function CampaignDetail(props) {
         const total = dataDetail?.totalMoney || 0;
         if (target && total) {
             const result = (total / target) * 100;
+            if (result >= 100) {
+                return 100;
+            }
             return result;
         }
         return 0;
@@ -400,19 +404,33 @@ export default function CampaignDetail(props) {
                                 <i className="fa-solid fa-download"></i>
                             </Link>
                         </div>
-                        <div className="flex items-center px-4">
-                            <div className="mx-2 ">
-                                <img className="w-12 rounded-full" src={Avatar} alt="" />
-                            </div>
-                            <div className="w-full mx-2 text-left">
-                                <div className="text-lg font-semibold leading-6 text-gray-100">Nguyen Van A</div>
-                                <div className="flex justify-between">
-                                    <p className="text-xs leading-6 text-gray-100 ">20.10.2022</p>
-                                    <span className="text-base font-semibold leading-6 text-blue-100">$ 22,000</span>
+                        {dataDetail &&
+                            dataDetail?.donations?.length > 0 &&
+                            dataDetail?.donations?.map((item) => (
+                                <div className="flex items-center px-4" key={item?.donationId}>
+                                    <div className="mx-2 ">
+                                        <img
+                                            className="w-12 rounded-full"
+                                            src={item?.user?.avatarUrl?.url}
+                                            alt={item?.user?.avatarUrl?.url}
+                                        />
+                                    </div>
+                                    <div className="w-full mx-2 text-left">
+                                        <div className="text-lg font-semibold leading-6 text-gray-100">
+                                            {item?.user?.displayName}
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <p className="text-xs leading-6 text-gray-100 ">
+                                                {item?.createdAt ? moment(item?.createdAt)?.format('YYYY-MM-DD') : ''}
+                                            </p>
+                                            <span className="text-base font-semibold leading-6 text-blue-100">
+                                                $ {item?.amount}
+                                            </span>
+                                        </div>
+                                        <div className="bg-slate-400 h-[.5px]"></div>
+                                    </div>
                                 </div>
-                                <div className="bg-slate-400 h-[.5px]"></div>
-                            </div>
-                        </div>
+                            ))}
                     </div>
                 </div>
             </div>

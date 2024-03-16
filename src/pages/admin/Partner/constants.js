@@ -15,10 +15,20 @@ export const columns = [
         maxWidth: 170,
         name: 'Email',
     },
-
     {
-        field: 'logo',
-        maxWidth: 170,
-        name: 'Logo',
+        field: 'createdAt',
+        maxWidth: 100,
+        name: 'Created At',
+    },
+    {
+        field: 'status',
+        width: 50,
+        name: 'Status',
+    },
+    {
+        field: 'actions',
+        width: 50,
+        name: 'Actions',
+        align: 'center',
     },
 ];

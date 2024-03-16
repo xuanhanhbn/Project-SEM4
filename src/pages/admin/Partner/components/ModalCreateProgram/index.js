@@ -44,7 +44,7 @@ function ModalCreateProgram(props) {
         shallow,
     );
 
-    const { onOpenCreateModal, handleCancelModalCreate, handleSubmitModalCreate, type } = props;
+    const { isOpen, handleCancelModalCreate, handleCreate, type } = props;
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -140,10 +140,11 @@ function ModalCreateProgram(props) {
     // xử lý create progeam
     const onSubmit = (data) => {
         const dataCreate = {
-            ...data,
-            startDonateDate: moment(data.startDate).format('YYYY/MM/DD'),
-            endDonateDate: moment(data.endDate).format('YYYY/MM/DD'),
-            finishDate: moment(data.finishDate).format('YYYY/MM/DD'),
+            programName: data?.programName || '',
+            target: data?.target || 0,
+            startDonateDate: moment(data.startDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            endDonateDate: moment(data.endDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            finishDate: moment(data.finishDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             description: data?.programDescription || '',
             finishSoon: true,
             recruitCollaborators: true,
@@ -151,7 +152,7 @@ function ModalCreateProgram(props) {
             imageUrl: listImage?.imageList,
         };
 
-        return handleSubmitModalCreate(dataCreate);
+        return handleCreate(dataCreate);
     };
 
     // xử lý update program
@@ -493,7 +494,7 @@ function ModalCreateProgram(props) {
                 title="New Program"
                 footer={false}
                 className="relative"
-                open={onOpenCreateModal}
+                open={isOpen}
                 onOk={type === 'update' ? handleSubmit(updateProgram) : handleSubmit(onSubmit)}
                 onCancel={handleCancelModalCreate}
                 width={800}

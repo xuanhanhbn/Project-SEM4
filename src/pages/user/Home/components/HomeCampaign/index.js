@@ -34,12 +34,12 @@ export default function HomeCampaign(props) {
                         </h3>
                         <p className="hidden text-base text-gray-100 lg:block">{dataProgram?.description || ''}</p>
                         <div className="hidden mt-4 lg:mt-14 md:block">
-                            <button
-                                onClick={() => navigate('/campaign-detail', { state: { id: dataProgram?.programId } })}
+                            <Link
+                                to={`/campaign-detail/${dataProgram?.programId}`}
                                 className="border-black lg_btn hover:bg-gray-700"
                             >
                                 Read more
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -108,25 +108,29 @@ export const inputChangePassword = [
 export const todayCardData = [
     {
         id: 1,
+        field: 'totalMoney',
         cardName: `Total Money`,
         todayAmount: `$53,000`,
         cardIcon: <i className="fa-solid fa-money-check-dollar-pen"></i>,
     },
     {
         id: 2,
-        cardName: `Total Donater`,
+        field: 'totalFollowers',
+        cardName: `Total Followers`,
         todayAmount: `2,300`,
         cardIcon: <i className="fa-solid fa-user"></i>,
     },
     {
         id: 3,
+        field: 'totalDonateForPaypal',
         cardName: `Today's Paypal`,
         todayAmount: `$33,000`,
         cardIcon: <i className="fa-brands fa-cc-paypal"></i>,
     },
     {
         id: 4,
-        cardName: `Today's Card`,
+        field: 'totalDonateForVnPay',
+        cardName: `Today's VNPay`,
         todayAmount: `$20,000`,
         cardIcon: <i className="fa-solid fa-credit-card"></i>,
     },
@@ -219,17 +223,42 @@ export const linePaymentData = {
 };
 
 export const columns = [
-    { field: 'programName', name: 'List Program', minWidth: 270 },
+    { field: 'programName', name: 'Program Name', minWidth: 270 },
+    {
+        field: 'createdAt',
+        name: 'Created At',
+        minWidth: 50,
+    },
+    {
+        field: 'finishDate',
+        name: 'Finish Date',
+        minWidth: 50,
+    },
     {
         field: 'target',
         name: 'Target',
-        minWidth: 170,
+        minWidth: 100,
     },
-
+    {
+        field: 'totalMoney',
+        name: 'Total Money',
+        minWidth: 100,
+    },
+    {
+        field: 'status',
+        name: 'Status',
+        minWidth: 50,
+    },
     {
         field: 'completion',
         name: 'Completion',
         minWidth: 370,
+    },
+    {
+        field: 'actions',
+        name: 'Actions',
+        minWidth: 50,
+        align: 'center',
     },
 ];
 

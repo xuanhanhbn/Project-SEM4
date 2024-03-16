@@ -1,7 +1,7 @@
 import { getApiDefault, postApiDefault } from '~/utils/api';
 
 export async function getAllPartnerApi() {
-    const url = `/partner/get-all-partner?name=&page=0&size=0`;
+    const url = `partner/get-all-partner?name=&page=1&size=20`;
     try {
         const res = await getApiDefault(url);
         // console.log('res: ', res);
@@ -18,6 +18,19 @@ export async function getApiSearchPartner(data) {
     try {
         const res = await getApiDefault(url, data);
         if (res && res?.status === 200) {
+            return res;
+        }
+    } catch (error) {
+        return error;
+    }
+}
+
+export async function createPartnerApi(data) {
+    // console.log('dataAPI: ', data);
+    const url = '/partner/create-partner';
+    try {
+        const res = await postApiDefault(url, data);
+        if (res) {
             return res;
         }
     } catch (error) {
