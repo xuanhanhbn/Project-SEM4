@@ -10,6 +10,10 @@ import SignUpPage from '~/pages/user/SignUp';
 import ResetPasswordPage from '~/pages/user/ResetPassword';
 import ForgotPasswordPage from '~/pages/user/ForgotPassword';
 import ChangePassword from '~/pages/user/ChangePassword';
+import ProfilePage from '~/pages/user/Profile';
+import PartnerPage from '~/pages/user/Partner';
+import PartnerDetailPage from '~/pages/user/Partner/components/PartnerDetail';
+import ThanksPage from '~/pages/user/DonateSuccess';
 
 // Public routes
 const publicRoutes = [
@@ -66,6 +70,26 @@ const publicRoutes = [
         path: '/change-password',
         component: ChangePassword,
         layout: null,
+    },
+    {
+        path: '/profile',
+        component: ProfilePage,
+        // layout: null,
+    },
+    {
+        path: '/partner',
+        component: PartnerPage,
+        // layout: null,
+    },
+    {
+        path: '/partner/detail',
+        component: PartnerDetailPage,
+        // layout: null,
+    },
+    {
+        path: '/payment-success',
+        component: ThanksPage,
+        // layout: null,
     },
 ];
 const privateRoutes = [];

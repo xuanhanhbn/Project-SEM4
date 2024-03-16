@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 // import { Link, animateScroll as scroll } from 'react-scroll';
 import './Header.css';
-import UserAvatar from '../../../../assets/images/avatar/avatar.png';
 import { animateScroll as scroll } from 'react-scroll';
 import { auth } from '~/firebase';
 import { signOut } from 'firebase/auth';
@@ -12,6 +11,8 @@ import { useMutation } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
 import { logoutApi } from './callApi';
 import dfAvatar from '~/assets/images/avatar/default-avatar.jpg';
+import logo from '~/assets/images/logo/black-logo.png';
+import logo1 from '~/assets/images/logo/white-logo.png';
 
 function Header() {
     const { userData, setUserData, cleanup } = useAuthStore(
@@ -90,7 +91,7 @@ function Header() {
                         {/* logo */}
                         <div className="flex items-center justify-center h-full bg-blue-400 w-36">
                             <Link onClick={scrollToTop} className="" to="/">
-                                {/* <img className="" src={logo} alt="Your Company" /> */}
+                                <img className="w-20" src={logo1} alt="Your Company" />
                             </Link>
                         </div>
                         {/* menu */}
@@ -110,6 +111,13 @@ function Header() {
                                     className={({ isActive }) => (isActive ? 'active ' : 'not-active')}
                                 >
                                     Fundraising goals
+                                </NavLink>
+                                <NavLink
+                                    to="/partner"
+                                    onClick={scrollToTop}
+                                    className={({ isActive }) => (isActive ? 'active ' : 'not-active')}
+                                >
+                                    Partners
                                 </NavLink>
                                 <NavLink
                                     onClick={scrollToTop}
@@ -163,7 +171,7 @@ function Header() {
                                     onClick={handleClose}
                                 >
                                     <Link
-                                        to="#"
+                                        to="/profile"
                                         className="li_user_menu"
                                         role="menuitem"
                                         tabIndex="-1"
@@ -171,7 +179,7 @@ function Header() {
                                     >
                                         Your Profile
                                     </Link>
-                                    <Link
+                                    {/* <Link
                                         to="#"
                                         className="li_user_menu"
                                         role="menuitem"
@@ -179,7 +187,7 @@ function Header() {
                                         id="user-menu-item-1"
                                     >
                                         History and tax receipts
-                                    </Link>
+                                    </Link> */}
                                     <Link
                                         to="/change-password"
                                         className="li_user_menu"
