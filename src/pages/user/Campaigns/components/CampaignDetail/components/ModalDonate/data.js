@@ -4,7 +4,7 @@ import paypalIcon from '~/assets/images/logo/16889553131686049166paypal.png';
 export const inputValueDonate = [
     {
         id: '1',
-        value: '4.9',
+        value: '5',
         type: 'BUTTON',
     },
     {
@@ -29,15 +29,15 @@ export const inputValueDonate = [
     },
     {
         id: '6',
-        value: 'PAYPAL',
+        value: 'Paypal',
         label: 'Paypal',
         type: 'RADIO',
         icon: paypalIcon,
     },
     {
         id: '7',
-        value: 'CARD',
-        label: 'Credit Card',
+        value: 'VNPay',
+        label: 'VNPay',
         type: 'RADIO',
         icon: cardIcon,
     },

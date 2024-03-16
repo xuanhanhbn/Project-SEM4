@@ -62,6 +62,7 @@ function App() {
                             <Route
                                 key={index}
                                 path={route.path}
+                                exact={route.exact}
                                 element={
                                     <Layout>
                                         <Page />
