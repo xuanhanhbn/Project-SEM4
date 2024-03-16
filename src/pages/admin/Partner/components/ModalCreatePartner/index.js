@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Modal, Input, Upload } from 'antd';
 import { inputCreatePartner } from './constants';
@@ -13,6 +14,7 @@ import './style.css';
 import { createPartnerApi, updatePartnerApi, uploadPartnerLogoApi } from './callApi';
 import { useLocation } from 'react-router-dom';
 import { getAllPartnerApi } from '../../callApi';
+import Loading from '~/components/Loading';
 
 const { TextArea } = Input;
 
@@ -67,17 +69,6 @@ function ModalCreatePartner(props) {
         }
     }, [state]);
 
-    //call api create partner
-    const { mutate: mutationCreatpartner } = useMutation({
-        mutationFn: createPartnerApi,
-        onSuccess: (data) => {
-            if ((data && data?.status === 200) || data?.status === '200') {
-                return notify('Success', 'success');
-            }
-            return notify(data?.message, 'error');
-        },
-    });
-
     //call api upload partner
     const { mutate: mutationUpdatepartner } = useMutation({
         mutationFn: updatePartnerApi,
@@ -92,7 +83,7 @@ function ModalCreatePartner(props) {
     });
 
     //call api upload logo
-    const { mutate: mutationUploadLogo } = useMutation({
+    const { mutate: mutationUploadLogo, isPending: isPendingUploadImg } = useMutation({
         mutationFn: uploadPartnerLogoApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
@@ -137,21 +128,8 @@ function ModalCreatePartner(props) {
         mutationUploadLogo({ files: files.originFileObj });
     };
 
-    // // call api
-    // const { mutate: mutationGetAllPartner } = useMutation({
-    //     mutationFn: getAllPartnerApi,
-    //     onSuccess: (data) => {
-    //         // console.log('data: ',data);
-    //         if ((data && data?.status === 200) || data?.status === '200') {
-    //         }
-    //         return notify(data?.message, 'error');
-    //     },
-    // });
-
     const onSubmit = (data) => {
-        console.log('data: ', data);
-        mutationCreatpartner(data);
-        reset();
+        return handleOk(data);
     };
 
     const updatePartner = (data) => {
@@ -253,17 +231,19 @@ function ModalCreatePartner(props) {
             );
         }
     };
+
     return (
         <div>
+            <Loading isLoading={isPendingUploadImg} />
             <Modal
                 style={{ top: 0 }}
                 title="Create partner"
                 footer={false}
                 open={isModalOpen}
-                onOk={type === 'update' ? handleSubmit(updatePartner) : handleSubmit(onSubmit)}
+                onOk={onSubmit}
                 onCancel={handleCancel}
             >
-                <form onSubmit={type === 'update' ? handleSubmit(updatePartner) : handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div id="create_partner_modal" className="grid grid-cols-2 gap-4 pt-3">
                         {inputCreatePartner.map((item) => RENDER_INPUT_CREATE_PARTNER(item))}
                         <button className="col-span-2 btn_create" type="submit">

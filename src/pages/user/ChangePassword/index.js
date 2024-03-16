@@ -53,19 +53,11 @@ function ChangePassword() {
     // call api login
     const { mutate: mutationLogin } = useMutation({
         mutationFn: loginApi,
-        onSuccess: (data) => {
-            if ((data && data?.status === 200) || data?.status === '200') {
-                // handleLoginAccountChatBox();
-                if (data?.data?.role === 'USER') {
-                    return navigation('/');
-                }
-
-                if (data?.data?.role === 'PARTNER') {
-                    return navigation('/admin/partner/detail');
-                }
-                return navigation('/admin/dashboard');
+        onSuccess: (res) => {
+            if ((res && res?.status === 200) || res?.status === '200') {
+                return navigation(`/admin/partner/detail/${userData?.partnerId}`);
             }
-            return notify(data?.response?.data, 'error');
+            return notify(res?.response?.data, 'error');
         },
     });
 

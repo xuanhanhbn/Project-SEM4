@@ -4,12 +4,14 @@ export const inputCreatePartner = [
         lable: 'Company Name',
         placeholder: 'Maybank',
         type: 'INPUT',
+        width: '50%',
     },
     {
         field: 'email',
         lable: 'Email Address',
         placeholder: 'maybank@gmail.com',
         type: 'INPUT',
+        width: '50%',
     },
     // {
     //     field: 'phone',
@@ -23,18 +25,21 @@ export const inputCreatePartner = [
         lable: 'Paypal Account ',
         placeholder: '****-****-****-****',
         type: 'INPUT',
+        width: '50%',
     },
     {
         field: 'vnpayAccount',
         lable: 'VNPay Account',
         placeholder: '****-****-****-****',
         type: 'INPUT',
+        width: '50%',
     },
     {
         field: 'description',
         lable: 'Description',
         placeholder: '',
         type: 'INPUT_AREA',
+        width: '100%',
     },
     // {
     //     field: 'paypal',

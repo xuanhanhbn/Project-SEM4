@@ -34,7 +34,7 @@ function ModalDonate(props) {
     } = useForm({
         resolver: yupResolver(validationSchema),
         defaultValues: {
-            paymentMethod: 'PAYPAL', // Set default payment method
+            paymentMethod: 'Paypal', // Set default payment method
         },
     });
 
@@ -44,7 +44,7 @@ function ModalDonate(props) {
 
     // set value và type donate mặc định
     useEffect(() => {
-        setValue('amount', 4.9);
+        setValue('amount', 5);
     }, []);
 
     // xử lý khi chọn value donate mặc định

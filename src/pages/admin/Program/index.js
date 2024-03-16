@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Program.css';
 
@@ -9,6 +10,11 @@ import { columnsAdminTable, columnsPartnerTable, dataTablePrograms } from './con
 import { Space, Input, Button, Modal } from 'antd';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
+import { useMutation } from '@tanstack/react-query';
+import { createProgramApi, getAllProgramApi } from './callApi';
+import { notify } from '~/utils/common';
+import Loading from '~/components/Loading';
+import { getApiDefault } from '~/utils/api';
 
 const { TextArea } = Input;
 
@@ -28,24 +34,27 @@ function Program() {
     const [listSearchDataTable, setListSearchDataTable] = useState([]);
     const [isRefuse, setIsRefuse] = useState(false);
     const [isMessage, setIsMessage] = useState('');
+    const [dataProgram, setDataProgram] = useState([]);
 
-    // xử lý khi ấn submit modal
-    const handleSubmitModal = (data) => {
-        setIsOpenModalCreateProject(false);
-        // console.log('data', data);
-    };
-    // xử lý khi ấn cancel modal
-    const handleCancelModal = () => {
-        setIsOpenModalCreateProject(false);
-        // console.log('click cancel btn');
-    };
+    useEffect(() => {
+        mutationGetAllProgram();
+    }, []);
 
     const onSearch = (value) => {
         setListSearchDataTable(dataTablePrograms.filter((data) => data.programName.toLowerCase().includes(value)));
     };
 
-    const acceptedProgram = () => {
-        console.log('accepted');
+    const acceptedProgram = async (item) => {
+        try {
+            const url = `program/active-program/${item?.programId}`;
+            const res = await getApiDefault(url);
+            if (res && res.status === 200) {
+                notify(res?.data, 'success');
+                return mutationGetAllProgram();
+            }
+        } catch (error) {
+            return notify(error, 'error');
+        }
     };
 
     const refuseProgram = () => {
@@ -62,20 +71,33 @@ function Program() {
         setIsRefuse(false);
     };
 
+    const { mutate: mutationGetAllProgram, isPending } = useMutation({
+        mutationFn: getAllProgramApi,
+        onSuccess: (res) => {
+            if ((res && res?.status === 200) || res?.status === '200') {
+                return setDataProgram(res?.data);
+            }
+            return notify(res?.message, 'error');
+        },
+    });
+
     // roll admin lấy danh sách program
     const parseData = useCallback((item, field, index) => {
         if (field === 'index') {
             return index + 1;
         }
 
-        if (field === 'programName') {
-            return <Link to="/admin/program/detail">{item.programName}</Link>;
+        // if (field === 'programName') {
+        //     return <Link to="/admin/program/detail">{item.programName}</Link>;
+        // }
+        if (field === 'partnerName') {
+            return item?.partner?.partnerName;
         }
 
         if (field === 'action') {
             return (
                 <div className="flex flex-col">
-                    <Button onClick={() => acceptedProgram()} type="primary" className="px-0 mb-1" ghost>
+                    <Button onClick={() => acceptedProgram(item)} type="primary" className="px-0 mb-1" ghost>
                         Accepted
                     </Button>
                     <Button onClick={() => showModal()} type="primary" danger ghost>
@@ -89,35 +111,13 @@ function Program() {
     }, []);
 
     // roll partner lấy danh sách program
-    const parseParnerData = useCallback((item, field, index) => {
-        if (field === 'index') {
-            return index + 1;
-        }
-
-        if (field === 'programName') {
-            return <Link to="/admin/program/detail">{item.programName}</Link>;
-        }
-
-        if (field === 'status') {
-            if (status === 'notSarted') {
-                return <span className=" from-slate-600 to-slate-300 text_startus_program">Not Started</span>;
-            }
-            if (status === 'inProcess') {
-                return <span className=" from-green-600 to-lime-400 text_startus_program">In Process</span>;
-            }
-            if (status === 'finished') {
-                return <span className=" from-purple-700 to-pink-500 text_startus_program">Finished</span>;
-            }
-        }
-
-        return item[field];
-    }, []);
 
     return (
         <div id="program_page">
+            <Loading isLoading={isPending} />
             <h1 className="mt-3 text-xl font-bold">Program</h1>
 
-            <div className={userData?.role === 'ADMIN' ? 'hidden' : 'flex-none w-full max-w-full px-3 mt-6'}>
+            {/* <div className={userData?.role === 'ADMIN' ? 'hidden' : 'flex-none w-full max-w-full px-3 mt-6'}>
                 <div className="program_container">
                     <div className="p-4 pb-0 mb-0 bg-white rounded-t-2xl">
                         <h6 className="mb-4">New Projects</h6>
@@ -148,6 +148,7 @@ function Program() {
                                         </Link>
                                     </div>
                                 </div>
+
                             </div>
 
                             <div className="program_new_project">
@@ -163,33 +164,39 @@ function Program() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex justify-end max-w-full px-3">
+            </div> */}
+
+            {/* <div className="flex justify-end max-w-full px-3">
                 <div className="flex items-center justify-center h-12 px-4 text-black bg-white border rounded-md border-gray-104">
                     <i className="mr-1 fa-regular fa-magnifying-glass"></i>
                     <Space direction="vertical">
                         <Search placeholder="input search program" allowClear size="large" onSearch={onSearch} />
                     </Space>
                 </div>
-            </div>
+                <div>
+                    <button onClick={() => setIsOpenModalCreateProject(true)} className="btn-create-program">
+                        Create Program
+                    </button>
+                </div>
+            </div> */}
             <div className="flex-none w-full max-w-full px-3 mt-6">
                 <TableCommon
-                    data={listSearchDataTable.length > 0 ? listSearchDataTable : dataTablePrograms || []}
+                    data={dataProgram || []}
                     parseFunction={parseData}
-                    columns={userData?.role === 'ADMIN' ? columnsAdminTable : columnsPartnerTable}
+                    columns={columnsAdminTable}
                     isShowPaging
                     className="shadow-md rounded-2xl"
                 />
             </div>
             {/* modal tạo chương trình mới */}
-            {isOpenModalCreateProject && (
+            {/* {isOpenModalCreateProject && (
                 <ModalCreateProgram
                     onOpenCreateModal={isOpenModalCreateProject}
-                    handleSubmitModalCreate={handleSubmitModal}
+                    handleSubmitModalCreate={handleCreateProgram}
                     handleCancelModalCreate={handleCancelModal}
                     type="create"
                 />
-            )}
+            )} */}
 
             {isRefuse && (
                 <Modal
