@@ -1,9 +1,16 @@
 import { Modal, Upload } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import React from 'react';
+import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+
+import { useForm } from 'react-hook-form';
+import { notify } from '~/utils/common';
+import { uploadProgramCarouselApi } from './callApi';
 
 function UploadImageCarousel(props) {
-    const { fileList, onPreview, onChange, open, title, onCancel, src } = props;
+    const { onPreview, open, title, onCancel, src } = props;
+
+    const [fileList, setFileList] = useState([]);
 
     // style button upload
     const uploadButtonUploadCareousel = (
@@ -25,24 +32,39 @@ function UploadImageCarousel(props) {
         </button>
     );
 
-    // const handleSuccess = (response) => {
-    //     message.success('Upload ảnh thành công!');
-    // };
+    //call api upload logo
+    const { mutate: mutationUploadBanner } = useMutation({
+        mutationFn: uploadProgramCarouselApi,
+        onSuccess: (data) => {
+            if ((data && data?.status === 200) || data?.status === '200') {
+                fileList.push(data?.data[0]);
+                console.log('fileList: ', fileList);
+            }
+            return notify(data?.message, 'error');
+        },
+    });
 
-    // const handleError = (error) => {
-    //     message.error('Có lỗi xảy ra trong quá trình upload. Vui lòng thử lại.');
-    // };
+    const handleChange = (info) => {
+        const files = info.file || {};
+
+        if (files.status === 'uploading') {
+            return;
+        }
+
+        if (files.status === 'done') {
+            mutationUploadBanner({ files: files?.originFileObj });
+
+            return notify('Upload success', 'success');
+        }
+    };
 
     return (
         <div>
             <Upload
                 action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                 listType="picture-card"
-                fileList={fileList}
                 onPreview={onPreview}
-                onChange={onChange}
-                // onSuccess={handleSuccess}
-                // onError={handleError}
+                onChange={handleChange}
             >
                 {fileList.length >= 8 ? null : uploadButtonUploadCareousel}
             </Upload>

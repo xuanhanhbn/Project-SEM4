@@ -35,6 +35,7 @@ function Program() {
     const [isRefuse, setIsRefuse] = useState(false);
     const [isMessage, setIsMessage] = useState('');
     const [dataProgram, setDataProgram] = useState([]);
+    const [value, setValue] = useState('');
 
     useEffect(() => {
         mutationGetAllProgram();
@@ -46,7 +47,7 @@ function Program() {
 
     const acceptedProgram = async (item) => {
         try {
-            const url = `program/active-program/${item?.programId}`;
+            const url = `program/active-program/${item?.programId}?value=${value}`;
             const res = await getApiDefault(url);
             if (res && res.status === 200) {
                 notify(res?.data, 'success');
@@ -97,10 +98,26 @@ function Program() {
         if (field === 'action') {
             return (
                 <div className="flex flex-col">
-                    <Button onClick={() => acceptedProgram(item)} type="primary" className="px-0 mb-1" ghost>
+                    <Button
+                        onClick={() => {
+                            acceptedProgram(item);
+                            setValue('Active');
+                        }}
+                        type="primary"
+                        className="px-0 mb-1"
+                        ghost
+                    >
                         Accepted
                     </Button>
-                    <Button onClick={() => showModal()} type="primary" danger ghost>
+                    <Button
+                        onClick={() => {
+                            showModal();
+                            setValue('Cancel');
+                        }}
+                        type="primary"
+                        danger
+                        ghost
+                    >
                         Refuse
                     </Button>
                 </div>
