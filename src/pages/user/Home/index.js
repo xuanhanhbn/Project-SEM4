@@ -1,4 +1,5 @@
-import React, { memo, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { memo, useEffect, useState } from 'react';
 import './Home.css';
 import HomeBanner from './components/HomeBanner';
 import HomeCampaign from './components/HomeCampaign';
@@ -11,6 +12,8 @@ import { getListProgram } from './callApi';
 import { notify } from '~/utils/common';
 
 function Home() {
+    const [dataProgram, setDataProgram] = useState([]);
+
     useEffect(() => {
         getListProgramApi();
     }, []);
@@ -18,8 +21,8 @@ function Home() {
     const { mutate: getListProgramApi } = useMutation({
         mutationFn: getListProgram,
         onSuccess: (data) => {
-            console.log('data: ', data);
             if (data && data?.status === 200) {
+                return setDataProgram(data.data);
             }
             return notify('error', 'error');
         },
@@ -31,8 +34,8 @@ function Home() {
                 <HomeBanner />
             </div>
             <div className="md:px-10">
-                <HomeCampaign />
-                <HomeSlide />
+                <HomeCampaign dataProgram={dataProgram && dataProgram?.length > 0 ? dataProgram[0] : {}} />
+                <HomeSlide dataProgram={dataProgram} />
                 <OutImpact />
                 <HomeContact />
                 <HomeConnect />

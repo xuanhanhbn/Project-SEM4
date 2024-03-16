@@ -6,7 +6,7 @@ import './CampaignDetail.css';
 import './style.css';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
 import Img from '~/assets/images/logo/Screenshot .png';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import ModalDonate from './components/ModalDonate';
 import Avatar from '~/assets/images/avatar/avatar.png';
 import ShareMailModal from '../ShareMailModal';
@@ -28,8 +28,11 @@ import { db } from '~/firebase';
 import ChatBoxCustom from '~/components/ChatBox';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
-
-const login = true;
+import { useMutation } from '@tanstack/react-query';
+import { getDetailProgram, onDonateProgram } from './callApi';
+import { notify } from '~/utils/common';
+import Loading from '~/components/Loading';
+import { Progress } from 'antd';
 
 const images = [
     {
@@ -82,7 +85,19 @@ const images = [
     },
 ];
 
-export default function CampaignDetail() {
+export default function CampaignDetail(props) {
+    const baseDataRequestDonate = {
+        amount: 0,
+        description: '',
+        paymentMethod: 'Paypal',
+        programId: 0,
+        userId: 0,
+    };
+    const params = useParams();
+
+    const programId = params?.programId;
+    const status = 'cc';
+
     const { userData, setUserData, cleanup } = useAuthStore(
         (state) => ({
             userData: state.userData || '',
@@ -100,33 +115,72 @@ export default function CampaignDetail() {
     const [isOpenChatBox, setisOpenChatBox] = useState(false);
     const [chats, setChats] = useState({});
     const [user, setUser] = useState(null);
+    const [dataDetail, setDataDetail] = useState({});
+    const [dataRequestDonate, setDataRequestDonate] = useState(baseDataRequestDonate);
 
     const { currentUser } = useContext(AuthContext);
     const { dispatch } = useContext(ChatContext);
 
-    useEffect(() => {
-        handleSearchUser();
-    }, []);
+    // useEffect(() => {
+    //     handleSearchUser();
+    // }, []);
+    const getChats = () => {
+        const unsub = onSnapshot(doc(db, 'userChats', currentUser?.uid), (doc) => {
+            setChats(doc.data());
+        });
+        return unsub;
+    };
+
+    // useEffect(() => {
+    //     const getChats = () => {
+    //         const unsub = onSnapshot(doc(db, 'userChats', currentUser?.uid), (doc) => {
+    //             setChats(doc.data());
+    //         });
+
+    //         return () => {
+    //             unsub();
+    //         };
+    //     };
+    //     currentUser?.uid && getChats();
+    // }, [currentUser]);
 
     useEffect(() => {
-        const getChats = () => {
-            const unsub = onSnapshot(doc(db, 'userChats', currentUser?.uid), (doc) => {
-                setChats(doc.data());
-            });
+        if (programId) {
+            getDetailProgramApi(programId);
+        }
+    }, [programId]);
 
-            return () => {
-                unsub();
-            };
-        };
-        currentUser?.uid && getChats();
-    }, [currentUser]);
+    const { mutate: getDetailProgramApi, isPending } = useMutation({
+        mutationFn: getDetailProgram,
+        onSuccess: (data) => {
+            if (data && data?.status === 200) {
+                const emailPartner = data?.data?.partner?.email;
+                handleSearchUser(emailPartner);
+                return setDataDetail(data?.data);
+            }
+            return notify('error', 'error');
+        },
+    });
 
-    const handleSearchUser = async () => {
-        const q = query(collection(db, 'users'), where('email', '==', email));
+    const { mutate: donateProgram, isPending: isLoadingDonate } = useMutation({
+        mutationFn: onDonateProgram,
+        onSuccess: (data) => {
+            if (data && data?.status === 200) {
+                const url = data?.data?.url;
+                console.log('url: ', url);
+                return window.open(url, '_blank');
+            }
+            return notify('error', 'error');
+        },
+    });
+
+    const handleSearchUser = async (emailPartner) => {
+        const q = query(collection(db, 'users'), where('email', '==', emailPartner));
         try {
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 if (doc && doc?.data()) {
+                    getChats();
                     return setUser(doc.data());
                 }
             });
@@ -178,13 +232,8 @@ export default function CampaignDetail() {
         }
     };
 
-    const [prams] = useSearchParams();
-    const status = prams.get('status');
-
     // xử lý open modal
-    const showModal = () => {
-        setIsOpenModal(true);
-    };
+    const showModal = () => setIsOpenModal(true);
 
     // xử lý open modal share mail
     const showModalShareMail = () => {
@@ -207,21 +256,51 @@ export default function CampaignDetail() {
     };
 
     // xử lý khi click đóng modal share mail
-    const handleCancelModalShareMail = () => {
-        setIsOpenModalShareMail(false);
+    const handleCancelModalShareMail = () => setIsOpenModalShareMail(false);
+
+    const handleCaculator = () => {
+        const target = dataDetail?.target || 0;
+        const total = dataDetail?.totalMoney || 0;
+        if (target && total) {
+            const result = (total / target) * 100;
+            return result;
+        }
+        return 0;
+    };
+
+    const handleDonate = (data) => {
+        const newDataRequest = {
+            ...dataRequestDonate,
+            amount: data?.amount,
+            description: `Donate in ${programId}`,
+            paymentMethod: data?.paymentMethod,
+            programId: programId,
+            userId: userData?.userId,
+        };
+        setDataRequestDonate(newDataRequest);
+        return donateProgram(newDataRequest);
     };
 
     return (
         <div id="campaignDetail">
+            <Loading isLoading={isPending} />
             <div>
-                <h1 className="mb-12 text-4xl font-bold leading-10 ">Help in the Democratic Republic of the Congo</h1>
+                <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
             </div>
             <div className="flex flex-nowrap">
                 <div className="lg:w-7/12">
                     <div className="flex flex-wrap -mx-4">
                         <div className="w-full px-4 ">
                             <div className="relative px-4 my-auto z-[1] ">
-                                <img src={CardImg} alt="" className="w-full rounded-2xl" />
+                                <img
+                                    src={
+                                        dataDetail && dataDetail?.attachment?.length > 0
+                                            ? dataDetail?.attachment[0]?.url
+                                            : CardImg
+                                    }
+                                    alt={dataDetail?.programName}
+                                    className="w-full rounded-2xl"
+                                />
                             </div>
                             <div className="card">
                                 <div className="card_container ">
@@ -229,26 +308,25 @@ export default function CampaignDetail() {
                                         <div className="pr-1 max-w-[50%] basis-1/2 w-full pl-4 relative ">
                                             <div className="card_header">
                                                 <i className="text-base fa-sharp fa-thin fa-bullseye-arrow"></i>
-                                                <p className="ml-2 text-xs">500,000 $</p>
+                                                <p className="ml-2 text-xs">{dataDetail?.target || 0} $</p>
                                             </div>
                                         </div>
                                         <div className="pl-1 max-w-[50%] basis-1/2 w-full pr-4 relative ">
                                             <div className="flex justify-end w-full text-xs text-gray-100 md:text-base">
                                                 <i className="text-base fa-light fa-user-group"></i>
                                                 <p className="ml-2 text-xs line-clamp-1 text-ellipsis whitespace-nowrap">
-                                                    500,000 supporteds
+                                                    {dataDetail?.volunteers || 0} supporteds
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="">
-                                        <div className="h-1 mx-auto mt-2 bg-gray-400 rounded-sm">
-                                            <div className="w-10/12 h-1 mt-4 bg-blue-100 rounded-sm"></div>
-                                        </div>
+
+                                    <div className="mt-2">
+                                        <Progress percent={handleCaculator()} showInfo={false} />
                                     </div>
                                     <div className="flex justify-between mx-auto mt-2">
-                                        <div className="text-sm font-semibold leading-6 text-blue-100">100.000</div>
-                                        <div className="text-sm font-semibold leading-6 text-blue-100">15%</div>
+                                        <div className="text_1">{dataDetail?.totalMoney || 0} $</div>
+                                        <div className="text_2">{handleCaculator()} %</div>
                                     </div>
                                     <button
                                         disabled={status === 'done' ? true : false}
@@ -280,19 +358,7 @@ export default function CampaignDetail() {
                             <p className="mb-6 text-sm font-semibold leading-6">
                                 Shared meals will provide emergency food assistance to families in Palestine.
                             </p>
-                            <p className="text-sm leading-6 text-gray-100">
-                                With conflict escalating in October 2023, Palestine is facing an urgent humanitarian
-                                crisis. 1.8 million people are now food insecure, many of whom have lost their homes and
-                                are seeking safety in shelters. <br />
-                                <br />
-                                Despite challenging conditions, the World Food Programme (WFP) is on the ground
-                                providing life-saving aid to people in Palestine and those in shelters. Regular cash and
-                                food programmes are also continuing every day where possible. <br />
-                                <br />
-                                So far, a total of 522,000 Palestinians have been assisted since the start of this
-                                crisis with an aim to ramp up and support 800,000 people in Gaza and the West Bank area.
-                                Food support includes bread, canned chickpeas and beans.{' '}
-                            </p>
+                            <p className="text-sm leading-6 text-gray-100">{dataDetail?.description || ''}</p>
                             <div className="flex mt-4 md:hidden">
                                 <button className="btn_share">
                                     <i className=" fa-light fa-bell-on"></i> 1.2k
@@ -352,7 +418,12 @@ export default function CampaignDetail() {
             </div>
             {/* Open modal */}
             {isOpenModal && (
-                <ModalDonate open={isOpenModal} handleOk={handleSubmitModal} handleCancel={handleCancelModal} />
+                <ModalDonate
+                    open={isOpenModal}
+                    handleOk={handleSubmitModal}
+                    handleCancel={handleCancelModal}
+                    onDonate={handleDonate}
+                />
             )}
 
             {/* open modal share mail */}

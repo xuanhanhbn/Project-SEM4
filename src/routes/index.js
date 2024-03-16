@@ -20,22 +20,27 @@ const publicRoutes = [
     {
         path: '/',
         component: Home,
+        exact: true,
     },
     {
         path: '/about',
         component: About,
+        exact: true,
     },
     {
         path: '/campaigns',
         component: Campaigns,
+        exact: true,
     },
     {
         path: '/faq',
         component: Faqs,
+        exact: true,
     },
     {
-        path: '/campaign-detail',
+        path: '/campaign-detail/:programId',
         component: CampaignDetail,
+        exact: true,
     },
     {
         path: '/register',

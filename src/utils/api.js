@@ -10,6 +10,14 @@ export const getApiDefault = (url) =>
             .catch((err) => reject(err)),
     );
 
+export const getApiWithBodyDefault = (url, data) =>
+    new Promise((resolve, reject) =>
+        baseApiUrlAuth
+            .get(url, data)
+            .then((res) => resolve(res))
+            .catch((err) => reject(err)),
+    );
+
 export const postApiDefault = (url, data) =>
     new Promise((resolve, reject) =>
         baseApiUrlAuth

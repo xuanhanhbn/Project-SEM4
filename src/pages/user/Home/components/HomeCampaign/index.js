@@ -1,9 +1,11 @@
 import React from 'react';
 import './HomeCampaign.css';
 import Palestine11 from '~/assets/images/campaigns/palestine11_Homecard.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-export default function HomeCampaign() {
+export default function HomeCampaign(props) {
+    const { dataProgram } = props;
+    const navigate = useNavigate();
     return (
         <div id="homeCampaign" className="pt-8 px-9 pb-9">
             <h2 className="title_h2">Take action</h2>
@@ -13,8 +15,12 @@ export default function HomeCampaign() {
             <div className="tag_donate">
                 <div className="relative md:w-3/5">
                     <img
-                        src={Palestine11}
-                        alt=""
+                        src={
+                            dataProgram && dataProgram?.attachment?.length > 0
+                                ? dataProgram?.attachment[0]?.url
+                                : Palestine11
+                        }
+                        alt={dataProgram?.programName}
                         className="rounded-t-2xl md:h-full md:rounded-l-2xl md:rounded-tr-none"
                     />
                     <button className="sm_donate_btn">Donate now</button>
@@ -24,18 +30,16 @@ export default function HomeCampaign() {
                     <div className="h-full px-6 pt-12 pb-6 lg:flex-col lg:flex lg:justify-center">
                         <h3 className="mb-0 text-2xl font-bold leading-[1.5] md:mb-4">
                             <span className="text-2xl font-bold leading-6 text-orange-500 md:hidden">Urgent </span>
-                            Give emergency aid in Palestine
+                            {dataProgram?.programName || ''}
                         </h3>
-                        <p className="hidden text-base text-gray-100 lg:block">
-                            Shared meals will provide emergency food assistance to families in Palestine.
-                        </p>
+                        <p className="hidden text-base text-gray-100 lg:block">{dataProgram?.description || ''}</p>
                         <div className="hidden mt-4 lg:mt-14 md:block">
-                            <Link to="/campaign-detail" className="border-black lg_btn hover:bg-gray-700">
-                                read more
-                            </Link>
-                            {/* <button className="ml-2 bg-orange-200 border-orange-200 lg_btn hover:bg-orange-100 hover:border-orange-100">
-                                Donate now
-                            </button> */}
+                            <button
+                                onClick={() => navigate('/campaign-detail', { state: { id: dataProgram?.programId } })}
+                                className="border-black lg_btn hover:bg-gray-700"
+                            >
+                                Read more
+                            </button>
                         </div>
                     </div>
                 </div>
