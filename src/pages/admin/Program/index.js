@@ -45,9 +45,9 @@ function Program() {
         setListSearchDataTable(dataTablePrograms.filter((data) => data.programName.toLowerCase().includes(value)));
     };
 
-    const acceptedProgram = async (item) => {
+    const acceptedProgram = async (item, data) => {
         try {
-            const url = `program/active-program/${item?.programId}?value=${value}`;
+            const url = `program/active-program/${item?.programId}?value=${data}`;
             const res = await getApiDefault(url);
             if (res && res.status === 200) {
                 notify(res?.data, 'success');
@@ -100,8 +100,8 @@ function Program() {
                 <div className="flex flex-col">
                     <Button
                         onClick={() => {
-                            acceptedProgram(item);
-                            setValue('Active');
+                            acceptedProgram(item, 'Active');
+                            // setValue('Active');
                         }}
                         type="primary"
                         className="px-0 mb-1"
@@ -111,8 +111,9 @@ function Program() {
                     </Button>
                     <Button
                         onClick={() => {
-                            showModal();
-                            setValue('Cancel');
+                            // showModal();
+                            acceptedProgram(item, 'Cancel');
+                            // setValue('Cancel');
                         }}
                         type="primary"
                         danger
