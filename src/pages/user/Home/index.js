@@ -6,22 +6,24 @@ import HomeSlide from './components/HomeSlide';
 import OutImpact from './components/Impact';
 import HomeContact from './components/HomeContact';
 import HomeConnect from './components/HomeConnect';
-// import { useMutation, useQuery } from '@tanstack/react-query';
-// import { testGet } from './callApi';
-// import { notify } from '~/utils/common';
+import { useMutation } from '@tanstack/react-query';
+import { getListProgram } from './callApi';
+import { notify } from '~/utils/common';
 
 function Home() {
-    // const mutation = useMutation({
-    //     mutationFn: testGet,
-    //     onSuccess: (data) => {
-    //         console.log('data: ', data);
-    //         return notify('Success', 'success');
-    //     },
-    // });
+    useEffect(() => {
+        getListProgramApi();
+    }, []);
 
-    // useEffect(() => {
-    //     mutation.mutate();
-    // }, []);
+    const { mutate: getListProgramApi } = useMutation({
+        mutationFn: getListProgram,
+        onSuccess: (data) => {
+            console.log('data: ', data);
+            if (data && data?.status === 200) {
+            }
+            return notify('error', 'error');
+        },
+    });
 
     return (
         <div id="homePage">

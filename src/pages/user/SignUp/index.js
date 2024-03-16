@@ -16,6 +16,8 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
 import './Signup.css';
 import dayjs from 'dayjs';
+import moment from 'moment';
+import Loading from '~/components/Loading';
 
 // validate register form
 const validationRegisterSchema = Yup.object().shape({
@@ -35,9 +37,16 @@ const validationRegisterSchema = Yup.object().shape({
 });
 
 function SignUpPage() {
+    const baseDataRegisterAccountChatBox = {
+        displayName: '',
+        email: '',
+        password: '',
+        files: '',
+    };
+
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
-    const [dataRegister, setDataRegiser] = useState(null);
+    const [dataRegisterAccountChatBox, setDataRegiserAccountChatBox] = useState(baseDataRegisterAccountChatBox);
     const [dataActive, setDataActive] = useState(false);
 
     const {
@@ -68,7 +77,7 @@ function SignUpPage() {
         </button>
     );
 
-    const { mutate: mutationUploadAvatar } = useMutation({
+    const { mutate: mutationUploadAvatar, isPending: isPendingUploadImage } = useMutation({
         mutationFn: uploadAvatarApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
@@ -89,21 +98,20 @@ function SignUpPage() {
         }
 
         if (files.status === 'done') {
-            setDataRegiser((prev) => ({
+            setDataRegiserAccountChatBox((prev) => ({
                 ...prev,
-                image: files.originFileObj,
+                files: files.originFileObj,
             }));
         }
         mutationUploadAvatar({ files: files.originFileObj });
     };
 
     const handleRegisterAccountChatBox = async () => {
-        // console.log('dataRegister: ', dataRegister);
-        const displayName = dataRegister?.email || '';
-        const email = dataRegister?.email;
-        const password = dataRegister?.password;
-        const file = dataRegister?.image;
         try {
+            const email = dataRegisterAccountChatBox?.email || '';
+            const password = dataRegisterAccountChatBox?.password || '';
+            const displayName = dataRegisterAccountChatBox?.displayName || '';
+            const file = dataRegisterAccountChatBox?.files || '';
             //Create user
             const res = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -153,16 +161,16 @@ function SignUpPage() {
     });
 
     const onSubmitRegister = (data) => {
-        const originalDateString = data.bod;
-        const dateObject = dayjs(originalDateString);
-        const formattedDate = dateObject.format('YYYY/MM/DD');
-        data.bod = formattedDate;
-        // console.log('dataSignUp: ', data);
-
+        const newDataRequest = {
+            ...data,
+            bod: data?.bod ? moment(data?.bod).format('YYYY/MM/DD') : '',
+        };
         setDataActive(data.email);
-        setDataRegiser(data);
-        // // console.log('data: ', data);
-        mutationRegister(data);
+        setDataRegiserAccountChatBox((prev) => ({
+            ...prev,
+            ...data,
+        }));
+        return mutationRegister(newDataRequest);
     };
 
     const RENDER_INPUT_SIGN_UP = (item) => {
@@ -285,21 +293,12 @@ function SignUpPage() {
     };
     return (
         <div>
+            <Loading isLoading={isPendingUploadImage} />
             <div id="signup_page">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
-                    {/* <Link
-                        to="/"
-                        className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-                    >
-                        <img
-                            className="w-8 h-8 mr-2"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                            alt="logo"
-                        />
-                    </Link> */}
                     <div className="w-full bg-white rounded-lg shadow-2xl dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-6 space-y-4 sm:p-8">
-                            <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl dark:text-white">
+                            <h1 className="text-xl font-bold leading-tight tracking-tight text-indigo-600 md:text-2xl">
                                 Create an account
                             </h1>
                             <form onSubmit={handleSubmit(onSubmitRegister)} className="space-y-4 md:space-y-6">
@@ -313,15 +312,15 @@ function SignUpPage() {
                                 >
                                     {isPending ? <Spin size="large" /> : <div>Create an account</div>}
                                 </button>
-                                <p className="text-sm font-light text-black dark:text-gray-400">
-                                    Already have an account?
+                                <div className="flex items-center justify-center">
+                                    <p className="text-sm font-light text-black mr-1">Already have an account?</p>
                                     <Link
                                         to="/login"
                                         className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                                     >
                                         Login here
                                     </Link>
-                                </p>
+                                </div>
                             </form>
                         </div>
                     </div>

@@ -24,7 +24,6 @@ baseInstance.defaults.timeout = 60000;
 
 baseInstance.interceptors.response.use(
     (response) => {
-        console.log('res: ', response);
         return response;
     },
     (error) => {

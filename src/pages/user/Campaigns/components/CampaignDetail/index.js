@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import ImageGallery from 'react-image-gallery';
 
@@ -11,11 +12,23 @@ import Avatar from '~/assets/images/avatar/avatar.png';
 import ShareMailModal from '../ShareMailModal';
 import { AuthContext } from '~/context/AuthContext';
 import { ChatContext } from '~/context/ChatContext';
-import { doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    onSnapshot,
+    query,
+    serverTimestamp,
+    setDoc,
+    updateDoc,
+    where,
+} from 'firebase/firestore';
 import { db } from '~/firebase';
 import ChatBoxCustom from '~/components/ChatBox';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
 
-const adminId = 'WI08Q27dOfTDfxGCZM3j42dtDQR2';
 const login = true;
 
 const images = [
@@ -70,15 +83,30 @@ const images = [
 ];
 
 export default function CampaignDetail() {
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+
     // state
+    const email = 'admin@gmail.com';
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenModalShareMail, setIsOpenModalShareMail] = useState(false);
     // State
     const [isOpenChatBox, setisOpenChatBox] = useState(false);
     const [chats, setChats] = useState({});
+    const [user, setUser] = useState(null);
 
     const { currentUser } = useContext(AuthContext);
     const { dispatch } = useContext(ChatContext);
+
+    useEffect(() => {
+        handleSearchUser();
+    }, []);
 
     useEffect(() => {
         const getChats = () => {
@@ -90,9 +118,22 @@ export default function CampaignDetail() {
                 unsub();
             };
         };
-
         currentUser?.uid && getChats();
     }, [currentUser]);
+
+    const handleSearchUser = async () => {
+        const q = query(collection(db, 'users'), where('email', '==', email));
+        try {
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                if (doc && doc?.data()) {
+                    return setUser(doc.data());
+                }
+            });
+        } catch (err) {
+            return err;
+        }
+    };
 
     useEffect(() => {
         if (Object.keys(chats)?.length && isOpenChatBox) {
@@ -106,7 +147,7 @@ export default function CampaignDetail() {
     const handleChangeStateOpenChatBox = async () => {
         setisOpenChatBox(!isOpenChatBox);
 
-        const combinedId = currentUser?.uid > adminId ? currentUser?.uid + adminId : adminId + currentUser?.uid;
+        const combinedId = currentUser?.uid > user?.uid ? currentUser?.uid + user?.uid : user?.uid + currentUser?.uid;
         try {
             const res = await getDoc(doc(db, 'chats', combinedId));
             if (!res.exists()) {
@@ -116,14 +157,14 @@ export default function CampaignDetail() {
                 //create user chats
                 await updateDoc(doc(db, 'userChats', currentUser?.uid), {
                     [combinedId + '.userInfo']: {
-                        uid: adminId,
-                        //   displayName: user.displayName,
-                        //   photoURL: user.photoURL,
+                        uid: user?.uid,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL,
                     },
                     [combinedId + '.date']: serverTimestamp(),
                 });
 
-                await updateDoc(doc(db, 'userChats', adminId), {
+                await updateDoc(doc(db, 'userChats', user?.uid), {
                     [combinedId + '.userInfo']: {
                         uid: currentUser?.uid,
                         displayName: currentUser?.displayName,
@@ -140,8 +181,6 @@ export default function CampaignDetail() {
     const [prams] = useSearchParams();
     const status = prams.get('status');
 
-    // console.log('status', status);
-
     // xử lý open modal
     const showModal = () => {
         setIsOpenModal(true);
@@ -155,25 +194,21 @@ export default function CampaignDetail() {
     // xử lý khi click submit modal
     const handleSubmitModal = () => {
         setIsOpenModal(false);
-        // console.log('click ok btn');
     };
 
     // xử lý khi click submit modal share mail
     const handleSubmitModalShareMail = () => {
         setIsOpenModalShareMail(false);
-        // console.log('click ok btn');
     };
 
     // xử lý khi click đóng modal
     const handleCancelModal = () => {
         setIsOpenModal(false);
-        // console.log('click cancel btn');
     };
 
     // xử lý khi click đóng modal share mail
     const handleCancelModalShareMail = () => {
         setIsOpenModalShareMail(false);
-        // console.log('click cancel btn');
     };
 
     return (
@@ -330,7 +365,7 @@ export default function CampaignDetail() {
                 />
             )}
 
-            <div className={login === true ? '' : 'hidden'}>
+            <div className={userData ? '' : 'hidden'}>
                 <button
                     onClick={() => handleChangeStateOpenChatBox()}
                     className={
@@ -344,7 +379,7 @@ export default function CampaignDetail() {
                 </button>
             </div>
 
-            {isOpenChatBox === false ? null : (
+            {isOpenChatBox && (
                 <div className="z-[999] fixed right-4 bottom-2 shadow-2xl rounded-2xl">
                     <ChatBoxCustom closeChatBox={() => handleChangeStateOpenChatBox()} />
                 </div>

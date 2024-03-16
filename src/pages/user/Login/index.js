@@ -63,7 +63,6 @@ function LoginPage() {
                 localStorage.setItem('loginPage', JSON.stringify(data?.data));
                 // navigation('/');
                 getMe();
-                handleLoginAccountChatBox();
                 return notify('Login Success', 'success');
             }
             return notify(data?.response?.data, 'error');
@@ -73,15 +72,17 @@ function LoginPage() {
     const { mutate: getMe } = useMutation({
         mutationFn: getMeApi,
         onSuccess: (data) => {
-            if (data && data?.status == 200) {
+            if (data && data?.status === 200) {
                 setUserData(data?.data);
                 if (data?.data?.role === 'USER') {
+                    handleLoginAccountChatBox();
                     return navigation('/');
                 }
 
                 if (data?.data?.role === 'PARTNER' && !data?.data.updateAt) {
                     return navigation('/admin/change-password');
                 }
+                handleLoginAccountChatBox();
                 return navigation('/admin/dashboard');
             }
             return notify('error', 'error');
@@ -114,7 +115,7 @@ function LoginPage() {
                     </Link> */}
                     <div className="w-full bg-white rounded-lg shadow-2xl dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                            <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl dark:text-white">
+                            <h1 className="text-xl font-bold leading-tight tracking-tight text-indigo-600 md:text-2xl">
                                 Sign in to your account
                             </h1>
                             <form
@@ -202,15 +203,15 @@ function LoginPage() {
                                 >
                                     {isPending ? <Spin size="large" /> : <div>Sign in</div>}
                                 </button>
-                                <p className="mt-10 text-sm text-center text-black">
-                                    Don't have an account?
+                                <div className="flex items-center justify-center">
+                                    <p className="text-sm text-center text-black mr-1">Don't have an account?</p>
                                     <Link
                                         to="/sign-up"
                                         className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                                     >
                                         Sign up here
                                     </Link>
-                                </p>
+                                </div>
                             </form>
                         </div>
                     </div>

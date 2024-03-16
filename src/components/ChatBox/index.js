@@ -23,28 +23,13 @@ function ChatBoxCustom(props) {
 
     const { currentUser } = useContext(AuthContext);
     const { data } = useContext(ChatContext);
+    // console.log('currentUser: ', currentUser);
+    // console.log('data: ', data);
 
     //State
-    const [isStartChat, setIsStartChat] = useState(false);
     const [text, setText] = useState('');
     const [messages, setMessages] = useState([]);
     const [img, setImg] = useState(null);
-
-    const {
-        handleSubmit,
-        control,
-        setValue,
-        // formState: { errors },
-    } = useForm({
-        resolver: yupResolver(validationSchema),
-    });
-
-    const name = 'Dương';
-
-    // xử lý khi click button chatbox
-    const handleStartChat = async () => {
-        setIsStartChat(true);
-    };
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
@@ -58,6 +43,7 @@ function ChatBoxCustom(props) {
 
     // xử lý khi send message
     const handleSendMeage = async () => {
+        debugger;
         try {
             if (img) {
                 const storageRef = ref(storage, uuid());
@@ -109,7 +95,6 @@ function ChatBoxCustom(props) {
             setText('');
             setImg(null);
         } catch (error) {
-            console.log('error: ', error);
             return error;
         }
     };
@@ -121,29 +106,14 @@ function ChatBoxCustom(props) {
                     <img src={avatar} alt="" className="w-full rounded-full" />
                 </div>
                 <div className="flex justify-between flex-1 pl-10 pr-4">
-                    <div className="mt-4 font-bold text-white">Admin</div>
+                    <div className="mt-4 font-bold text-white">{data?.user?.displayName}</div>
                     <button onClick={() => closeChatBox()} className="h-2 mt-2">
                         <i className="text-white fa-solid fa-xmark"></i>
                     </button>
                 </div>
             </div>
             <div className="w-full p-2 overflow-auto font-semibold text-center bg-white h-80">
-                <div className={!isStartChat && !currentUser ? 'mt-20' : 'hidden'}>
-                    <div>Hi {name}!</div>
-                    <div>Thank you for contacting us.</div>
-                    <br />
-                    <div>Click to send.</div>
-                    <div>
-                        <button
-                            onClick={() => handleStartChat()}
-                            className="p-2 px-6 mt-2 font-medium text-blue-500 transition-transform bg-white shadow-2xl hover:-translate-y-1 rounded-3xl shadow-slate-400"
-                        >
-                            Start
-                        </button>
-                    </div>
-                </div>
-
-                <div className={!isStartChat && !currentUser ? 'hidden' : ''}>
+                <div>
                     <div className="flex items-end">
                         <div className="w-10">
                             <img src={avatar} alt="" className="rounded-full w-7 h-w-7" />
@@ -151,7 +121,7 @@ function ChatBoxCustom(props) {
                         <div>
                             <div className="max-w-[12rem]  px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl">
                                 <div>
-                                    <p className="my-1">Hello {name}! How can we help you?</p>
+                                    <p className="my-1">Hello {currentUser?.displayName}! How can we help you?</p>
                                 </div>
                             </div>
                         </div>
@@ -162,11 +132,7 @@ function ChatBoxCustom(props) {
                     </div>
                 </div>
             </div>
-            <div
-                className={
-                    !isStartChat && !currentUser ? 'hidden' : 'flex items-center justify-between p-2 border-t-[1px]'
-                }
-            >
+            <div className="flex items-center justify-between p-2 border-t-[1px]">
                 <Input
                     onChange={(e) => setText(e?.target?.value)}
                     value={text}

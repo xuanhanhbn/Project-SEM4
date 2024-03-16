@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 // import { Link, animateScroll as scroll } from 'react-scroll';
 import './Header.css';
 import { animateScroll as scroll } from 'react-scroll';
@@ -23,7 +23,8 @@ function Header() {
         }),
         shallow,
     );
-    console.log('userData: ', userData);
+
+    const navigation = useNavigate();
 
     //State
     const [openMenuUser, setOpenMenuUser] = useState(false);
@@ -61,6 +62,7 @@ function Header() {
                 localStorage.removeItem('loginPage');
                 setUserData(null);
                 signOut(auth);
+                navigation('/');
                 return notify('Logout Success', 'success');
             }
             return notify(data?.response?.data, 'error');

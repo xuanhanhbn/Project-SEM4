@@ -9,6 +9,8 @@ import { changePasswordApi, loginApi } from './callApi';
 import { notify } from '~/utils/common';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '~/firebase';
 
 // validate change password form
 const validationChangePasswordSchema = Yup.object().shape({
@@ -40,13 +42,13 @@ function ChangePassword() {
 
     const navigation = useNavigate();
 
-    // const handleLoginAccountChatBox = async () => {
-    //     try {
-    //         await signInWithEmailAndPassword(auth, dataLogin?.email, dataLogin?.password);
-    //     } catch (err) {
-    //         return err;
-    //     }
-    // };
+    const handleLoginAccountChatBox = async () => {
+        try {
+            await signInWithEmailAndPassword(auth, userData?.email, newPassword);
+        } catch (err) {
+            return err;
+        }
+    };
 
     // call api login
     const { mutate: mutationLogin } = useMutation({
@@ -76,8 +78,8 @@ function ChangePassword() {
                     email: userData.email,
                     password: newPassword,
                 };
+                handleLoginAccountChatBox();
                 mutationLogin(loginData);
-                // navigation('/');
                 return notify('Change password success', 'success');
             }
             return notify(data?.response.data, 'error');
