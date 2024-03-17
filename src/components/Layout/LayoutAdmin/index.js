@@ -27,30 +27,20 @@ function LayoutAdmin({ children }) {
     // render sidebar item
     const RENDER_TAB_ITEMS = (item) => {
         if (item.type === 'TAB_ITEM') {
-            if (item.tabName === 'Dashboard') {
-                if (userData?.role === 'PARTNER') {
-                    return null;
-                }
-                return (
-                    <li id="admin_sidebar_item" key={item.id} className="mt-0.5 w-full">
-                        <NavLink
-                            className={({ isActive }) => (isActive ? 'tab_active shadow-md tab_item' : 'tab_item')}
-                            to={item.path}
-                            onClick={() => setisHiddenClass(false)}
-                        >
-                            <div className="tab_item_icon">{item.tabIcon}</div>
-                            <span className={isHiddenClass ? 'hidden' : ''}>{item.tabName}</span>
-                        </NavLink>
-                    </li>
-                );
-            }
+            // if (item.tabName === 'Dashboard') {
+            //     if (userData?.role === 'PARTNER') {
+            //         return null;
+            //     }
             if (item.tabName === 'Partner') {
                 return (
                     <li id="admin_sidebar_item" key={item.id} className="mt-0.5 w-full">
                         <NavLink
                             className={({ isActive }) => (isActive ? 'tab_active shadow-md tab_item' : 'tab_item')}
-                            to={userData?.role === 'PARTNER' ? '/admin/partner/detail' : '/admin/partner'}
-                            onClick={item.id === 7 ? () => hiddenTabName() : () => setisHiddenClass(false)}
+                            to={
+                                userData?.role === 'PARTNER'
+                                    ? `/admin/partner/detail/${userData?.partnerId}`
+                                    : '/admin/partner'
+                            }
                         >
                             <div className="tab_item_icon">{item.tabIcon}</div>
                             <span className={isHiddenClass ? 'hidden' : ''}>{item.tabName}</span>
@@ -63,7 +53,7 @@ function LayoutAdmin({ children }) {
                     <NavLink
                         className={({ isActive }) => (isActive ? 'tab_active shadow-md tab_item' : 'tab_item')}
                         to={item.path}
-                        onClick={item.id === 7 ? () => hiddenTabName() : () => setisHiddenClass(false)}
+                        onClick={() => setisHiddenClass(false)}
                     >
                         <div className="tab_item_icon">{item.tabIcon}</div>
                         <span className={isHiddenClass ? 'hidden' : ''}>{item.tabName}</span>
@@ -71,6 +61,7 @@ function LayoutAdmin({ children }) {
                 </li>
             );
         }
+        // }
 
         if (item.type === 'TABTITLE') {
             return (
@@ -79,6 +70,18 @@ function LayoutAdmin({ children }) {
                 </li>
             );
         }
+        return (
+            <li id="admin_sidebar_item" key={item.id} className="mt-0.5 w-full">
+                <NavLink
+                    className={({ isActive }) => (isActive ? 'tab_active shadow-md tab_item' : 'tab_item')}
+                    to={item.path}
+                    onClick={item.id === 7 ? () => hiddenTabName() : () => setisHiddenClass(false)}
+                >
+                    <div className="tab_item_icon">{item.tabIcon}</div>
+                    <span className={isHiddenClass ? 'hidden' : ''}>{item.tabName}</span>
+                </NavLink>
+            </li>
+        );
     };
 
     const hiddenTabName = () => {
@@ -86,6 +89,7 @@ function LayoutAdmin({ children }) {
     };
 
     const handleSignOut = () => {
+        signOut(auth);
         mutationLogout();
     };
 
@@ -131,7 +135,7 @@ function LayoutAdmin({ children }) {
                             <div className="min-w-[18.75rem] absolute top-20 flex flex-col right-7 bg-white shadow-2xl">
                                 <div className="flex items-center px-6 py-5 m-2 rounded-lg pointer-events-none bg-gray-102">
                                     <img
-                                        src={userData?.avatarUrl === null ? defaultAvatar : userData?.avatarUrl}
+                                        src={userData?.avatarUrl ? userData?.avatarUrl?.url : defaultAvatar}
                                         className="w-8 mr-4 rounded-full"
                                         alt="admin_logo"
                                     />
@@ -146,11 +150,7 @@ function LayoutAdmin({ children }) {
                                     <Link
                                         to="/admin/dashboard"
                                         onClick={() => setisHiddenMenu((prev) => !prev)}
-                                        className={
-                                            userData?.role === 'PARTNER'
-                                                ? 'hidden'
-                                                : 'w-full px-6 py-2 my-px text-sm transition-all duration-300 ease-in-out hover:pl-9 hover:bg-item-200 delay-0 hover:text-item-100'
-                                        }
+                                        className="w-full px-6 py-2 my-px text-sm transition-all duration-300 ease-in-out hover:pl-9 hover:bg-item-200 delay-0 hover:text-item-100"
                                     >
                                         <i className="mr-4 text-lg fa-duotone fa-chart-simple "></i>
                                         Dashboard
@@ -203,7 +203,18 @@ function LayoutAdmin({ children }) {
                 {/* <hr className="admin_sidebar_line" /> */}
 
                 <div className="mt-24 admin_sidebar_list">
-                    <ul className="flex flex-col pl-0 mb-0">{sideBarList.map((data) => RENDER_TAB_ITEMS(data))}</ul>
+                    <ul className="flex flex-col pl-0 mb-0">
+                        {sideBarList
+                            .filter((route) => {
+                                if (route.role) {
+                                    // Lọc ra những route có role trùng với các role trong parseRole
+                                    return route.role.some((role) => [userData?.role].includes(role));
+                                }
+                                // Nếu route không có role, không lọc
+                                return true;
+                            })
+                            .map((data) => RENDER_TAB_ITEMS(data))}
+                    </ul>
                 </div>
             </aside>
             <main className={isHiddenClass ? 'admin_container xl:ml-[6.5rem]' : 'admin_container xl:ml-[17.125rem]'}>

@@ -52,6 +52,7 @@ function Header() {
     };
 
     const handleSignOut = () => {
+        signOut(auth);
         mutationLogout();
     };
 

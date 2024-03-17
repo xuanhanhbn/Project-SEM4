@@ -11,10 +11,10 @@ export default function Message(props) {
     }, [mess]);
 
     const handleCheckUIDAndReturnClassName = () => {
-        if (mess && mess?.senderId === currentUser?.uid) {
-            return 'float-right max-w-[12rem] px-3 py-2  mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left text-white bg-blue-500 rounded-3xl break-words ';
+        if (mess && mess?.senderId !== currentUser?.uid) {
+            return 'max-w-xs px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl break-words';
         }
-        return 'float-left max-w-[12rem] px-3 py-2  mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl break-words ';
+        return 'float-right max-w-xs px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left shadow-2xl bg-blue-102 rounded-3xl break-words';
     };
 
     return (

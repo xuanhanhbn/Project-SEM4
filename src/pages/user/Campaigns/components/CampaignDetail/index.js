@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ImageGallery from 'react-image-gallery';
 
 import './CampaignDetail.css';
@@ -119,31 +119,36 @@ export default function CampaignDetail(props) {
     const [dataDetail, setDataDetail] = useState({});
     const [dataRequestDonate, setDataRequestDonate] = useState(baseDataRequestDonate);
 
+    const ref = useRef();
     const { currentUser } = useContext(AuthContext);
     const { dispatch } = useContext(ChatContext);
+
+    useEffect(() => {
+        ref.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
 
     // useEffect(() => {
     //     handleSearchUser();
     // }, []);
-    const getChats = () => {
-        const unsub = onSnapshot(doc(db, 'userChats', currentUser?.uid), (doc) => {
-            setChats(doc.data());
-        });
-        return unsub;
-    };
+    // const getChats = () => {
+    //     const unsub = onSnapshot(doc(db, 'userChats', currentUser?.uid), (doc) => {
+    //         setChats(doc.data());
+    //     });
+    //     return unsub;
+    // };
 
-    // useEffect(() => {
-    //     const getChats = () => {
-    //         const unsub = onSnapshot(doc(db, 'userChats', currentUser?.uid), (doc) => {
-    //             setChats(doc.data());
-    //         });
+    useEffect(() => {
+        const getChats = () => {
+            const unsub = onSnapshot(doc(db, 'userChats', currentUser?.uid), (doc) => {
+                setChats(doc.data());
+            });
 
-    //         return () => {
-    //             unsub();
-    //         };
-    //     };
-    //     currentUser?.uid && getChats();
-    // }, [currentUser]);
+            return () => {
+                unsub();
+            };
+        };
+        currentUser?.uid && getChats();
+    }, [currentUser]);
 
     useEffect(() => {
         if (programId) {
@@ -153,11 +158,12 @@ export default function CampaignDetail(props) {
 
     const { mutate: getDetailProgramApi, isPending } = useMutation({
         mutationFn: getDetailProgram,
-        onSuccess: (data) => {
-            if (data && data?.status === 200) {
-                const emailPartner = data?.data?.partner?.email;
+        onSuccess: (res) => {
+            // console.log('res: ', res);
+            if (res && res?.status === 200) {
+                const emailPartner = res?.data?.partner?.email;
                 handleSearchUser(emailPartner);
-                return setDataDetail(data?.data);
+                return setDataDetail(res?.data);
             }
             return notify('error', 'error');
         },
@@ -168,7 +174,6 @@ export default function CampaignDetail(props) {
         onSuccess: (data) => {
             if (data && data?.status === 200) {
                 const url = data?.data?.url;
-                console.log('url: ', url);
                 return window.open(url, '_blank');
             }
             return notify('error', 'error');
@@ -181,7 +186,7 @@ export default function CampaignDetail(props) {
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 if (doc && doc?.data()) {
-                    getChats();
+                    // getChats();
                     return setUser(doc.data());
                 }
             });
@@ -286,7 +291,7 @@ export default function CampaignDetail(props) {
     };
 
     return (
-        <div id="campaignDetail">
+        <div id="campaignDetail" ref={ref}>
             <Loading isLoading={isPending} />
             <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
             <div></div>

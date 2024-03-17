@@ -11,15 +11,25 @@ import { createPartnerApi, getAllPartnerApi, getApiSearchPartner } from './callA
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Loading from '~/components/Loading';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth, db, storage } from '~/firebase';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
 
 const { Search } = Input;
 
 function Partner() {
+    const baseDataRegisterAccountChatBox = {
+        displayName: '',
+        email: '',
+        password: '',
+        files: '',
+    };
     // STATE
     const [isModalOpenCreatePartner, setIsModalOpenCreatePartner] = useState(false);
     const [dataTable, setDataTable] = useState(null);
     const [isOpenModalUploadPartner, setIsOpenModalUploadPartner] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [dataRegisterAccountChatBox, setDataRegiserAccountChatBox] = useState(baseDataRegisterAccountChatBox);
 
     useEffect(() => {
         mutationGetAllPartner();
@@ -78,6 +88,44 @@ function Partner() {
         return item[field];
     }, []);
 
+    const handleRegisterAccountChatBox = async () => {
+        try {
+            const email = dataRegisterAccountChatBox?.email || '';
+            const password = dataRegisterAccountChatBox?.password || '';
+            const displayName = dataRegisterAccountChatBox?.displayName || '';
+            const file = dataRegisterAccountChatBox?.files || '';
+            //Create user
+            const res = await createUserWithEmailAndPassword(auth, email, password);
+            //Create a unique image name
+            const date = new Date().getTime();
+            const storageRef = ref(storage, `${displayName + date}`);
+            await uploadBytesResumable(storageRef, file).then(() => {
+                getDownloadURL(storageRef).then(async (downloadURL) => {
+                    try {
+                        //Update profile
+                        await updateProfile(res.user, {
+                            displayName,
+                            photoURL: downloadURL,
+                        });
+                        //create user on firestore
+                        await setDoc(doc(db, 'users', res.user.uid), {
+                            uid: res.user.uid,
+                            displayName,
+                            email,
+                            photoURL: downloadURL,
+                        });
+                        //create empty user chats on firestore
+                        await setDoc(doc(db, 'userChats', res.user.uid), {});
+                    } catch (err) {
+                        return err;
+                    }
+                });
+            });
+        } catch (err) {
+            return err;
+        }
+    };
+
     // call api
     const { mutate: mutationGetAllPartner, isPending } = useMutation({
         mutationFn: getAllPartnerApi,
@@ -107,6 +155,7 @@ function Partner() {
             if ((res && res?.status === 201) || res?.status === '201') {
                 mutationGetAllPartner();
                 handleCancelModal();
+                handleRegisterAccountChatBox();
                 return notify('Create Partner Success', 'success');
             } else {
                 return notify(res?.response?.data, 'warning');
@@ -149,6 +198,7 @@ function Partner() {
                     isModalOpen={isModalOpenCreatePartner}
                     handleOk={handleCreatePartner}
                     handleCancel={handleCancelModal}
+                    setDataRegiserAccountChatBox={setDataRegiserAccountChatBox}
                     type="create"
                 />
             )}

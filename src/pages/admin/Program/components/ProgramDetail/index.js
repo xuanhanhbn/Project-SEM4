@@ -1,20 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ImageGallery from 'react-image-gallery';
 
 import './programDetail.css';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
-// import { Link } from 'react-router-dom';
 import ModalCreateProgram from '../ModalCreateProgram';
 import { Line } from 'react-chartjs-2';
 import { linePaymentData, optionsChartLine, todayCardData } from './constants';
-// import ChatBoxCustom from './ChatBox';
+import { useParams } from 'react-router-dom';
+import { notify } from '~/utils/common';
+import { getApiDefault } from '~/utils/api';
+import Loading from '~/components/Loading';
 
 export default function ProgramDetail() {
+    const params = useParams();
     // state
+    const ref = useRef();
     const [isOpenModalEditProject, setIsOpenModalEditProject] = useState(false);
-    const [dataDetail, setDataDetail] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [dataDetail, setDataDetail] = useState({});
 
-    // const [isOpenChatBox, setisOpenChatBox] = useState(false);
+    useEffect(() => {
+        ref.current?.scrollIntoView({ behavior: 'smooth' });
+        if (params && params?.programId) {
+            async function fetchData() {
+                // You can await here
+                const response = await handleGetDetail(params?.programId);
+                return response;
+                // ...
+            }
+            fetchData();
+        }
+    }, [params]);
+
+    const handleGetDetail = async (id) => {
+        try {
+            setIsLoading(true);
+            const url = `program/detail-program/${id}`;
+            const res = await getApiDefault(url);
+            if (res && res?.status === 200) {
+                setIsLoading(false);
+                return setDataDetail(res?.data);
+            }
+            return setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+            return notify(error, 'error');
+        }
+    };
 
     // // xử lý open modal edit program
     const showModalEditProgram = () => {
@@ -84,6 +116,14 @@ export default function ProgramDetail() {
         }
     };
 
+    const handleReturnImage = () => {
+        if (dataDetail && dataDetail?.attachment?.length > 0) {
+            const url = dataDetail?.attachment?.filter((logo) => logo?.type === 'Logo');
+            return url[0]?.url;
+        }
+        return CardImg;
+    };
+
     // render thẻ thông số theo ngày
     const RENDER_TODAY_CARD = (data) => {
         return (
@@ -111,70 +151,42 @@ export default function ProgramDetail() {
         );
     };
 
-    // xử lý mở chat box
-    // const handleChangeStateOpenChatBox = async () => {
-    //     setisOpenChatBox(!isOpenChatBox);
-
-    //     const combinedId = currentUser?.uid > adminId ? currentUser?.uid + adminId : adminId + currentUser?.uid;
-    //     try {
-    //         const res = await getDoc(doc(db, 'chats', combinedId));
-    //         if (!res.exists()) {
-    //             //create a chat in chats collection
-    //             await setDoc(doc(db, 'chats', combinedId), { messages: [] });
-
-    //             //create user chats
-    //             await updateDoc(doc(db, 'userChats', currentUser?.uid), {
-    //                 [combinedId + '.userInfo']: {
-    //                     uid: adminId,
-    //                     //   displayName: user.displayName,
-    //                     //   photoURL: user.photoURL,
-    //                 },
-    //                 [combinedId + '.date']: serverTimestamp(),
-    //             });
-
-    //             await updateDoc(doc(db, 'userChats', adminId), {
-    //                 [combinedId + '.userInfo']: {
-    //                     uid: currentUser?.uid,
-    //                     displayName: currentUser?.displayName,
-    //                     photoURL: currentUser?.photoURL,
-    //                 },
-    //                 [combinedId + '.date']: serverTimestamp(),
-    //             });
-    //         }
-    //     } catch (err) {
-    //         return err;
-    //     }
-    // };
-
     return (
-        <div id="programDetail">
+        <div id="programDetail" ref={ref}>
+            <Loading isLoading={isLoading} />
             <div className="fixed z-50 right-2 bottom-5"></div>
             <div>
-                <h1 className="mb-12 text-4xl font-bold leading-10 ">Help in the Democratic Republic of the Congo</h1>
+                <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
             </div>
             <div className="flex flex-nowrap">
                 <div className="m-auto lg:w-4/5">
                     <div className="flex flex-wrap -mx-4">
                         <div className="w-full px-4 ">
                             <div className="relative px-4 my-auto z-[1] ">
-                                <img src={CardImg} alt="" className="w-full rounded-2xl" />
+                                <img
+                                    src={handleReturnImage()}
+                                    alt={dataDetail?.programName}
+                                    className="w-full rounded-2xl"
+                                />
                             </div>
                             <div className="card">
                                 <div className="card_container">
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">Start date: </span> 20/10/2022
+                                        <span className="font-semibold">Start date: </span>{' '}
+                                        {dataDetail?.startDonateDate}
                                     </div>
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">End date:</span> 20/10/2022
+                                        <span className="font-semibold">End date:</span> {dataDetail?.endDonateDate}
                                     </div>
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">Finish date:</span> 20/10/2022
+                                        <span className="font-semibold">Finish date:</span> {dataDetail?.finishDate}
                                     </div>
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">Partner:</span> Facebook
+                                        <span className="font-semibold">Partner:</span>{' '}
+                                        {dataDetail?.partner?.partnerName}
                                     </div>
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">Status:</span> Not start
+                                        <span className="font-semibold">Status:</span> {dataDetail?.status}
                                     </div>
                                     <div className="flex-col text-start">
                                         <span className="font-semibold">Field:</span> Children

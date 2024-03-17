@@ -34,7 +34,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function ModalCreatePartner(props) {
-    const { isModalOpen, handleOk, handleCancel, type } = props;
+    const { isModalOpen, handleOk, handleCancel, type, setDataRegiserAccountChatBox } = props;
 
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
@@ -124,11 +124,21 @@ function ModalCreatePartner(props) {
 
         if (files.status === 'done') {
             // console.log('files', files.originFileObj);
+            setDataRegiserAccountChatBox((prev) => ({
+                ...prev,
+                files: files.originFileObj,
+            }));
         }
         mutationUploadLogo({ files: files.originFileObj });
     };
 
     const onSubmit = (data) => {
+        setDataRegiserAccountChatBox((prev) => ({
+            ...prev,
+            displayName: data?.partnerName,
+            email: data?.email,
+            password: '12345678',
+        }));
         return handleOk(data);
     };
 

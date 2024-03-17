@@ -43,7 +43,6 @@ function ChatBoxCustom(props) {
 
     // xử lý khi send message
     const handleSendMeage = async () => {
-        debugger;
         try {
             if (img) {
                 const storageRef = ref(storage, uuid());
@@ -103,7 +102,7 @@ function ChatBoxCustom(props) {
         <div className="h-full bg-white rounded-2xl w-72">
             <div className="flex bg-blue-100 rounded-t-2xl">
                 <div className="relative flex items-center justify-center w-16 h-16 bg-white border-4 border-blue-700 rounded-full -top-4 left-6">
-                    <img src={avatar} alt="" className="w-full rounded-full" />
+                    <img src={data?.user?.photoURL || avatar} alt="" className="w-full rounded-full" />
                 </div>
                 <div className="flex justify-between flex-1 pl-10 pr-4">
                     <div className="mt-4 font-bold text-white">{data?.user?.displayName}</div>
@@ -116,10 +115,10 @@ function ChatBoxCustom(props) {
                 <div>
                     <div className="flex items-end">
                         <div className="w-10">
-                            <img src={avatar} alt="" className="rounded-full w-7 h-w-7" />
+                            <img src={data?.user?.photoURL || avatar} alt="" className="rounded-full w-7 h-w-7" />
                         </div>
                         <div>
-                            <div className="max-w-[12rem]  px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl">
+                            <div className="max-w-xs  px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl">
                                 <div>
                                     <p className="my-1">Hello {currentUser?.displayName}! How can we help you?</p>
                                 </div>
@@ -127,9 +126,9 @@ function ChatBoxCustom(props) {
                         </div>
                     </div>
 
-                    <div className="mt-2">
-                        {messages && messages?.map((mess) => <Message mess={mess} key={mess?.id} />)}
-                    </div>
+                    {/* <div className="mt-2"> */}
+                    {messages && messages?.map((mess) => <Message mess={mess} key={mess?.id} />)}
+                    {/* </div> */}
                 </div>
             </div>
             <div className="flex items-center justify-between p-2 border-t-[1px]">

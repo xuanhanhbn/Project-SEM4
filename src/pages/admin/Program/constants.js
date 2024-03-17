@@ -38,12 +38,12 @@ export const columnsAdminTable = [
 
     {
         field: 'target',
-        maxWidth: 170,
+        maxWidth: 130,
         name: 'Target',
     },
     {
         field: 'action',
-        maxWidth: 50,
+        maxWidth: 100,
         name: 'Actions',
     },
 ];

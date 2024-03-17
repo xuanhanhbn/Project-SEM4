@@ -47,9 +47,9 @@ function LoginPage() {
         resolver: yupResolver(validationLoginSchema),
     });
 
-    const handleLoginAccountChatBox = async () => {
+    const handleLoginAccountChatBox = async (email, password) => {
         try {
-            await signInWithEmailAndPassword(auth, dataLogin?.email, dataLogin?.password);
+            await signInWithEmailAndPassword(auth, email, password);
         } catch (err) {
             return err;
         }
@@ -58,14 +58,14 @@ function LoginPage() {
     // call api login
     const { mutate: mutationLogin, isPending } = useMutation({
         mutationFn: loginApi,
-        onSuccess: (data) => {
-            if ((data && data?.status === 200) || data?.status === '200') {
-                localStorage.setItem('loginPage', JSON.stringify(data?.data));
+        onSuccess: (res) => {
+            if ((res && res?.status === 200) || res?.status === '200') {
+                localStorage.setItem('loginPage', JSON.stringify(res?.data));
                 // navigation('/');
                 getMe();
                 return notify('Login Success', 'success');
             }
-            return notify(data?.response?.data, 'error');
+            return notify(res?.response?.data, 'error');
         },
     });
 
@@ -75,10 +75,11 @@ function LoginPage() {
             if (res && res?.status === 200) {
                 setUserData(res?.data);
                 if (res?.data?.role === 'USER') {
-                    handleLoginAccountChatBox();
+                    handleLoginAccountChatBox(dataLogin?.email, dataLogin?.password);
                     return navigation('/');
                 }
                 if (res?.data?.role === 'PARTNER') {
+                    handleLoginAccountChatBox(dataLogin?.email, '12345678');
                     if (!res?.data.updatedAt) {
                         return navigation('/admin/change-password');
                     }

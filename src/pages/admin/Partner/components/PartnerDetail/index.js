@@ -33,6 +33,7 @@ import Loading from '~/components/Loading';
 import { Input, Progress, Space } from 'antd';
 import './style.css';
 import ModalCreateProgram from '../ModalCreateProgram';
+import moment from 'moment';
 function PartnerDetailPage(props) {
     // const [loading, setLoading] = useState(false);
     // const [imageUrl, setImageUrl] = useState();
@@ -61,7 +62,6 @@ function PartnerDetailPage(props) {
     const { mutate: mutationCreateProgram } = useMutation({
         mutationFn: createProgramApi,
         onSuccess: (res) => {
-            console.log('res: ', res);
             if ((res && res?.status === 200) || res?.status === '200') {
                 setIsOpenModalCreateProgram(false);
                 mutationGetSearchPartner(params?.partnerId);
@@ -101,6 +101,9 @@ function PartnerDetailPage(props) {
         }
         if (field === 'completion') {
             return <Progress percent={handleCaculator(item)} />;
+        }
+        if (field === 'createdAt') {
+            return moment(item[field])?.format('YYYY-MM-DD');
         }
 
         return item[field];

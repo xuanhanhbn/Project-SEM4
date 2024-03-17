@@ -18,7 +18,6 @@ function App() {
         }),
         shallow,
     );
-
     const [type, setType] = useState('USER');
 
     useEffect(() => {
@@ -35,7 +34,6 @@ function App() {
         }
         return AdminRouter;
     };
-
     const handleReturnLayout = () => {
         if (type === 'USER') {
             return DefaultLayout;

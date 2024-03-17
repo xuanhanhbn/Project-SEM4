@@ -5,14 +5,9 @@ export const sideBarList = [
         type: 'TAB_ITEM',
         tabIcon: <i className="fa-duotone fa-chart-simple "></i>,
         path: '/admin/dashboard',
+        role: ['ADMIN'],
     },
-    {
-        id: 2,
-        tabName: 'Partner',
-        type: 'TAB_ITEM',
-        tabIcon: <i className="fa-regular fa-handshake"></i>,
-        path: '/admin/partner',
-    },
+
     // {
     //     id: 3,
     //     tabName: 'Tables',
@@ -33,6 +28,15 @@ export const sideBarList = [
         tabName: 'ACCOUNT PAGES',
         type: 'TABTITLE',
         tabIcon: '',
+        role: ['PARTNER'],
+    },
+    {
+        id: 2,
+        tabName: 'Partner',
+        type: 'TAB_ITEM',
+        tabIcon: <i className="fa-regular fa-handshake"></i>,
+        path: '/admin/partner',
+        role: ['ADMIN', 'PARTNER'],
     },
     {
         id: 7,
@@ -40,6 +44,7 @@ export const sideBarList = [
         type: 'TAB_ITEM',
         tabIcon: <i className="fa-brands fa-rocketchat"></i>,
         path: '/admin/message',
+        role: ['PARTNER'],
     },
     {
         id: 6,
@@ -47,5 +52,6 @@ export const sideBarList = [
         type: 'TAB_ITEM',
         tabIcon: <i className="fa-duotone fa-diagram-project"></i>,
         path: '/admin/program',
+        role: ['ADMIN'],
     },
 ];
