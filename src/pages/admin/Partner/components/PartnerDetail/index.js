@@ -73,57 +73,6 @@ function PartnerDetailPage(props) {
 
     const handleCreateProgram = (data) => mutationCreateProgram(data);
 
-    const handleReturnData = (item) => {
-        if (item?.field === 'totalMoney') {
-            if (dataDetail && dataDetail?.programs?.length > 0) {
-                let tong = 0;
-                // Duyệt qua từng phần tử trong mảng và tính tổng
-                for (let i = 0; i < dataDetail?.programs?.length; i++) {
-                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
-                    if (dataDetail?.programs[i].hasOwnProperty('totalMoney')) {
-                        tong += dataDetail?.programs[i].totalMoney;
-                    }
-                }
-                return `${tong} $`;
-            }
-            return 0;
-        }
-
-        if (item?.field === 'totalDonateForPaypal') {
-            if (dataDetail && dataDetail?.programs?.length > 0) {
-                let tong = 0;
-                // Duyệt qua từng phần tử trong mảng và tính tổng
-                for (let i = 0; i < dataDetail?.programs?.length; i++) {
-                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
-                    if (dataDetail?.programs[i].hasOwnProperty('donateByPaypal')) {
-                        tong += dataDetail?.programs[i].donateByPaypal;
-                    }
-                }
-                return `${tong} $`;
-            }
-            return 0;
-        }
-
-        if (item?.field === 'totalDonateForVnPay') {
-            if (dataDetail && dataDetail?.programs?.length > 0) {
-                let tong = 0;
-                // Duyệt qua từng phần tử trong mảng và tính tổng
-                for (let i = 0; i < dataDetail?.programs?.length; i++) {
-                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
-                    if (dataDetail?.programs[i].hasOwnProperty('donateByVNPay')) {
-                        tong += dataDetail?.programs[i].donateByVNPay;
-                    }
-                }
-                return `${tong} $`;
-            }
-            return 0;
-        }
-
-        if (item?.field === 'totalFollowers') {
-            return 0;
-        }
-    };
-
     const handleCaculator = (item) => {
         const target = item?.target || 0;
         const total = item?.totalMoney || 0;
@@ -135,33 +84,6 @@ function PartnerDetailPage(props) {
             return result;
         }
         return 0;
-    };
-
-    // render thẻ thông số theo ngày
-    const RENDER_TODAY_CARD = (data) => {
-        return (
-            <div id="todayCard" key={data.id}>
-                <div className="card_container">
-                    <div className="flex-auto p-4">
-                        <div className="flex flex-row -mx-3">
-                            <div className="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p className="mb-0 font-sans text-sm font-semibold leading-normal">
-                                        {data.cardName}
-                                    </p>
-                                    <h5 className="mb-0 font-bold">{handleReturnData(data)}</h5>
-                                </div>
-                            </div>
-                            <div className="px-3 text-right basis-1/3">
-                                <div className="card_icon">
-                                    <div className="text-lg relative top-3.5 text-white">{data.cardIcon}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
     };
 
     // render data table
@@ -223,7 +145,6 @@ function PartnerDetailPage(props) {
                                             </span>
                                         </div>
                                         <div className="ml-auto text-right">
-                                            {/* logo */}
                                             <img
                                                 src={
                                                     dataDetail?.attachment?.length > 0
@@ -249,36 +170,31 @@ function PartnerDetailPage(props) {
                         </div>
                     </div>
 
-                    {/* thẻ tổng hợp theo ngày */}
-                    {todayCardData.map((data) => RENDER_TODAY_CARD(data))}
+                    {/* {todayCardData.map((data) => RENDER_TODAY_CARD(data))}
 
-                    <div className="flex-1 w-full mt-12 ">
-                        <div className="w-full max-w-full px-3 mt-0 lg:flex-none">
-                            <div className="shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
-                                <div className="p-6 pb-0 mb-0 bg-white border-b-0 border-solid rounded-t-2xl">
-                                    <h6>Payment methods overview</h6>
-                                    <p className="text-sm leading-normal">
-                                        <i className="fa fa-arrow-up text-lime-500"></i>
-                                        <span className="font-semibold">4% more</span> in 2023
-                                    </p>
-                                </div>
-                                <div className="flex-auto p-4">
-                                    <div className="h-full">
-                                        {/* bảng so danh lương thanh toán qua 2 phương thức paypal và card */}
-                                        <Line options={optionsChartLine} data={linePaymentData} />
+                        <div className="flex-1 w-full mt-12 ">
+                            <div className="w-full max-w-full px-3 mt-0 lg:flex-none">
+                                <div className="shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
+                                    <div className="p-6 pb-0 mb-0 bg-white border-b-0 border-solid rounded-t-2xl">
+                                        <h6>Payment methods overview</h6>
+                                        <p className="text-sm leading-normal">
+                                            <i className="fa fa-arrow-up text-lime-500"></i>
+                                            <span className="font-semibold">4% more</span> in 2023
+                                        </p>
+                                    </div>
+                                    <div className="flex-auto p-4">
+                                        <div className="h-full">
+                                            <Line options={optionsChartLine} data={linePaymentData} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </div> */}
                     <div className="w-full mt-4">
                         <div className="flex justify-end max-w-full px-3">
-                            {/* <div className="flex items-center justify-center h-12 px-4 text-black bg-white border rounded-md border-gray-104"> */}
-                            {/* <i className="mr-1 fa-regular fa-magnifying-glass"></i> */}
                             <Space direction="vertical">
                                 <Search placeholder="Search program" allowClear size="large" />
                             </Space>
-                            {/* </div> */}
                             <div>
                                 <button
                                     onClick={() => setIsOpenModalCreateProgram(true)}

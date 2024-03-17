@@ -5,62 +5,15 @@ import './programDetail.css';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
 // import { Link } from 'react-router-dom';
 import ModalCreateProgram from '../ModalCreateProgram';
+import { Line } from 'react-chartjs-2';
+import { linePaymentData, optionsChartLine, todayCardData } from './constants';
 // import ChatBoxCustom from './ChatBox';
-
-const images = [
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-];
 
 export default function ProgramDetail() {
     // state
     const [isOpenModalEditProject, setIsOpenModalEditProject] = useState(false);
+    const [dataDetail, setDataDetail] = useState(null);
+
     // const [isOpenChatBox, setisOpenChatBox] = useState(false);
 
     // // xử lý open modal edit program
@@ -78,6 +31,84 @@ export default function ProgramDetail() {
     const handleCancelModal = () => {
         setIsOpenModalEditProject(false);
         // console.log('click cancel btn');
+    };
+
+    const handleReturnData = (item) => {
+        if (item?.field === 'totalMoney') {
+            if (dataDetail && dataDetail?.programs?.length > 0) {
+                let tong = 0;
+                // Duyệt qua từng phần tử trong mảng và tính tổng
+                for (let i = 0; i < dataDetail?.programs?.length; i++) {
+                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+                    if (dataDetail?.programs[i].hasOwnProperty('totalMoney')) {
+                        tong += dataDetail?.programs[i].totalMoney;
+                    }
+                }
+                return `${tong} $`;
+            }
+            return 0;
+        }
+
+        if (item?.field === 'totalDonateForPaypal') {
+            if (dataDetail && dataDetail?.programs?.length > 0) {
+                let tong = 0;
+                // Duyệt qua từng phần tử trong mảng và tính tổng
+                for (let i = 0; i < dataDetail?.programs?.length; i++) {
+                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+                    if (dataDetail?.programs[i].hasOwnProperty('donateByPaypal')) {
+                        tong += dataDetail?.programs[i].donateByPaypal;
+                    }
+                }
+                return `${tong} $`;
+            }
+            return 0;
+        }
+
+        if (item?.field === 'totalDonateForVnPay') {
+            if (dataDetail && dataDetail?.programs?.length > 0) {
+                let tong = 0;
+                // Duyệt qua từng phần tử trong mảng và tính tổng
+                for (let i = 0; i < dataDetail?.programs?.length; i++) {
+                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+                    if (dataDetail?.programs[i].hasOwnProperty('donateByVNPay')) {
+                        tong += dataDetail?.programs[i].donateByVNPay;
+                    }
+                }
+                return `${tong} $`;
+            }
+            return 0;
+        }
+
+        if (item?.field === 'totalFollowers') {
+            return 0;
+        }
+    };
+
+    // render thẻ thông số theo ngày
+    const RENDER_TODAY_CARD = (data) => {
+        return (
+            <div className="w-full max-w-full px-3 mb-6 sm:flex-none xl:mb-0 " key={data.id}>
+                <div className="relative flex flex-col min-w-0 break-words bg-white shadow-md rounded-2xl bg-clip-border">
+                    <div className="flex-auto p-4">
+                        <div className="flex flex-row -mx-3">
+                            <div className="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p className="mb-0 font-sans text-sm font-semibold leading-normal">
+                                        {data.cardName}
+                                    </p>
+                                    <h5 className="mb-0 font-bold">{handleReturnData(data)}</h5>
+                                </div>
+                            </div>
+                            <div className="px-3 text-right basis-1/3">
+                                <div className="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500">
+                                    <div className="text-lg relative top-3.5 text-white">{data.cardIcon}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     };
 
     // xử lý mở chat box
@@ -117,19 +148,7 @@ export default function ProgramDetail() {
 
     return (
         <div id="programDetail">
-            <div className="fixed z-50 right-2 bottom-5">
-                {/* <button
-                    onClick={() => handleChangeStateOpenChatBox()}
-                    className={
-                        isOpenChatBox === true
-                            ? 'hidden'
-                            : 'z-[999] fixed right-4 bottom-12 rounded-full w-10 h-10 bg-sky-400 items-center  flex justify-center'
-                    }
-                >
-                    <span className="absolute z-10 inline-flex w-8 h-8 rounded-full opacity-75 animate-ping bg-sky-400"></span>
-                    <i className="z-20 text-white fa-brands fa-facebook-messenger"></i>
-                </button> */}
-            </div>
+            <div className="fixed z-50 right-2 bottom-5"></div>
             <div>
                 <h1 className="mb-12 text-4xl font-bold leading-10 ">Help in the Democratic Republic of the Congo</h1>
             </div>
@@ -170,35 +189,28 @@ export default function ProgramDetail() {
                             </div>
                         </div>
                     </div>
-                    <div className=" pt-14">
-                        <div className="p-5 text-left bg-white rounded-2xl">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
-                            </div>
-
-                            <p className="text-sm leading-6 text-gray-100">
-                                With conflict escalating in October 2023, Palestine is facing an urgent humanitarian
-                                crisis. 1.8 million people are now food insecure, many of whom have lost their homes and
-                                are seeking safety in shelters. <br />
-                                <br />
-                                Despite challenging conditions, the World Food Programme (WFP) is on the ground
-                                providing life-saving aid to people in Palestine and those in shelters. Regular cash and
-                                food programmes are also continuing every day where possible. <br />
-                                <br />
-                                So far, a total of 522,000 Palestinians have been assisted since the start of this
-                                crisis with an aim to ramp up and support 800,000 people in Gaza and the West Bank area.
-                                Food support includes bread, canned chickpeas and beans.
-                            </p>
-                        </div>
+                    <div className="grid-cols-2 gap-4 mt-10 md:grid">
+                        {todayCardData.map((data) => RENDER_TODAY_CARD(data))}
                     </div>
-                    <div className="relative pt-10">
-                        <ImageGallery
-                            showPlayButton={false}
-                            showFullscreenButton={false}
-                            showNav={false}
-                            showBullets={false}
-                            items={images || []}
-                        />
+
+                    <div className="flex-1 w-full mt-12 ">
+                        <div className="w-full max-w-full px-3 mt-0 lg:flex-none">
+                            <div className="shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
+                                <div className="p-6 pb-0 mb-0 bg-white border-b-0 border-solid rounded-t-2xl">
+                                    <h6>Payment methods overview</h6>
+                                    <p className="text-sm leading-normal">
+                                        <i className="fa fa-arrow-up text-lime-500"></i>
+                                        <span className="font-semibold">4% more</span> in 2023
+                                    </p>
+                                </div>
+
+                                <div className="flex-auto p-4">
+                                    <div className="h-full">
+                                        <Line options={optionsChartLine} data={linePaymentData} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -211,12 +223,6 @@ export default function ProgramDetail() {
                     type="edit"
                 />
             )}
-
-            {/* {isOpenChatBox === false ? null : (
-                <div className="z-[999] fixed right-4 bottom-2 shadow-2xl rounded-2xl">
-                    <ChatBoxCustom closeChatBox={() => handleChangeStateOpenChatBox()} />
-                </div>
-            )} */}
         </div>
     );
 }

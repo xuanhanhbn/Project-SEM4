@@ -288,62 +288,11 @@ export default function CampaignDetail(props) {
     return (
         <div id="campaignDetail">
             <Loading isLoading={isPending} />
-            <div>
-                <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
-            </div>
+            <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
+            <div></div>
             <div className="flex flex-nowrap">
                 <div className="lg:w-7/12">
-                    <div className="flex flex-wrap -mx-4">
-                        <div className="w-full px-4 ">
-                            <div className="relative px-4 my-auto z-[1] ">
-                                <img
-                                    src={
-                                        dataDetail && dataDetail?.attachment?.length > 0
-                                            ? dataDetail?.attachment[0]?.url
-                                            : CardImg
-                                    }
-                                    alt={dataDetail?.programName}
-                                    className="w-full rounded-2xl"
-                                />
-                            </div>
-                            <div className="card">
-                                <div className="card_container ">
-                                    <div className="flex -mx-4 flex-nowrap ">
-                                        <div className="pr-1 max-w-[50%] basis-1/2 w-full pl-4 relative ">
-                                            <div className="card_header">
-                                                <i className="text-base fa-sharp fa-thin fa-bullseye-arrow"></i>
-                                                <p className="ml-2 text-xs">{dataDetail?.target || 0} $</p>
-                                            </div>
-                                        </div>
-                                        <div className="pl-1 max-w-[50%] basis-1/2 w-full pr-4 relative ">
-                                            <div className="flex justify-end w-full text-xs text-gray-100 md:text-base">
-                                                <i className="text-base fa-light fa-user-group"></i>
-                                                <p className="ml-2 text-xs line-clamp-1 text-ellipsis whitespace-nowrap">
-                                                    {dataDetail?.volunteers || 0} supporteds
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-2">
-                                        <Progress percent={handleCaculator()} showInfo={false} />
-                                    </div>
-                                    <div className="flex justify-between mx-auto mt-2">
-                                        <div className="text_1">{dataDetail?.totalMoney || 0} $</div>
-                                        <div className="text_2">{handleCaculator()} %</div>
-                                    </div>
-                                    <button
-                                        disabled={status === 'done' ? true : false}
-                                        onClick={showModal}
-                                        className="btn"
-                                    >
-                                        Donate now
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className=" pt-14">
+                    <div className="">
                         <div className="p-5 text-left bg-white rounded-2xl">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
@@ -397,7 +346,7 @@ export default function CampaignDetail(props) {
                     </div>
                 </div>
                 <div className="hidden w-5/12 pr-4 pl-11 lg:block">
-                    <div className="sticky py-6 bg-white top-24 rounded-2xl">
+                    <div className="py-6 bg-white top-24 rounded-2xl">
                         <div className="flex items-center justify-around mb-5">
                             <h3 className="text-2xl font-bold leading-8 ">List Donate</h3>
                             <Link to="">
@@ -431,6 +380,56 @@ export default function CampaignDetail(props) {
                                     </div>
                                 </div>
                             ))}
+                    </div>
+                    <div className="flex flex-wrap mt-10 -mx-4">
+                        <div className="w-full px-4 ">
+                            <div className="relative px-4 my-auto z-[1] ">
+                                <img
+                                    src={
+                                        dataDetail && dataDetail?.attachment?.length > 0
+                                            ? dataDetail?.attachment[0]?.url
+                                            : CardImg
+                                    }
+                                    alt={dataDetail?.programName}
+                                    className="w-full max-h-96 rounded-2xl"
+                                />
+                            </div>
+                            <div className="card">
+                                <div className="card_container ">
+                                    <div className="flex -mx-4 flex-nowrap ">
+                                        <div className="pr-1 max-w-[50%] basis-1/2 w-full pl-4 relative ">
+                                            <div className="card_header">
+                                                <i className="text-base fa-sharp fa-thin fa-bullseye-arrow"></i>
+                                                <p className="ml-2 text-xs">{dataDetail?.target || 0} $</p>
+                                            </div>
+                                        </div>
+                                        <div className="pl-1 max-w-[50%] basis-1/2 w-full pr-4 relative ">
+                                            <div className="flex justify-end w-full text-xs text-gray-100 md:text-base">
+                                                <i className="text-base fa-light fa-user-group"></i>
+                                                <p className="ml-2 text-xs line-clamp-1 text-ellipsis whitespace-nowrap">
+                                                    {dataDetail?.volunteers || 0} supporteds
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-2">
+                                        <Progress percent={handleCaculator()} showInfo={false} />
+                                    </div>
+                                    <div className="flex justify-between mx-auto mt-2">
+                                        <div className="text_1">{dataDetail?.totalMoney || 0} $</div>
+                                        <div className="text_2">{handleCaculator()} %</div>
+                                    </div>
+                                    <button
+                                        disabled={status === 'done' ? true : false}
+                                        onClick={showModal}
+                                        className="btn"
+                                    >
+                                        Donate now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
