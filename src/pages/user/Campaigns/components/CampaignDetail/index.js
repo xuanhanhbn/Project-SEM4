@@ -297,96 +297,7 @@ export default function CampaignDetail(props) {
             <div></div>
             <div className="flex flex-nowrap">
                 <div className="lg:w-7/12">
-                    <div className="">
-                        <div className="p-5 text-left bg-white rounded-2xl">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
-                                <div className="hidden md:block">
-                                    <button className="btn_share">
-                                        <i className=" fa-light fa-bell-on"></i> 1.2k
-                                    </button>
-                                    <button className="btn_share">
-                                        <i className=" fa-light fa-comment"></i> 234
-                                    </button>
-                                    <button onClick={showModalShareMail} className="btn_share">
-                                        <i className=" fa-light fa-share"></i> 567
-                                    </button>
-                                </div>
-                            </div>
-                            <p className="mb-6 text-sm font-semibold leading-6">
-                                Shared meals will provide emergency food assistance to families in Palestine.
-                            </p>
-                            <p className="text-sm leading-6 text-gray-100">{dataDetail?.description || ''}</p>
-                            <div className="flex mt-4 md:hidden">
-                                <button className="btn_share">
-                                    <i className=" fa-light fa-bell-on"></i> 1.2k
-                                </button>
-                                <button className="btn_share">
-                                    <i className=" fa-light fa-comment"></i> 234
-                                </button>
-                                <button onClick={showModalShareMail} className="btn_share">
-                                    <i className=" fa-light fa-share"></i> 567
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="relative pt-10">
-                        <ImageGallery
-                            showPlayButton={false}
-                            showFullscreenButton={false}
-                            showNav={false}
-                            showBullets={false}
-                            items={images}
-                        />
-                    </div>
-                    <div className="mt-12 text-center">
-                        <img src={Img} alt="" className="w-24 mx-auto mb-3" />
-                        <h3 className="mb-3 text-3xl font-bold leading-8 md:text-4xl md:leading-9">How can we help?</h3>
-                        <p className="md:text-base">
-                            <Link to="#" className="text-sm text-blue-100 md:text-base">
-                                Contact us
-                            </Link>{' '}
-                            with any payment-related questions.
-                        </p>
-                    </div>
-                </div>
-                <div className="hidden w-5/12 pr-4 pl-11 lg:block">
-                    <div className="py-6 bg-white top-24 rounded-2xl">
-                        <div className="flex items-center justify-around mb-5">
-                            <h3 className="text-2xl font-bold leading-8 ">List Donate</h3>
-                            <Link to="">
-                                <i className="fa-solid fa-download"></i>
-                            </Link>
-                        </div>
-                        {dataDetail &&
-                            dataDetail?.donations?.length > 0 &&
-                            dataDetail?.donations?.map((item) => (
-                                <div className="flex items-center px-4" key={item?.donationId}>
-                                    <div className="mx-2 ">
-                                        <img
-                                            className="w-12 rounded-full"
-                                            src={item?.user?.avatarUrl?.url}
-                                            alt={item?.user?.avatarUrl?.url}
-                                        />
-                                    </div>
-                                    <div className="w-full mx-2 text-left">
-                                        <div className="text-lg font-semibold leading-6 text-gray-100">
-                                            {item?.user?.displayName}
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <p className="text-xs leading-6 text-gray-100 ">
-                                                {item?.createdAt ? moment(item?.createdAt)?.format('YYYY-MM-DD') : ''}
-                                            </p>
-                                            <span className="text-base font-semibold leading-6 text-blue-100">
-                                                $ {item?.amount}
-                                            </span>
-                                        </div>
-                                        <div className="bg-slate-400 h-[.5px]"></div>
-                                    </div>
-                                </div>
-                            ))}
-                    </div>
-                    <div className="flex flex-wrap mt-10 -mx-4">
+                    <div className="flex flex-wrap  -mx-4">
                         <div className="w-full px-4 ">
                             <div className="relative px-4 my-auto z-[1] ">
                                 <img
@@ -425,16 +336,101 @@ export default function CampaignDetail(props) {
                                         <div className="text_1">{dataDetail?.totalMoney || 0} $</div>
                                         <div className="text_2">{handleCaculator()} %</div>
                                     </div>
-                                    <button
-                                        disabled={status === 'done' ? true : false}
-                                        onClick={showModal}
-                                        className="btn"
-                                    >
-                                        Donate now
-                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className="mt-10">
+                        <div className="p-5 text-left bg-white rounded-2xl">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
+                                <div className="hidden md:block">
+                                    <button className="btn_share">
+                                        <i className=" fa-light fa-bell-on"></i> 1.2k
+                                    </button>
+                                    <button className="btn_share">
+                                        <i className=" fa-light fa-comment"></i> 234
+                                    </button>
+                                    <button onClick={showModalShareMail} className="btn_share">
+                                        <i className=" fa-light fa-share"></i> 567
+                                    </button>
+                                </div>
+                            </div>
+                            <p className="mb-6 text-sm font-semibold leading-6">
+                                Shared meals will provide emergency food assistance to families in Palestine.
+                            </p>
+                            <p className="text-sm leading-6 text-gray-100">{dataDetail?.description || ''}</p>
+                            <button disabled={status === 'done' ? true : false} onClick={showModal} className="btn">
+                                Donate now
+                            </button>
+                            <div className="flex mt-4 md:hidden">
+                                <button className="btn_share">
+                                    <i className=" fa-light fa-bell-on"></i> 1.2k
+                                </button>
+                                <button className="btn_share">
+                                    <i className=" fa-light fa-comment"></i> 234
+                                </button>
+                                <button onClick={showModalShareMail} className="btn_share">
+                                    <i className=" fa-light fa-share"></i> 567
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="relative pt-10">
+                        <ImageGallery
+                            showPlayButton={false}
+                            showFullscreenButton={false}
+                            showNav={false}
+                            showBullets={false}
+                            items={images}
+                        />
+                    </div>
+                    <div className="mt-12 text-center">
+                        <img src={Img} alt="" className="w-24 mx-auto mb-3" />
+                        <h3 className="mb-3 text-3xl font-bold leading-8 md:text-4xl md:leading-9">How can we help?</h3>
+                        <p className="md:text-base">
+                            <Link to="#" className="text-sm text-blue-100 md:text-base">
+                                Contact us
+                            </Link>{' '}
+                            with any payment-related questions.
+                        </p>
+                    </div>
+                </div>
+                <div className="hidden  w-5/12 pr-4 pl-11 lg:block">
+                    <div className="py-6 sticky bg-white top-24 rounded-2xl">
+                        <div className="flex items-center justify-around mb-5">
+                            <h3 className="text-2xl font-bold leading-8 ">List Donate</h3>
+                            <Link to="">
+                                <i className="fa-solid fa-download"></i>
+                            </Link>
+                        </div>
+                        {dataDetail &&
+                            dataDetail?.donations?.length > 0 &&
+                            dataDetail?.donations?.map((item) => (
+                                <div className="flex items-center px-4" key={item?.donationId}>
+                                    <div className="mx-2 ">
+                                        <img
+                                            className="w-12 rounded-full"
+                                            src={item?.user?.avatarUrl?.url}
+                                            alt={item?.user?.avatarUrl?.url}
+                                        />
+                                    </div>
+                                    <div className="w-full mx-2 text-left">
+                                        <div className="text-lg font-semibold leading-6 text-gray-100">
+                                            {item?.user?.displayName}
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <p className="text-xs leading-6 text-gray-100 ">
+                                                {item?.createdAt ? moment(item?.createdAt)?.format('YYYY-MM-DD') : ''}
+                                            </p>
+                                            <span className="text-base font-semibold leading-6 text-blue-100">
+                                                $ {item?.amount}
+                                            </span>
+                                        </div>
+                                        <div className="bg-slate-400 h-[.5px]"></div>
+                                    </div>
+                                </div>
+                            ))}
                     </div>
                 </div>
             </div>

@@ -132,7 +132,7 @@ function ChatBoxCustom(props) {
                             <img src={avatar} alt="" className="rounded-full w-7 h-w-7" />
                         </div>
                         <div>
-                            <div className="max-w-[12rem]  px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl">
+                            <div className="max-w-[12rem] w-fit  px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl">
                                 <div>
                                     <p className="my-1">Hello! How can we help you?</p>
                                 </div>

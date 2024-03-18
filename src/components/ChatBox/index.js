@@ -28,7 +28,26 @@ function ChatBoxCustom(props) {
 
     //State
     const [text, setText] = useState('');
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState([
+        {
+            senderId: '0szWwXUjJDbZo8Og4M11p4gEZ3r1',
+            text: 'alo',
+            id: 'e4b0c7c1-c923-4a88-8f10-9b1efac669cd',
+            date: Timestamp,
+        },
+        {
+            date: Timestamp,
+            id: 'de1c3445-69b7-4043-bf26-ab3c2a86fac1',
+            senderId: 'ppM6GmVMHegA61VPllEMgcn3yEM2',
+            text: 'gi',
+        },
+        {
+            id: 'c2ff1b3f-0f8b-4faa-a2a6-5975368e3b9e',
+            text: 'ok hi',
+            senderId: '0szWwXUjJDbZo8Og4M11p4gEZ3r1',
+            date: Timestamp,
+        },
+    ]);
     const [img, setImg] = useState(null);
 
     useEffect(() => {
@@ -114,11 +133,11 @@ function ChatBoxCustom(props) {
             <div className="w-full p-2 overflow-auto font-semibold text-center bg-white h-80">
                 <div>
                     <div className="flex items-end">
-                        <div className="w-10">
+                        {/* <div className="w-10">
                             <img src={data?.user?.photoURL || avatar} alt="" className="rounded-full w-7 h-w-7" />
-                        </div>
+                        </div> */}
                         <div>
-                            <div className="max-w-xs  px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl">
+                            <div className="max-w-[12rem] w-fit  px-3 py-2 mb-1 overflow-x-hidden overflow-y-hidden font-normal text-left bg-gray-700 rounded-3xl">
                                 <div>
                                     <p className="my-1">Hello {currentUser?.displayName}! How can we help you?</p>
                                 </div>
