@@ -41,9 +41,12 @@ function Chats() {
                         <div key={chat[0]}>
                             <Link onClick={() => handleSelect(chat[1].userInfo)} to="#" className="flex items-center">
                                 <img src={chat[1].userInfo.photoURL} className="mr-3 rounded-full w-9 h-9" alt="" />
-                                <p className="" style={{ color: '#000' }}>
-                                    {chat[1].userInfo.displayName}
-                                </p>
+                                <div>
+                                    <span className="" style={{ color: '#000' }}>
+                                        {chat[1].userInfo.displayName}
+                                    </span>
+                                    <p>{chat[1].lastMessage?.text}</p>
+                                </div>
                             </Link>
                             <Divider />
                         </div>

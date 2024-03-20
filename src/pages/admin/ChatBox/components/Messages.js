@@ -41,22 +41,22 @@ function Messages() {
                                     <img src={data?.user?.photoURL} alt="" className="rounded-full w-7 h-w-7" />
                                 </div>
                                 {/* FOR USER */}
-                                <div>
+                                <div className="w-[100%]">
                                     {messages &&
                                         messages?.length > 0 &&
                                         messages
-                                            ?.filter((obj) => obj?.senderId !== currentUser?.uid)
+                                            // ?.filter((obj) => obj?.senderId !== currentUser?.uid)
                                             .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)}
                                 </div>
                             </div>
 
                             {/* FOR ME */}
 
-                            {messages &&
+                            {/* {messages &&
                                 messages?.length > 0 &&
                                 messages
                                     ?.filter((obj) => obj?.senderId === currentUser?.uid)
-                                    .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)}
+                                    .map((mess) => <MessageAdmin mess={mess} key={mess?.id} />)} */}
                         </div>
                     </div>
                 </div>

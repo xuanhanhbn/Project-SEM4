@@ -85,6 +85,7 @@ function Partner() {
                 </Link>
             );
         }
+
         return item[field];
     }, []);
 

@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 
 function Campaigns() {
     const [dataProgram, setDataProgram] = useState([]);
-
     const mutation = useMutation({
         mutationFn: getAllPrograms,
         onSuccess: (data) => {

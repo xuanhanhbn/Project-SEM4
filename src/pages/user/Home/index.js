@@ -10,6 +10,7 @@ import HomeConnect from './components/HomeConnect';
 import { useMutation } from '@tanstack/react-query';
 import { getListProgram } from './callApi';
 import { notify } from '~/utils/common';
+import Loading from '~/components/Loading';
 
 function Home() {
     const [dataProgram, setDataProgram] = useState([]);
@@ -18,7 +19,7 @@ function Home() {
         getListProgramApi();
     }, []);
 
-    const { mutate: getListProgramApi } = useMutation({
+    const { mutate: getListProgramApi, isPending } = useMutation({
         mutationFn: getListProgram,
         onSuccess: (data) => {
             if (data && data?.status === 200) {
@@ -30,6 +31,7 @@ function Home() {
 
     return (
         <div id="homePage">
+            <Loading isLoading={isPending} />
             <div>
                 <HomeBanner />
             </div>
