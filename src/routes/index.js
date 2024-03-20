@@ -94,7 +94,7 @@ const publicRoutes = [
     {
         path: '/payment-success',
         component: ThanksPage,
-        // layout: null,
+        layout: null,
     },
 ];
 const privateRoutes = [];

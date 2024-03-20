@@ -5,6 +5,7 @@ import Partner from '~/pages/admin/Partner';
 import PartnerDetailPage from '~/pages/admin/Partner/components/PartnerDetail';
 import Program from '~/pages/admin/Program';
 import ProgramDetail from '~/pages/admin/Program/components/ProgramDetail';
+import ProgramDetailForAdmin from '~/pages/admin/Program/components/ProgramDetailForAdmin';
 import TablePages from '~/pages/admin/Tables';
 import ChangePassword from '~/pages/user/ChangePassword';
 
@@ -39,10 +40,10 @@ const AdminRouter = [
         path: '/admin/message',
         component: ChatBox,
     },
-    // {
-    //     path: '/admin/billing',
-    //     component: BillingPage,
-    // },
+    {
+        path: '/admin/program-detail-for-admin/:programId',
+        component: ProgramDetailForAdmin,
+    },
     {
         path: '/admin/tables',
         component: TablePages,

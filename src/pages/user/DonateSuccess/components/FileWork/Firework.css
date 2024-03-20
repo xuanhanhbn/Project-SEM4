@@ -1,0 +1,20 @@
+/* Firework.css */
+
+.firework {
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    position: absolute;
+    border-radius: 50%;
+    animation: explode 1s forwards;
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(50);
+        opacity: 0;
+    }
+}

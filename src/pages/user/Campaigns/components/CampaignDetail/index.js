@@ -34,6 +34,7 @@ import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
 import { Progress } from 'antd';
 import moment from 'moment';
+import { exchangeRateMoney } from '~/utils/constant';
 
 const images = [
     {
@@ -41,48 +42,8 @@ const images = [
         thumbnail: 'https://picsum.photos/id/1018/250/150/',
     },
     {
-        original: 'https://picsum.photos/id/1015/1000/600/',
+        original: 'https://picsum.photos/id/1015/250/150/',
         thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1019/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1019/250/150/',
     },
 ];
 
@@ -109,7 +70,6 @@ export default function CampaignDetail(props) {
     );
 
     // state
-    const email = 'admin@gmail.com';
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenModalShareMail, setIsOpenModalShareMail] = useState(false);
     // State
@@ -118,6 +78,7 @@ export default function CampaignDetail(props) {
     const [user, setUser] = useState(null);
     const [dataDetail, setDataDetail] = useState({});
     const [dataRequestDonate, setDataRequestDonate] = useState(baseDataRequestDonate);
+    const [listImage, setListImage] = useState([]);
 
     const ref = useRef();
     const { currentUser } = useContext(AuthContext);
@@ -161,6 +122,16 @@ export default function CampaignDetail(props) {
         onSuccess: (res) => {
             // console.log('res: ', res);
             if (res && res?.status === 200) {
+                if (res && res?.data?.attachment?.length > 0) {
+                    const listImage = res?.data?.attachment?.filter((obj) => obj.type !== 'Logo');
+                    const convertedArray = listImage.map((item) => {
+                        return {
+                            original: item.url,
+                            thumbnail: item.url,
+                        };
+                    });
+                    setListImage(convertedArray);
+                }
                 const emailPartner = res?.data?.partner?.email;
                 handleSearchUser(emailPartner);
                 return setDataDetail(res?.data);
@@ -169,7 +140,7 @@ export default function CampaignDetail(props) {
         },
     });
 
-    const { mutate: donateProgram, isPending: isLoadingDonate } = useMutation({
+    const { mutate: donateProgram, isPending: isPendingDonate } = useMutation({
         mutationFn: onDonateProgram,
         onSuccess: (data) => {
             if (data && data?.status === 200) {
@@ -280,7 +251,7 @@ export default function CampaignDetail(props) {
     const handleDonate = (data) => {
         const newDataRequest = {
             ...dataRequestDonate,
-            amount: data?.amount,
+            amount: data?.paymentMethod === 'VNPay' ? data?.amount * exchangeRateMoney : data?.amount,
             description: `Donate in ${programId}`,
             paymentMethod: data?.paymentMethod,
             programId: programId,
@@ -289,12 +260,11 @@ export default function CampaignDetail(props) {
         setDataRequestDonate(newDataRequest);
         return donateProgram(newDataRequest);
     };
-
     return (
         <div id="campaignDetail" ref={ref}>
-            <Loading isLoading={isPending} />
+            <Loading isLoading={isPending || isPendingDonate} />
             <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
-            <div></div>
+            {/* <div></div> */}
             <div className="flex flex-nowrap">
                 <div className="lg:w-7/12">
                     <div className="flex flex-wrap  -mx-4">
@@ -382,7 +352,7 @@ export default function CampaignDetail(props) {
                             showFullscreenButton={false}
                             showNav={false}
                             showBullets={false}
-                            items={images}
+                            items={listImage}
                         />
                     </div>
                     <div className="mt-12 text-center">

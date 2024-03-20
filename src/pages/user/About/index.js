@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './AboutPage.css';
 import Card_img_1 from '~/assets/images/campaigns/Cover_Photo_November_12 .jpg';
 import Card_img_2 from '~/assets/images/campaigns/DPRK_20120620_WFP-Rein_Skullerud_D3S2561.jpg';

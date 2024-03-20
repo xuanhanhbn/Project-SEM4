@@ -102,6 +102,9 @@ function PartnerDetailPage(props) {
         if (field === 'completion') {
             return <Progress percent={handleCaculator(item)} />;
         }
+        if (field === 'target' || field === 'totalMoney') {
+            return `${(item[field] && item[field].toLocaleString()) || 0} $`;
+        }
         if (field === 'createdAt') {
             return moment(item[field])?.format('YYYY-MM-DD');
         }

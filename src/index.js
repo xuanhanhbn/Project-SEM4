@@ -14,9 +14,9 @@ root.render(
     <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
             <ChatContextProvider>
-                <React.StrictMode>
-                    <App />
-                </React.StrictMode>
+                {/* <React.StrictMode> */}
+                <App />
+                {/* </React.StrictMode> */}
             </ChatContextProvider>
         </AuthContextProvider>
     </QueryClientProvider>,
