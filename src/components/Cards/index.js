@@ -28,7 +28,7 @@ export default function CardCustom(props) {
                 <div className="min-h-[12px]  mt-4">
                     {status === 'done' ? null : (
                         <div className="h-1 mx-auto mt-2 bg-gray-400 rounded-sm">
-                            <div className="w-10/12 h-1 bg-blue-100 rounded-sm"></div>
+                            {/* <div className="w-10/12 h-1 bg-blue-100 rounded-sm"></div> */}
                         </div>
                     )}
                 </div>

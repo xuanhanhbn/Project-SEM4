@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Modal, Input, InputNumber, Space, Select, DatePicker, message } from 'antd';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,6 +16,8 @@ import { shallow } from 'zustand/shallow';
 import { uploadImageApi } from './callApi';
 import { useMutation } from '@tanstack/react-query';
 import Loading from '~/components/Loading';
+import SunEditor from 'suneditor-react';
+import 'suneditor/dist/css/suneditor.min.css';
 
 const { TextArea } = Input;
 
@@ -57,11 +59,14 @@ function ModalCreateProgram(props) {
         imageLogo: '',
         imageList: [],
     });
+    const [valueDescription, setValueDescription] = useState('');
+
+    const editorRef = useRef();
 
     const validationSchema = Yup.object().shape({
         // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
         programName: Yup.string().required('Full name is required'),
-        programDescription: Yup.string().required('Description is required'),
+        // programDescription: Yup.string().required('Description is required'),
         tagName: type === 'create' && Yup.string().required('Tag is required'),
         partner: type === 'create' && Yup.string().required('Partner is required'),
         startDate: type === 'create' && Yup.string().required('Start date is required'),
@@ -110,6 +115,11 @@ function ModalCreateProgram(props) {
         return current && current <= finishDateProgram.add(1, 'day');
     };
 
+    // lưu thay đổi trong editor vào trong ValueDescription
+    const onChangeHandler = (content) => {
+        setValueDescription(content);
+    };
+
     //call api upload logo
     const { mutate: mutationUploadLogo, isPending: isPendingUploadImg } = useMutation({
         mutationFn: uploadImageApi,
@@ -145,7 +155,7 @@ function ModalCreateProgram(props) {
             startDonateDate: moment(data.startDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             endDonateDate: moment(data.endDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             finishDate: moment(data.finishDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            description: data?.programDescription || '',
+            description: valueDescription || '',
             finishSoon: true,
             recruitCollaborators: true,
             imageLogo: listImage.imageLogo,
@@ -153,6 +163,7 @@ function ModalCreateProgram(props) {
         };
 
         return handleCreate(dataCreate);
+        // console.log('dataCreate: ', dataCreate);
     };
 
     // xử lý update program
@@ -426,7 +437,7 @@ function ModalCreateProgram(props) {
             return (
                 <div key={item.field} className="flex flex-col col-span-2">
                     <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                    <Controller
+                    {/* <Controller
                         control={control}
                         render={({ field: { onChange, value } }) => {
                             return (
@@ -443,7 +454,8 @@ function ModalCreateProgram(props) {
                         }}
                         name={item.field}
                     />
-                    {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
+                    {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>} */}
+                    <SunEditor onChange={onChangeHandler} ref={editorRef} />
                 </div>
             );
         }
@@ -490,7 +502,7 @@ function ModalCreateProgram(props) {
         <div>
             <Loading isLoading={isPendingUploadImg || isPendingUploadListImg} />
             <Modal
-                style={{ top: 0 }}
+                style={{ top: 0, width: '100%' }}
                 title="New Program"
                 footer={false}
                 className="relative"
@@ -505,6 +517,7 @@ function ModalCreateProgram(props) {
                     className="grid grid-cols-2 gap-4 pt-3"
                 >
                     {inputCreateProgram.map((item) => RENDER_INPUT_CREATE_PROGRAM(item))}
+
                     <button className="col-span-2 btn_create" type="submit">
                         submit
                     </button>
