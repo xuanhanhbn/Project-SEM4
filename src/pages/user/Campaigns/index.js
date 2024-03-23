@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CardCustom from '~/components/Cards';
 import Card_img_1 from '~/assets/images/campaigns/Cover_Photo_November_12 .jpg';
 import { CampaignsData } from './constants';
@@ -13,7 +14,6 @@ function Campaigns() {
     const mutation = useMutation({
         mutationFn: getAllPrograms,
         onSuccess: (data) => {
-            console.log('data: ', data);
             if ((data && data?.status === 200) || data?.status === '200') {
                 return setDataProgram(data?.data);
             }

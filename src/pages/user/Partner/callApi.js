@@ -1,7 +1,7 @@
 import { getApiDefault } from '~/utils/api';
 
 export async function getAllPartnerApi() {
-    const url = `/partner/get-all-partner?name=&page=0&size=0`;
+    const url = `/partner/get-all-partner?name=&page=1&size=20`;
     try {
         const res = await getApiDefault(url);
         // console.log('res: ', res);

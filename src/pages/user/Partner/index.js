@@ -13,7 +13,7 @@ function PartnerPage() {
         mutationFn: getAllPartnerApi,
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
-                setDataAllPartner(data?.data);
+                return setDataAllPartner(data?.data);
             }
             return notify(data?.message, 'error');
         },
