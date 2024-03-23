@@ -1,18 +1,30 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { onGetDetailProgram } from './callApi';
 import { notify } from '~/utils/common';
 import moment from 'moment';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
-import { Button } from 'antd';
+import { Button, Input, Modal } from 'antd';
+import './index.css';
+import Loading from '~/components/Loading';
+import { getApiWithBodyDefault } from '~/utils/api';
+const { TextArea } = Input;
 
 function ProgramDetailForAdmin() {
+    const baseOpenModal = {
+        accept: false,
+        cancel: false,
+    };
     const params = useParams();
+    const navigation = useNavigate();
 
     const ref = useRef();
     const [dataProgram, setDataProgram] = useState({});
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isOpenModal, setIsOpenModal] = useState(baseOpenModal);
+    const [isMessage, setIsMessage] = useState('');
 
     useEffect(() => {
         ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -37,16 +49,76 @@ function ProgramDetailForAdmin() {
         },
     });
 
-    const indexOfSecondPeriod = dataProgram?.description?.indexOf('.', dataProgram?.description?.indexOf('.') + 1);
+    // Hàm xử lý khi nhấn nút Xem thêm hoặc Thu gọn
+    const toggleExpanded = () => {
+        setIsExpanded(!isExpanded);
+    };
 
-    const hiddenText = dataProgram?.description?.slice(0, indexOfSecondPeriod + 1);
-    const longText = dataProgram?.description?.slice(indexOfSecondPeriod + 2);
+    const renderDescription = () => {
+        if (isExpanded) {
+            return (
+                <div>
+                    <div dangerouslySetInnerHTML={{ __html: dataProgram?.description }} />
+                    <button className="btn-see-more" onClick={toggleExpanded}>
+                        Collapse
+                    </button>
+                </div>
+            );
+        } else {
+            const limitedDescription = dataProgram?.description?.substring(0, 200);
+            return (
+                <div>
+                    <div dangerouslySetInnerHTML={{ __html: limitedDescription }} />
+                    <button className="btn-see-more" onClick={toggleExpanded}>
+                        See more
+                    </button>
+                </div>
+            );
+        }
+    };
 
-    console.log('dataProgram: ', dataProgram);
+    const acceptedProgram = async (data) => {
+        try {
+            const url = `program/active-program/${dataProgram?.programId}?reasonRejection=${isMessage}&value=${data}`;
+            const res = await getApiWithBodyDefault(url);
+            if (res && res.status === 200) {
+                notify(res?.data, 'success');
+                handleCancel();
+                return navigation('admin/program');
+                // return mutationGetAllProgram();
+            }
+        } catch (error) {
+            return notify(error, 'error');
+        }
+    };
+
+    const handleCancel = () => setIsOpenModal(baseOpenModal);
+
+    const handleOpenModal = (type) => {
+        if (type && type === 'accept') {
+            return setIsOpenModal((prev) => ({
+                ...prev,
+                accept: true,
+                cancel: false,
+            }));
+        }
+        return setIsOpenModal((prev) => ({
+            ...prev,
+            accept: false,
+            cancel: true,
+        }));
+    };
+
+    // const indexOfSecondPeriod = dataProgram?.description?.indexOf('.', dataProgram?.description?.indexOf('.') + 1);
+
+    // const hiddenText = dataProgram?.description?.slice(0, indexOfSecondPeriod + 1);
+    // const longText = dataProgram?.description?.slice(indexOfSecondPeriod + 2);
+
+    // console.log('dataProgram: ', dataProgram);
 
     return (
         <div id="campaignDetail" ref={ref}>
-            {/* <Loading isLoading={isPending || isPendingDonate} /> */}
+            <Loading isLoading={isPending} />
             <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataProgram?.programName}</h1>
             {/* <div></div> */}
             <div className="grid grid-rows-1 md:flex">
@@ -104,19 +176,7 @@ function ProgramDetailForAdmin() {
                             </p>
                             <div>
                                 <p className="text-sm leading-6 text-gray-100"></p>
-
-                                <div className="content">
-                                    <p className="text-sm leading-6 text-gray-100">
-                                        {hiddenText}
-                                        <span className={`long-text ${isExpanded ? 'expanded' : ''}`}>{longText}</span>
-                                    </p>
-                                </div>
-                                <button
-                                    className="flex justify-start w-full text-blue-500 moreless-button hover:text-blue-700"
-                                    onClick={() => setIsExpanded((prev) => !prev)}
-                                >
-                                    Read more
-                                </button>
+                                {renderDescription()}
                             </div>
                         </div>
                     </div>
@@ -148,17 +208,71 @@ function ProgramDetailForAdmin() {
                                     Respond using the options below.
                                 </div>
                                 <div className="flex justify-around mt-6">
-                                    <Button className="w-2/5 text-blue-100 border-blue-100">accpet </Button>
-                                    <Button type="primary" className="w-2/5" danger>
-                                        reject
+                                    <Button
+                                        onClick={() => handleOpenModal('accept')}
+                                        className="w-2/5 text-blue-100 border-blue-100"
+                                    >
+                                        Accept{' '}
+                                    </Button>
+                                    <Button
+                                        onClick={() => handleOpenModal('reject')}
+                                        type="primary"
+                                        className="w-2/5"
+                                        danger
+                                    >
+                                        Reject
                                     </Button>
                                 </div>
                             </div>
-                            <div></div>
+                            {/* <div></div> */}
                         </div>
                     </div>
                 </div>
             </div>
+
+            {isOpenModal && isOpenModal.cancel && (
+                <Modal
+                    footer={false}
+                    title="Refuse Program"
+                    open={isOpenModal.cancel}
+                    // onOk={refuseProgram}
+                    onCancel={handleCancel}
+                >
+                    <div>
+                        <TextArea
+                            placeholder="Enter the reason for rejection"
+                            allowClear
+                            onChange={(e) => setIsMessage(e.target.value)}
+                        />
+                        <Button
+                            disabled={isMessage ? false : true}
+                            // onClick={() => refuseProgram()}
+                            onClick={() => acceptedProgram('Reject')}
+                            type="primary"
+                            className="mt-3 "
+                            ghost
+                        >
+                            Send Message
+                        </Button>
+                    </div>
+                </Modal>
+            )}
+
+            {isOpenModal && isOpenModal.accept && (
+                <Modal
+                    title="Accept Program"
+                    open={isOpenModal.accept}
+                    onOk={() => acceptedProgram('Active')}
+                    onCancel={handleCancel}
+                    // footerRenderParams={{
+                    //     extra: {
+                    //         OkBtn: <></>,
+                    //     },
+                    // }}
+                >
+                    <p>Program approval confirmation, upon confirmation the program will be activated</p>
+                </Modal>
+            )}
         </div>
     );
 }

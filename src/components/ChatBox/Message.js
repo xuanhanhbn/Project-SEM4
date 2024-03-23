@@ -26,7 +26,7 @@ export default function Message(props) {
                     )}
                 </div> */}
                 <div>
-                    <p className="my-1  ">{mess?.text}</p>
+                    <p className="my-1">{mess?.text}</p>
                 </div>
             </div>
         </div>
