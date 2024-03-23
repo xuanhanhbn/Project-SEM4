@@ -493,13 +493,13 @@ export default function CampaignDetail(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="relative order-4 pt-10">
+                    <div className="relative order-4 col-start-1 pt-10">
                         <ImageGallery
                             showPlayButton={false}
                             showFullscreenButton={false}
                             showNav={false}
                             showBullets={false}
-                            items={listImage}
+                            items={images}
                         />
                     </div>
                     <div className="order-5 col-start-1 mt-12 text-center">
