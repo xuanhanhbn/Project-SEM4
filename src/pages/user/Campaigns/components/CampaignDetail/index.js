@@ -242,6 +242,8 @@ export default function CampaignDetail(props) {
         setIsOpenModal(false);
     };
 
+    const toggleExpanded = () => setIsExpanded(!isExpanded);
+
     // xử lý khi click đóng modal share mail
     const handleCancelModalShareMail = () => setIsOpenModalShareMail(false);
 
@@ -270,6 +272,29 @@ export default function CampaignDetail(props) {
         setDataRequestDonate(newDataRequest);
         return donateProgram(newDataRequest);
     };
+    const renderDescription = () => {
+        if (isExpanded) {
+            return (
+                <div>
+                    <div dangerouslySetInnerHTML={{ __html: dataDetail?.description }} />
+                    <button className="btn-see-more" onClick={toggleExpanded}>
+                        Collapse
+                    </button>
+                </div>
+            );
+        } else {
+            const limitedDescription = dataDetail?.description?.substring(0, 200);
+            return (
+                <div>
+                    <div dangerouslySetInnerHTML={{ __html: limitedDescription }} />
+                    <button className="btn-see-more" onClick={toggleExpanded}>
+                        See more
+                    </button>
+                </div>
+            );
+        }
+    };
+
     return (
         <div id="campaignDetail" ref={ref}>
             <Loading isLoading={isPending || isPendingDonate} />
@@ -450,12 +475,13 @@ export default function CampaignDetail(props) {
                                     </button>
                                 </div>
                             </div>
-                            <p className="mb-6 text-sm font-semibold leading-6">
+                            {/* <p className="mb-6 text-sm font-semibold leading-6">
                                 Shared meals will provide emergency food assistance to families in Palestine.
-                            </p>
+                            </p> */}
                             {/* <p className="text-sm leading-6 text-gray-100">{dataDetail?.description || ''}</p> */}
                             <div>
-                                <p className="text-sm leading-6 text-gray-100"></p>
+                                {renderDescription()}
+                                {/* <p className="text-sm leading-6 text-gray-100"></p>
 
                                 <div className="content">
                                     <p className="text-sm leading-6 text-gray-100">
@@ -466,13 +492,6 @@ export default function CampaignDetail(props) {
                                 <button
                                     className="flex justify-start w-full text-blue-500 moreless-button hover:text-blue-700"
                                     onClick={() => setIsExpanded((prev) => !prev)}
-                                >
-                                    Read more
-                                </button>
-
-                                {/* <button
-                                    className="inline-block py-3 mt-2 "
-                                    onClick={() => setReadMore((prev) => !prev)}
                                 >
                                     Read more
                                 </button> */}

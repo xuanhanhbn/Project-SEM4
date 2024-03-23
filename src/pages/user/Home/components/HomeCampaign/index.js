@@ -5,7 +5,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function HomeCampaign(props) {
     const { dataProgram } = props;
-    const navigate = useNavigate();
+
+    const renderDescription = () => {
+        const limitedDescription = dataProgram?.description?.substring(0, 200);
+        return <div dangerouslySetInnerHTML={{ __html: limitedDescription }} />;
+    };
     return (
         <div id="homeCampaign" className="pt-8 px-9 pb-9">
             <h2 className="title_h2">Take action</h2>
@@ -32,7 +36,7 @@ export default function HomeCampaign(props) {
                             <span className="text-2xl font-bold leading-6 text-orange-500 md:hidden">Urgent </span>
                             {dataProgram?.programName || ''}
                         </h3>
-                        <p className="hidden text-base text-gray-100 lg:block">{dataProgram?.description || ''}</p>
+                        <p className="hidden text-base lg:block">{renderDescription()}</p>
                         <div className="hidden mt-4 lg:mt-14 md:block">
                             <Link
                                 to={`/campaign-detail/${dataProgram?.programId}`}
