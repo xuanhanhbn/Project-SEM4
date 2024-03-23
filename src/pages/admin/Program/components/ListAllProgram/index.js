@@ -22,6 +22,7 @@ function ListAllProgram() {
     const { mutate: mutationGetAllProgram, isPending } = useMutation({
         mutationFn: getAllProgramApi,
         onSuccess: (res) => {
+            console.log('res: ', res);
             if ((res && res?.status === 200) || res?.status === '200') {
                 return setDataProgram(res?.data);
             }
@@ -65,7 +66,7 @@ function ListAllProgram() {
         <div id="program_page">
             <Loading isLoading={isPending} />
 
-            <div className="flex-none w-full max-w-full  mt-6">
+            <div className="flex-none w-full max-w-full mt-6">
                 <TableCommon
                     data={dataProgram || []}
                     parseFunction={parseData}

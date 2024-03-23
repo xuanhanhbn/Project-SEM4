@@ -176,26 +176,6 @@ function PartnerDetailPage(props) {
                         </div>
                     </div>
 
-                    {/* {todayCardData.map((data) => RENDER_TODAY_CARD(data))}
-
-                        <div className="flex-1 w-full mt-12 ">
-                            <div className="w-full max-w-full px-3 mt-0 lg:flex-none">
-                                <div className="shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
-                                    <div className="p-6 pb-0 mb-0 bg-white border-b-0 border-solid rounded-t-2xl">
-                                        <h6>Payment methods overview</h6>
-                                        <p className="text-sm leading-normal">
-                                            <i className="fa fa-arrow-up text-lime-500"></i>
-                                            <span className="font-semibold">4% more</span> in 2023
-                                        </p>
-                                    </div>
-                                    <div className="flex-auto p-4">
-                                        <div className="h-full">
-                                            <Line options={optionsChartLine} data={linePaymentData} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                     <div className="w-full mt-4">
                         <div className="flex justify-end max-w-full px-3">
                             <Space direction="vertical">

@@ -17,18 +17,18 @@ export default function CardCustom(props) {
                     {status === 'done' ? null : (
                         <div className="col">
                             <i className="text-xl fa-sharp fa-thin fa-bullseye-arrow"></i>
-                            <p className="ml-2 text-xs">{target}</p>
+                            <p className="ml-2 text-xs">{target} $</p>
                         </div>
                     )}
                     <div className="col_3">
                         <i className="text-xl fa-light fa-user-group"></i>
-                        <p className="ml-2 text-sm">{supporteds}</p>
+                        <p className="ml-2 text-sm">{supporteds ? supporteds : 0} supporteds</p>
                     </div>
                 </div>
-                <div className="min-h-[12px] mt-4">
+                <div className="min-h-[12px]  mt-4">
                     {status === 'done' ? null : (
                         <div className="h-1 mx-auto mt-2 bg-gray-400 rounded-sm">
-                            <div className="w-10/12 h-1 bg-blue-100 rounded-sm"></div>
+                            {/* <div className="w-10/12 h-1 bg-blue-100 rounded-sm"></div> */}
                         </div>
                     )}
                 </div>
