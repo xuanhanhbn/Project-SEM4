@@ -10,40 +10,14 @@ import { useMutation } from '@tanstack/react-query';
 import { getAllProgramApi } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
-import { getApiDefault, getApiWithBodyDefault } from '~/utils/api';
-
-const { TextArea } = Input;
 
 function ListProgramPending() {
-    const baseOpenModal = {
-        accept: false,
-        cancel: false,
-    };
     // State
-    const [isMessage, setIsMessage] = useState('');
     const [dataProgram, setDataProgram] = useState([]);
-    const [isOpenModal, setIsOpenModal] = useState(baseOpenModal);
-    const [programId, setProgramId] = useState('');
 
     useEffect(() => {
         mutationGetAllProgram();
     }, []);
-
-    const acceptedProgram = async (item, data) => {
-        try {
-            const url = `program/active-program/${item?.programId}?reasonRejection=${isMessage}&value=${data}`;
-            const res = await getApiWithBodyDefault(url);
-            if (res && res.status === 200) {
-                notify(res?.data, 'success');
-                handleCancel();
-                return mutationGetAllProgram();
-            }
-        } catch (error) {
-            return notify(error, 'error');
-        }
-    };
-
-    const handleCancel = () => setIsOpenModal(baseOpenModal);
 
     const { mutate: mutationGetAllProgram, isPending } = useMutation({
         mutationFn: getAllProgramApi,
@@ -81,41 +55,6 @@ function ListProgramPending() {
                             <i className="fa-sharp fa-solid fa-eye"></i>
                         </Button>
                     </Link>
-                    {/* <Button
-                        onClick={() => {
-                            // acceptedProgram(item, 'Active');
-                            setIsOpenModal((prev) => ({
-                                ...prev,
-                                accept: true,
-                                cancel: false,
-                            }));
-                            return setProgramId(item);
-                            // setValue('Active');
-                        }}
-                        title="Accept"
-                        type="primary"
-                        className="mx-1"
-                        ghost
-                    >
-                        <i className="fa-duotone fa-check"></i>
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            // acceptedProgram(item, 'Cancel');
-                            setIsOpenModal((prev) => ({
-                                ...prev,
-                                accept: false,
-                                cancel: true,
-                            }));
-                            return setProgramId(item);
-                        }}
-                        title="Cancel"
-                        type="primary"
-                        danger
-                        ghost
-                    >
-                        <i className="fa-sharp fa-solid fa-xmark"></i>
-                    </Button> */}
                 </div>
             );
         }
@@ -135,50 +74,6 @@ function ListProgramPending() {
                     className="shadow-md rounded-2xl"
                 />
             </div>
-            {/*
-            {isOpenModal && isOpenModal.cancel && (
-                <Modal
-                    footer={false}
-                    title="Refuse Program"
-                    open={isOpenModal.cancel}
-                    // onOk={refuseProgram}
-                    onCancel={handleCancel}
-                >
-                    <div>
-                        <TextArea
-                            placeholder="Enter the reason for rejection"
-                            allowClear
-                            onChange={(e) => setIsMessage(e.target.value)}
-                        />
-                        <Button
-                            disabled={isMessage ? false : true}
-                            // onClick={() => refuseProgram()}
-                            onClick={() => acceptedProgram(programId, 'Reject')}
-                            type="primary"
-                            className="mt-3 "
-                            ghost
-                        >
-                            Send Message
-                        </Button>
-                    </div>
-                </Modal>
-            )}
-
-            {isOpenModal && isOpenModal.accept && (
-                <Modal
-                    title="Accept Program"
-                    open={isOpenModal.accept}
-                    onOk={() => acceptedProgram(programId, 'Active')}
-                    onCancel={handleCancel}
-                    footerRenderParams={{
-                        extra: {
-                            OkBtn: <></>,
-                        },
-                    }}
-                >
-                    <p>Program approval confirmation, upon confirmation the program will be activated</p>
-                </Modal>
-            )} */}
         </div>
     );
 }

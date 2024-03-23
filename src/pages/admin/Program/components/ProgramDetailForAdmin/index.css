@@ -1,0 +1,6 @@
+#campaignDetail .btn-see-more {
+    @apply text-blue-100;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+}

@@ -2,7 +2,7 @@ import { getApiDefault, postApiDefault } from '~/utils/api';
 
 export async function getAllProgramApi(data) {
     const request = {
-        name: '',
+        name: 'Active',
         page: 1,
         size: 20,
     };
