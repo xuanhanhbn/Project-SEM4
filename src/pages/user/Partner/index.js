@@ -8,6 +8,7 @@ import { notify } from '~/utils/common';
 
 function PartnerPage() {
     const [dataAllPartner, setDataAllPartner] = useState([]);
+
     // call api
     const { mutate: mutationGetAllPartner } = useMutation({
         mutationFn: getAllPartnerApi,
@@ -25,8 +26,9 @@ function PartnerPage() {
     }, []);
 
     return (
-        <div>
+        <div id="partner-page">
             <div className="">
+                {/* phần banner  */}
                 <div className="pt-20 md:grid md:grid-cols-2 ">
                     <div className="flex flex-col justify-center md:px-12">
                         <div className="mb-4 text-5xl md:text-6xl md:font-bold md:leading-[4.5rem] font-medium leading-[3.5rem] ">
@@ -42,6 +44,8 @@ function PartnerPage() {
                     </div>
                 </div>
             </div>
+
+            {/* phần list partner */}
             <div className="pb-8 bg-white ">
                 <div className="p-8 text-4xl font-medium">Meet our Integration Partners</div>
 
@@ -51,7 +55,7 @@ function PartnerPage() {
                         : dataAllPartner.map((data) => {
                               return (
                                   <Link
-                                      to="#"
+                                      to={`/partner/detail/${data.partnerId}`}
                                       key={data?.partnerId}
                                       className="max-w-xs p-2 mb-8 duration-150 bg-gray-400 rounded-lg shadow cursor-pointer md:mb-0 hover:scale-105 hover:shadow-md"
                                   >
