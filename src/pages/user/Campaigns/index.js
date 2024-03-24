@@ -24,6 +24,14 @@ function Campaigns() {
     useEffect(() => {
         mutation.mutate();
     }, []);
+
+    const handleReturnLogo = (data) => {
+        if (Array.isArray(data) && data.length > 0) {
+            const filterLogo = data.filter((item) => item.type === 'Logo');
+            return filterLogo[0]?.url;
+        }
+        return '';
+    };
     return (
         <div id="campaigns">
             <div>
@@ -33,21 +41,14 @@ function Campaigns() {
             <div className="container_wrapper ">
                 <div className="flex-wrap wrapper">
                     {dataProgram?.map((data) => {
-                        let urlLogo = String;
-                        data.attachment.map((e) => {
-                            if (e.type === 'Logo') {
-                                return (urlLogo = e.url);
-                            }
-                        });
-
-                        if (data.field === 'true') {
+                        if (data.field) {
                             return (
-                                <div key={data.cardTitle} className="tag_campaign">
+                                <div key={data.programId} className="tag_campaign">
                                     <h1 className="tag_title">{data.cardTitle}</h1>
                                     <div className="relative flex-1 p-6 ">
                                         <img
-                                            src={urlLogo}
-                                            alt=""
+                                            src={handleReturnLogo(data?.attachment)}
+                                            alt={data?.programName}
                                             className="absolute h-full rounded-2xl translate-x-[-50%] top-0 left-1/2"
                                         />
                                         <div className="relative -bottom-40 md:-bottom-52">
@@ -64,9 +65,9 @@ function Campaigns() {
                         } else {
                             return (
                                 <CardCustom
-                                    key={data.cardTitle}
+                                    key={data.programId}
                                     to="/campaign-detail"
-                                    cardImage={urlLogo}
+                                    cardImage={handleReturnLogo(data?.attachment)}
                                     target={data.target}
                                     supporteds={data.supporteds}
                                     progressValue={data.progressValue}

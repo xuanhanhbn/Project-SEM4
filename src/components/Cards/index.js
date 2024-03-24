@@ -17,7 +17,7 @@ export default function CardCustom(props) {
                     {status === 'done' ? null : (
                         <div className="col">
                             <i className="text-xl fa-sharp fa-thin fa-bullseye-arrow"></i>
-                            <p className="ml-2 text-xs">{target} $</p>
+                            <p className="ml-2 text-xs">{target ? target.toLocaleString() : 0} $</p>
                         </div>
                     )}
                     <div className="col_3">

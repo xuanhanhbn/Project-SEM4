@@ -406,7 +406,9 @@ export default function CampaignDetail(props) {
                                         <div className="pr-1 max-w-[50%] basis-1/2 w-full pl-4 relative ">
                                             <div className="card_header">
                                                 <i className="text-base fa-sharp fa-thin fa-bullseye-arrow"></i>
-                                                <p className="ml-2 text-xs">{dataDetail?.target || 0} $</p>
+                                                <p className="ml-2 text-xs">
+                                                    {dataDetail?.target ? dataDetail?.target.toLocaleString() : 0} $
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="pl-1 max-w-[50%] basis-1/2 w-full pr-4 relative ">
@@ -423,7 +425,9 @@ export default function CampaignDetail(props) {
                                         <Progress percent={handleCaculator()} showInfo={false} />
                                     </div>
                                     <div className="flex justify-between mx-auto mt-2">
-                                        <div className="text_1">{dataDetail?.totalMoney || 0} $</div>
+                                        <div className="text_1">
+                                            {dataDetail?.totalMoney ? dataDetail?.totalMoney?.toLocaleString() : 0} $
+                                        </div>
                                         <div className="text_2">{handleCaculator()} %</div>
                                     </div>
                                 </div>
