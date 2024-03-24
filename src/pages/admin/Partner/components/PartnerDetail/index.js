@@ -34,6 +34,10 @@ import { Input, Progress, Space } from 'antd';
 import './style.css';
 import ModalCreateProgram from '../ModalCreateProgram';
 import moment from 'moment';
+import { Tabs } from 'antd';
+import ActiveProgram from './components/ActiveProgram';
+import DeActiveProgram from './components/DeActiveProgram';
+
 function PartnerDetailPage(props) {
     // const [loading, setLoading] = useState(false);
     // const [imageUrl, setImageUrl] = useState();
@@ -73,44 +77,23 @@ function PartnerDetailPage(props) {
 
     const handleCreateProgram = (data) => mutationCreateProgram(data);
 
-    const handleCaculator = (item) => {
-        const target = item?.target || 0;
-        const total = item?.totalMoney || 0;
-        if (target && total) {
-            const result = (total / target) * 100;
-            if (result >= 100) {
-                return 100;
-            }
-            return result;
-        }
-        return 0;
+    const items = [
+        {
+            key: '1',
+            label: 'Active Proram',
+            children: <ActiveProgram dataDetail={dataDetail} />,
+        },
+
+        {
+            key: '3',
+            label: 'Program rejected',
+            children: <DeActiveProgram />,
+        },
+    ];
+
+    const onChange = (key) => {
+        console.log(key);
     };
-
-    // render data table
-    const parseData = useCallback((item, field, index) => {
-        if (field === 'actions') {
-            return (
-                <Link to={`/admin/program/detail/${item?.programId}`}>
-                    <i className="fa-sharp fa-solid fa-eye"></i>
-                </Link>
-            );
-        }
-        if (field === 'status') {
-            if (item.status === 'Active') return <div style={{ color: 'green', fontWeight: 800 }}>{item[field]}</div>;
-            return <div style={{ color: 'red', fontWeight: 800 }}>{item[field]}</div>;
-        }
-        if (field === 'completion') {
-            return <Progress percent={handleCaculator(item)} />;
-        }
-        if (field === 'target' || field === 'totalMoney') {
-            return `${(item[field] && item[field].toLocaleString()) || 0} $`;
-        }
-        if (field === 'createdAt') {
-            return moment(item[field])?.format('YYYY-MM-DD');
-        }
-
-        return item[field];
-    }, []);
 
     return (
         <div id="partner-detail-container">
@@ -190,14 +173,8 @@ function PartnerDetailPage(props) {
                                 </button>
                             </div>
                         </div>
-                        <div className="flex-1 pl-3 mt-6 ">
-                            <TableCommon
-                                data={dataDetail?.programs || []}
-                                parseFunction={parseData}
-                                columns={columns}
-                                isShowPaging
-                                className="shadow-md rounded-2xl"
-                            />
+                        <div className="flex-1 pl-3 mt-6 mb-10">
+                            <Tabs onChange={onChange} type="card" items={items} />
                         </div>
                     </div>
                 </div>

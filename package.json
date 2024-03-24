@@ -37,6 +37,7 @@
         "react-scripts": "5.0.1",
         "react-scroll": "^1.9.0",
         "react-toastify": "^10.0.4",
+        "react-tooltip": "^5.26.3",
         "suneditor": "^2.45.1",
         "suneditor-react": "^3.6.1",
         "uuid": "^9.0.1",

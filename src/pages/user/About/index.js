@@ -6,8 +6,13 @@ import Logo1 from '~/assets/images/logo/WFP_STM_Values_Illustrations_Open.png';
 import Logo2 from '~/assets/images/logo/WFP_STM_Values_Illustrations_Counts.png';
 import Logo3 from '~/assets/images/logo/WFP_STM_Values_Illustrations_Together.png';
 import { Link } from 'react-router-dom';
+import { animateScroll as scroll } from 'react-scroll';
 
 function About() {
+    // cuộn về đầu trang khi chuyển tab
+    const scrollToTop = () => {
+        scroll.scrollToTop();
+    };
     return (
         <div id="aboutPage">
             <div className="aboutPage_container">
@@ -96,7 +101,7 @@ function About() {
                                     Does this sound like your dream job? For us it is. Join our team and bring your
                                     passion to work every day.
                                 </p>
-                                <Link to="#" className="btn">
+                                <Link onClick={scrollToTop} to="/volunteers" className="btn">
                                     Explore opportunities
                                 </Link>
                             </div>

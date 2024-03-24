@@ -18,6 +18,7 @@ export default function ProgramDetail() {
     const [isOpenModalEditProject, setIsOpenModalEditProject] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [dataDetail, setDataDetail] = useState({});
+    const [isExpanded, setIsExpanded] = useState(false);
 
     useEffect(() => {
         ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -151,6 +152,36 @@ export default function ProgramDetail() {
         );
     };
 
+    // Hàm xử lý khi nhấn nút Xem thêm hoặc Thu gọn
+    const toggleExpanded = () => {
+        setIsExpanded(!isExpanded);
+    };
+
+    console.log('dataDetail: ', dataDetail);
+
+    const renderDescription = () => {
+        if (isExpanded) {
+            return (
+                <div>
+                    <div dangerouslySetInnerHTML={{ __html: dataDetail?.description }} />
+                    <button className="btn-see-more" onClick={toggleExpanded}>
+                        Collapse
+                    </button>
+                </div>
+            );
+        } else {
+            const limitedDescription = dataDetail?.description?.substring(0, 200);
+            return (
+                <div>
+                    <div dangerouslySetInnerHTML={{ __html: limitedDescription }} />
+                    <button className="btn-see-more" onClick={toggleExpanded}>
+                        See more
+                    </button>
+                </div>
+            );
+        }
+    };
+
     return (
         <div id="programDetail" ref={ref}>
             <Loading isLoading={isLoading} />
@@ -201,11 +232,30 @@ export default function ProgramDetail() {
                             </div>
                         </div>
                     </div>
-                    <div className="grid-cols-2 gap-4 mt-10 md:grid">
+
+                    {/* nếu program chưa active hoạc bị từ chối thì hiển thị phần mô tả program */}
+                    <div className={dataDetail?.status === 'Acitive' ? 'hidden' : 'mt-10'}>
+                        <div className="p-5 text-left bg-white rounded-2xl">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
+                            </div>
+                            <p className="mb-6 text-sm font-semibold leading-6">
+                                Shared meals will provide emergency food assistance to families in Palestine.
+                            </p>
+                            <div>
+                                <p className="text-sm leading-6 text-gray-100"></p>
+                                {renderDescription()}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* nếu program đã được active thì ẩn phần motar và hiện phần thông số và biểu đồ */}
+
+                    <div className={dataDetail?.status === 'Acitive' ? 'grid-cols-2 gap-4 mt-10 md:grid' : 'hidden'}>
                         {todayCardData.map((data) => RENDER_TODAY_CARD(data))}
                     </div>
 
-                    <div className="flex-1 w-full mt-12 ">
+                    <div className={dataDetail?.status === 'Acitive' ? 'flex-1 w-full mt-12' : 'hidden'}>
                         <div className="w-full max-w-full px-3 mt-0 lg:flex-none">
                             <div className="shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
                                 <div className="p-6 pb-0 mb-0 bg-white border-b-0 border-solid rounded-t-2xl">
