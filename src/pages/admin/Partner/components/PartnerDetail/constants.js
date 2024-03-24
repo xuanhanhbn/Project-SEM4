@@ -269,3 +269,32 @@ export const fakeDataTable = [
         completion: '45%',
     },
 ];
+
+export const columnsRejectProgram = [
+    { field: 'programName', name: 'Program Name', minWidth: 270 },
+
+    {
+        field: 'target',
+        name: 'Target',
+        minWidth: 100,
+    },
+
+    {
+        field: 'status',
+        name: 'Status',
+        minWidth: 50,
+    },
+
+    {
+        field: 'reason',
+        name: 'Reason',
+        minWidth: 270,
+        align: 'center',
+    },
+    {
+        field: 'actions',
+        name: 'Actions',
+        minWidth: 50,
+        align: 'center',
+    },
+];

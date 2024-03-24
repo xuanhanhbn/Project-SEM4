@@ -22,7 +22,7 @@ export default function Message(props) {
             <div className={handleCheckUIDAndReturnClassName()}>
                 {/* <div>
                     {mess && mess?.senderId !== currentUser?.uid ? null : (
-                        <img src={dfAvatar} alt="" className="rounded-full  mr- w-7 h-w-7" />
+                        <img src={dfAvatar} alt="" className="rounded-full mr- w-7 h-w-7" />
                     )}
                 </div> */}
                 <div>

@@ -85,7 +85,7 @@
 }
 
 #campaignDetail .btn {
-    @apply bg-orange-100 mt-10 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]
+    @apply bg-orange-100 mt-10 text-white border-orange-100 rounded w-full p-[.75rem_1rem_.8125rem]
 }
 
 #campaignDetail {

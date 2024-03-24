@@ -12,8 +12,8 @@ import ForgotPasswordPage from '~/pages/user/ForgotPassword';
 import ChangePassword from '~/pages/user/ChangePassword';
 import ProfilePage from '~/pages/user/Profile';
 import PartnerPage from '~/pages/user/Partner';
-import PartnerDetailPage from '~/pages/user/Partner/components/PartnerDetail';
 import ThanksPage from '~/pages/user/DonateSuccess';
+import PartnerDetail from '~/pages/user/Partner/components/PartnerDetail';
 
 // Public routes
 const publicRoutes = [
@@ -87,8 +87,8 @@ const publicRoutes = [
         // layout: null,
     },
     {
-        path: '/partner/detail',
-        component: PartnerDetailPage,
+        path: '/partner/detail/:partnerId',
+        component: PartnerDetail,
         // layout: null,
     },
     {

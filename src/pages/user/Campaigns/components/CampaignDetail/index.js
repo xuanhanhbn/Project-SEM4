@@ -32,13 +32,30 @@ import { useMutation } from '@tanstack/react-query';
 import { getDetailProgram, onDonateProgram } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
-import { Collapse, Progress } from 'antd';
+import { Collapse, Input, Modal, Progress } from 'antd';
 import moment from 'moment';
 import { exchangeRateMoney } from '~/utils/constant';
 import { Tabs } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import { inputVolunteerForm } from './constants';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { Tooltip } from 'react-tooltip';
+import TabListDonate from './components/ListDonateTab';
+import TabComments from './components/CommentsTab';
 
-const TabPane = Tabs.TabPane;
+// validate form đăng ký volunteer
+const validationSchema = Yup.object().shape({
+    phone: Yup.string()
+        .required('Phone number is required')
+        .matches(/^(0[3|5|7|8|9]{1})([0-9]{8})$/, 'Phone number invalid'),
+    fullName: Yup.string().required('Name is required'),
+    // programId: Yup.string().required('Program is required'),
+    email: Yup.string()
+        .required('Email is required')
+        .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
+});
 
 const images = [
     {
@@ -84,6 +101,7 @@ export default function CampaignDetail(props) {
     const [dataRequestDonate, setDataRequestDonate] = useState(baseDataRequestDonate);
     const [listImage, setListImage] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isOpenModalVolunteer, setIsOpenModalVolunteer] = useState(false);
 
     const ref = useRef();
     const { currentUser } = useContext(AuthContext);
@@ -93,6 +111,14 @@ export default function CampaignDetail(props) {
 
     const hiddenText = dataDetail?.description?.slice(0, indexOfSecondPeriod + 1);
     const longText = dataDetail?.description?.slice(indexOfSecondPeriod + 2);
+
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(validationSchema),
+    });
 
     useEffect(() => {
         ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -272,6 +298,7 @@ export default function CampaignDetail(props) {
         setDataRequestDonate(newDataRequest);
         return donateProgram(newDataRequest);
     };
+
     const renderDescription = () => {
         if (isExpanded) {
             return (
@@ -294,6 +321,64 @@ export default function CampaignDetail(props) {
             );
         }
     };
+
+    // đóng mở modal đăng ký volunteer
+    const showOpenModalVolunteer = () => setIsOpenModalVolunteer(true);
+
+    // render input đăng ký volunteer
+    const RENDER_INPUT_FORM = (item) => {
+        const { field } = item;
+        const message = errors[field] && errors[field].message;
+
+        return (
+            <div key={item.id}>
+                <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => {
+                        return (
+                            <Input
+                                type={item.type}
+                                className="w-full h-10"
+                                onChange={onChange}
+                                value={value == null ? '' : value}
+                                placeholder={`${item.placeholder}*`}
+                            />
+                        );
+                    }}
+                    name={item.field}
+                />
+                <div className="mt-0 text-red-600"> {message}</div>
+            </div>
+        );
+    };
+
+    // xử lý khi click nút submit modal volunteer
+    const onSubmit = (data) => {
+        const volunteerData = data;
+        volunteerData.programid = programId;
+        console.log('dataSubmit: ', volunteerData);
+    };
+
+    // đóng modal volunteer
+    const handleCancel = () => {
+        setIsOpenModalVolunteer(false);
+    };
+
+    const onChange = (key) => {
+        console.log(key);
+    };
+    const items = [
+        {
+            key: '1',
+            label: 'List Donate',
+            children: <TabListDonate dataDetail={dataDetail || []} />,
+        },
+        {
+            key: '2',
+            label: 'Comments',
+            children: <TabComments />,
+        },
+    ];
 
     return (
         <div id="campaignDetail" ref={ref}>
@@ -351,132 +436,45 @@ export default function CampaignDetail(props) {
                     </div>
                     <div className="order-3 h-[500px] z-50 col-start-2 mt-6 md:order-1 md:mt-0 md:sticky md:top-20 lg:block">
                         <div className="h-full px-4 py-6 bg-white rounded-2xl">
-                            <Tabs defaultActiveKey="1">
-                                <TabPane tab="List Donate" key="1">
-                                    {dataDetail &&
-                                        dataDetail?.donations?.length > 0 &&
-                                        dataDetail?.donations?.map((item) => (
-                                            <div className="flex items-center px-4" key={item?.donationId}>
-                                                <div className="mx-2 ">
-                                                    <img
-                                                        className="w-12 rounded-full"
-                                                        src={item?.user?.avatarUrl?.url}
-                                                        alt={item?.user?.avatarUrl?.url}
-                                                    />
-                                                </div>
-                                                <div className="w-full mx-2 text-left">
-                                                    <div className="text-lg font-semibold leading-6 text-gray-100">
-                                                        {item?.user?.displayName}
-                                                    </div>
-                                                    <div className="flex justify-between">
-                                                        <p className="text-xs leading-6 text-gray-100 ">
-                                                            {item?.createdAt
-                                                                ? moment(item?.createdAt)?.format('YYYY-MM-DD')
-                                                                : ''}
-                                                        </p>
-                                                        <span className="text-base font-semibold leading-6 text-blue-100">
-                                                            $ {item?.amount}
-                                                        </span>
-                                                    </div>
-                                                    <div className="bg-slate-400 h-[.5px]"></div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                </TabPane>
-                                <TabPane tab="Comments" className="" key="2">
-                                    <div className="h-[25rem] flex flex-col justify-between">
-                                        <div className="flex-grow p-3 mb-3 overflow-auto text-left comment-box">
-                                            <div className="mb-5 comment-item">
-                                                <div className="flex user-info">
-                                                    <img src={dfAvatar} alt="" className="mr-3 rounded-full w-7 h-7" />
-                                                    <p className="font-bold">User name</p>
-                                                </div>
-                                                <div className="pl-10">
-                                                    <div className="p-3 break-all border shadow-inner comment rounded-xl">
-                                                        .
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="mb-5 comment-item">
-                                                <div className="flex user-info">
-                                                    <img src={dfAvatar} alt="" className="mr-3 rounded-full w-7 h-7" />
-                                                    <p className="font-bold">User name</p>
-                                                </div>
-                                                <div className="pl-10">
-                                                    <div className="p-3 break-all border shadow-inner comment rounded-xl">
-                                                        đây là văn bản đây là văn bản đây là văn bản đây là văn bản đây
-                                                        là văn bản đây là văn bản đây là văn bản đây là văn bản
-                                                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="mb-5 comment-item">
-                                                <div className="flex user-info">
-                                                    <img src={dfAvatar} alt="" className="mr-3 rounded-full w-7 h-7" />
-                                                    <p className="font-bold">User name</p>
-                                                </div>
-                                                <div className="pl-10">
-                                                    <div className="p-3 break-all border shadow-inner comment rounded-xl">
-                                                        đây là văn bản đây là văn bản đây là văn bản đây là văn bản đây
-                                                        là văn bản đây là văn bản đây là văn bản đây là văn bản
-                                                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="mb-5 comment-item">
-                                                <div className="flex user-info">
-                                                    <img src={dfAvatar} alt="" className="mr-3 rounded-full w-7 h-7" />
-                                                    <p className="font-bold">User name</p>
-                                                </div>
-                                                <div className="pl-10">
-                                                    <div className="p-3 break-all border shadow-inner comment rounded-xl">
-                                                        đây là văn bản đây là văn bản đây là văn bản đây là văn bản đây
-                                                        là văn bản đây là văn bản đây là văn bản đây là văn bản
-                                                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="mb-5 comment-item">
-                                                <div className="flex user-info">
-                                                    <img src={dfAvatar} alt="" className="mr-3 rounded-full w-7 h-7" />
-                                                    <p className="font-bold">User name</p>
-                                                </div>
-                                                <div className="pl-10">
-                                                    <div className="p-3 break-all border shadow-inner comment rounded-xl">
-                                                        đây là văn bản đây là văn bản đây là văn bản đây là văn bản đây
-                                                        là văn bản đây là văn bản đây là văn bản đây là văn bản
-                                                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="w-full bg-white ">
-                                            <div>
-                                                <TextArea
-                                                    placeholder="Add your comment..."
-                                                    className="p-2 focus:outline-1 focus:outline-blue-500 font-bold border-[0.1px] resize-none h-[120px] border-[#9EA5B1] rounded-md w-full"
-                                                ></TextArea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </TabPane>
-                            </Tabs>
+                            <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
                         </div>
                     </div>
                     <div className="order-2 col-start-1 mt-10">
                         <div className="p-5 text-left bg-white rounded-2xl">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
-                                <div className="hidden md:block">
-                                    <button className="btn_share">
-                                        <i className=" fa-light fa-bell-on"></i> 1.2k
+                                <div className="hidden lg:block">
+                                    <button
+                                        data-tooltip-id="my-tooltip"
+                                        data-tooltip-content="Volunteer"
+                                        className="btn_share"
+                                    >
+                                        <i className="fa-light fa-users-medical"></i> 234
                                     </button>
-                                    <button className="btn_share">
+                                    <button
+                                        data-tooltip-id="my-tooltip"
+                                        data-tooltip-content="Comments"
+                                        className="btn_share"
+                                    >
                                         <i className=" fa-light fa-comment"></i> 234
                                     </button>
-                                    <button onClick={showModalShareMail} className="btn_share">
+                                    <button
+                                        data-tooltip-id="my-tooltip"
+                                        data-tooltip-content="Share program"
+                                        onClick={showModalShareMail}
+                                        className="btn_share"
+                                    >
                                         <i className=" fa-light fa-share"></i> 567
                                     </button>
+                                    <Tooltip
+                                        style={{
+                                            backgroundColor: 'white',
+                                            color: 'black',
+                                            boxShadow:
+                                                'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
+                                        }}
+                                        id="my-tooltip"
+                                    />
                                 </div>
                             </div>
                             {/* <p className="mb-6 text-sm font-semibold leading-6">
@@ -500,29 +498,33 @@ export default function CampaignDetail(props) {
                                     Read more
                                 </button> */}
                             </div>
-                            <button disabled={status === 'done' ? true : false} onClick={showModal} className="btn">
-                                Donate now
-                            </button>
-                            <div className="flex mt-4 md:hidden">
-                                <button className="btn_share">
-                                    <i className=" fa-light fa-bell-on"></i> 1.2k
+                            <div className="grid grid-cols-2 gap-4">
+                                <button
+                                    disabled={status === 'done' ? true : false}
+                                    onClick={showModal}
+                                    className="font-bold btn"
+                                >
+                                    Donate now
                                 </button>
-                                <button className="btn_share">
-                                    <i className=" fa-light fa-comment"></i> 234
-                                </button>
-                                <button onClick={showModalShareMail} className="btn_share">
-                                    <i className=" fa-light fa-share"></i> 567
+                                <button
+                                    onClick={() => showOpenModalVolunteer()}
+                                    className="px-4 py-2 mt-10 font-bold text-orange-100 bg-white border border-orange-100 rounded "
+                                >
+                                    Become a volunteer
                                 </button>
                             </div>
+                            {/* <div className="flex mt-4 md:hidden">
+                                <button className="mx-0 bg-orange-100 md:mx-2 btn_share">Become a volunteer</button>
+                            </div> */}
                         </div>
                     </div>
-                    <div className="relative order-4 pt-10">
+                    <div className="relative order-4 col-start-1 pt-10">
                         <ImageGallery
                             showPlayButton={false}
                             showFullscreenButton={false}
                             showNav={false}
                             showBullets={false}
-                            items={listImage}
+                            items={images}
                         />
                     </div>
                     <div className="order-5 col-start-1 mt-12 text-center">
@@ -576,6 +578,29 @@ export default function CampaignDetail(props) {
                 <div className="z-[999] fixed right-4 bottom-2 shadow-2xl rounded-2xl">
                     <ChatBoxCustom closeChatBox={() => handleChangeStateOpenChatBox()} />
                 </div>
+            )}
+
+            {isOpenModalVolunteer && (
+                <Modal footer={false} onCancel={handleCancel} open={isOpenModalVolunteer}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div id="volunteer-form">
+                            <div className="flex">
+                                <h1 className="text-3xl font-bold uppercase md:text-5xl">
+                                    Become a <br /> volunteer
+                                </h1>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-5 mt-5">
+                            {inputVolunteerForm.map((data) => RENDER_INPUT_FORM(data))}
+                        </div>
+
+                        <div className="my-2 mt-3 md:w-1/2">
+                            <button className="w-full p-3 text-sm font-bold tracking-wide text-white uppercase bg-orange-100 rounded-lg focus:outline-none focus:shadow-outline">
+                                submit now
+                            </button>
+                        </div>
+                    </form>
+                </Modal>
             )}
         </div>
     );

@@ -103,25 +103,25 @@ function ProfilePage() {
                     onCancel={handleCancel}
                 >
                     <div className="p-5 pb-0">
-                        <div class="">
-                            <div class="">
-                                <div class="flow-root">
-                                    <div class="divide-y h-[350px] overflow-auto divide-gray-200 dark:divide-gray-700">
+                        <div className="">
+                            <div className="">
+                                <div className="flow-root">
+                                    <div className="divide-y h-[350px] overflow-auto divide-gray-200 dark:divide-gray-700">
                                         <div>
                                             <a
                                                 href="/campaign-detail"
                                                 target="_blank"
-                                                class="flex px-8 py-3 hover:bg-gray-600 rounded-xl items-center space-x-4"
+                                                className="flex items-center px-8 py-3 space-x-4 hover:bg-gray-600 rounded-xl"
                                             >
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-black truncate dark:text-white">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-black truncate dark:text-white">
                                                         Help in the Democratic Republic of the Congo
                                                     </p>
-                                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                                                         Partner name
                                                     </p>
                                                 </div>
-                                                <div class="inline-flex items-center text-base font-semibold text-black dark:text-white">
+                                                <div className="inline-flex items-center text-base font-semibold text-black dark:text-white">
                                                     $320
                                                 </div>
                                             </a>
@@ -130,17 +130,17 @@ function ProfilePage() {
                                             <a
                                                 href="/campaign-detail"
                                                 target="_blank"
-                                                class="flex px-8 py-3 hover:bg-gray-600 rounded-xl items-center space-x-4"
+                                                className="flex items-center px-8 py-3 space-x-4 hover:bg-gray-600 rounded-xl"
                                             >
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-black truncate dark:text-white">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-black truncate dark:text-white">
                                                         Help in the Democratic Republic of the Congo
                                                     </p>
-                                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                                                         Partner name
                                                     </p>
                                                 </div>
-                                                <div class="inline-flex items-center text-base font-semibold text-black dark:text-white">
+                                                <div className="inline-flex items-center text-base font-semibold text-black dark:text-white">
                                                     $320
                                                 </div>
                                             </a>
@@ -149,17 +149,17 @@ function ProfilePage() {
                                             <a
                                                 href="/campaign-detail"
                                                 target="_blank"
-                                                class="flex px-8 py-3 hover:bg-gray-600 rounded-xl items-center space-x-4"
+                                                className="flex items-center px-8 py-3 space-x-4 hover:bg-gray-600 rounded-xl"
                                             >
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-black truncate dark:text-white">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-black truncate dark:text-white">
                                                         Help in the Democratic Republic of the Congo
                                                     </p>
-                                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                                                         Partner name
                                                     </p>
                                                 </div>
-                                                <div class="inline-flex items-center text-base font-semibold text-black dark:text-white">
+                                                <div className="inline-flex items-center text-base font-semibold text-black dark:text-white">
                                                     $320
                                                 </div>
                                             </a>
@@ -168,17 +168,17 @@ function ProfilePage() {
                                             <a
                                                 href="/campaign-detail"
                                                 target="_blank"
-                                                class="flex px-8 py-3 hover:bg-gray-600 rounded-xl items-center space-x-4"
+                                                className="flex items-center px-8 py-3 space-x-4 hover:bg-gray-600 rounded-xl"
                                             >
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-black truncate dark:text-white">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-black truncate dark:text-white">
                                                         Help in the Democratic Republic of the Congo
                                                     </p>
-                                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                                                         Partner name
                                                     </p>
                                                 </div>
-                                                <div class="inline-flex items-center text-base font-semibold text-black dark:text-white">
+                                                <div className="inline-flex items-center text-base font-semibold text-black dark:text-white">
                                                     $320
                                                 </div>
                                             </a>
@@ -187,17 +187,17 @@ function ProfilePage() {
                                             <a
                                                 href="/campaign-detail"
                                                 target="_blank"
-                                                class="flex px-8 py-3 hover:bg-gray-600 rounded-xl items-center space-x-4"
+                                                className="flex items-center px-8 py-3 space-x-4 hover:bg-gray-600 rounded-xl"
                                             >
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-black truncate dark:text-white">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-black truncate dark:text-white">
                                                         Help in the Democratic Republic of the Congo
                                                     </p>
-                                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                                                         Partner name
                                                     </p>
                                                 </div>
-                                                <div class="inline-flex items-center text-base font-semibold text-black dark:text-white">
+                                                <div className="inline-flex items-center text-base font-semibold text-black dark:text-white">
                                                     $320
                                                 </div>
                                             </a>
@@ -206,17 +206,17 @@ function ProfilePage() {
                                             <a
                                                 href="/campaign-detail"
                                                 target="_blank"
-                                                class="flex px-8 py-3 hover:bg-gray-600 rounded-xl items-center space-x-4"
+                                                className="flex items-center px-8 py-3 space-x-4 hover:bg-gray-600 rounded-xl"
                                             >
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-black truncate dark:text-white">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-black truncate dark:text-white">
                                                         Help in the Democratic Republic of the Congo
                                                     </p>
-                                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                    <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                                                         Partner name
                                                     </p>
                                                 </div>
-                                                <div class="inline-flex items-center text-base font-semibold text-black dark:text-white">
+                                                <div className="inline-flex items-center text-base font-semibold text-black dark:text-white">
                                                     $320
                                                 </div>
                                             </a>
