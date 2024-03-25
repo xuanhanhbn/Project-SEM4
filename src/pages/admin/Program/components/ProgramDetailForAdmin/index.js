@@ -84,8 +84,7 @@ function ProgramDetailForAdmin() {
             if (res && res.status === 200) {
                 notify(res?.data, 'success');
                 handleCancel();
-                return navigation('admin/program');
-                // return mutationGetAllProgram();
+                return handleGetDetail(params?.programId);
             }
         } catch (error) {
             return notify(error, 'error');

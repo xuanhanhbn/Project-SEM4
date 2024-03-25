@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-escape */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ImageGallery from 'react-image-gallery';
@@ -6,9 +8,8 @@ import './CampaignDetail.css';
 import './style.css';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
 import Img from '~/assets/images/logo/Screenshot .png';
-import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ModalDonate from './components/ModalDonate';
-import dfAvatar from '~/assets/images/avatar/default-avatar.jpg';
 import ShareMailModal from '../ShareMailModal';
 import { AuthContext } from '~/context/AuthContext';
 import { ChatContext } from '~/context/ChatContext';
@@ -32,11 +33,9 @@ import { useMutation } from '@tanstack/react-query';
 import { getDetailProgram, onDonateProgram } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
-import { Collapse, Input, Modal, Progress } from 'antd';
-import moment from 'moment';
+import { Input, Modal, Progress } from 'antd';
 import { exchangeRateMoney } from '~/utils/constant';
 import { Tabs } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
 import { inputVolunteerForm } from './constants';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -44,6 +43,7 @@ import * as Yup from 'yup';
 import { Tooltip } from 'react-tooltip';
 import TabListDonate from './components/ListDonateTab';
 import TabComments from './components/CommentsTab';
+import ModalRegisterVolunteer from './components/ModalRegisterVolunteer';
 
 // validate form đăng ký volunteer
 const validationSchema = Yup.object().shape({
@@ -56,17 +56,6 @@ const validationSchema = Yup.object().shape({
         .required('Email is required')
         .matches(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/, 'Email invalid'),
 });
-
-const images = [
-    {
-        original: 'https://picsum.photos/id/1018/1000/600/',
-        thumbnail: 'https://picsum.photos/id/1018/250/150/',
-    },
-    {
-        original: 'https://picsum.photos/id/1015/250/150/',
-        thumbnail: 'https://picsum.photos/id/1015/250/150/',
-    },
-];
 
 export default function CampaignDetail(props) {
     const baseDataRequestDonate = {
@@ -106,11 +95,6 @@ export default function CampaignDetail(props) {
     const ref = useRef();
     const { currentUser } = useContext(AuthContext);
     const { dispatch } = useContext(ChatContext);
-
-    const indexOfSecondPeriod = dataDetail?.description?.indexOf('.', dataDetail?.description?.indexOf('.') + 1);
-
-    const hiddenText = dataDetail?.description?.slice(0, indexOfSecondPeriod + 1);
-    const longText = dataDetail?.description?.slice(indexOfSecondPeriod + 2);
 
     const {
         control,
@@ -156,7 +140,6 @@ export default function CampaignDetail(props) {
     const { mutate: getDetailProgramApi, isPending } = useMutation({
         mutationFn: getDetailProgram,
         onSuccess: (res) => {
-            // console.log('res: ', res);
             if (res && res?.status === 200) {
                 if (res && res?.data?.attachment?.length > 0) {
                     const listImage = res?.data?.attachment?.filter((obj) => obj.type !== 'Logo');
@@ -367,6 +350,14 @@ export default function CampaignDetail(props) {
     const onChange = (key) => {
         console.log(key);
     };
+    const handleReturnLogoImg = (data) => {
+        if (Array.isArray(data) && data?.length > 0) {
+            const filterLogo = data.filter((obj) => obj?.type === 'Logo');
+            return filterLogo[0]?.url;
+        }
+        return '';
+    };
+
     const items = [
         {
             key: '1',
@@ -391,11 +382,7 @@ export default function CampaignDetail(props) {
                         <div className="w-full px-4 ">
                             <div className="relative px-4 my-auto z-[1] ">
                                 <img
-                                    src={
-                                        dataDetail && dataDetail?.attachment?.length > 0
-                                            ? dataDetail?.attachment[0]?.url
-                                            : CardImg
-                                    }
+                                    src={handleReturnLogoImg(dataDetail?.attachment)}
                                     alt={dataDetail?.programName}
                                     className="w-full max-h-96 rounded-2xl"
                                 />
@@ -434,112 +421,101 @@ export default function CampaignDetail(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="order-3 h-[500px] z-50 col-start-2 mt-6 md:order-1 md:mt-0 md:sticky md:top-20 lg:block">
+                    <div className="order-2 z-50 col-start-2 mt-6 md:order-1 md:mt-0 lg:block">
                         <div className="h-full px-4 py-6 bg-white rounded-2xl">
-                            <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+                            <TabListDonate dataDetail={dataDetail || []} />
+                            {/* <Tabs defaultActiveKey="1" items={items} onChange={onChange} /> */}
                         </div>
                     </div>
-                    <div className="order-2 col-start-1 mt-10">
-                        <div className="p-5 text-left bg-white rounded-2xl">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
-                                <div className="hidden lg:block">
-                                    <button
-                                        data-tooltip-id="my-tooltip"
-                                        data-tooltip-content="Volunteer"
-                                        className="btn_share"
-                                    >
-                                        <i className="fa-light fa-users-medical"></i> 234
-                                    </button>
-                                    <button
-                                        data-tooltip-id="my-tooltip"
-                                        data-tooltip-content="Comments"
-                                        className="btn_share"
-                                    >
-                                        <i className=" fa-light fa-comment"></i> 234
-                                    </button>
-                                    <button
-                                        data-tooltip-id="my-tooltip"
-                                        data-tooltip-content="Share program"
-                                        onClick={showModalShareMail}
-                                        className="btn_share"
-                                    >
-                                        <i className=" fa-light fa-share"></i> 567
-                                    </button>
-                                    <Tooltip
-                                        style={{
-                                            backgroundColor: 'white',
-                                            color: 'black',
-                                            boxShadow:
-                                                'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
-                                        }}
-                                        id="my-tooltip"
-                                    />
-                                </div>
-                            </div>
-                            {/* <p className="mb-6 text-sm font-semibold leading-6">
-                                Shared meals will provide emergency food assistance to families in Palestine.
-                            </p> */}
-                            {/* <p className="text-sm leading-6 text-gray-100">{dataDetail?.description || ''}</p> */}
-                            <div>
-                                {renderDescription()}
-                                {/* <p className="text-sm leading-6 text-gray-100"></p>
 
-                                <div className="content">
-                                    <p className="text-sm leading-6 text-gray-100">
-                                        {hiddenText}
-                                        <span className={`long-text ${isExpanded ? 'expanded' : ''}`}>{longText}</span>
-                                    </p>
-                                </div>
-                                <button
-                                    className="flex justify-start w-full text-blue-500 moreless-button hover:text-blue-700"
-                                    onClick={() => setIsExpanded((prev) => !prev)}
-                                >
-                                    Read more
-                                </button> */}
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <button
-                                    disabled={status === 'done' ? true : false}
-                                    onClick={showModal}
-                                    className="font-bold btn"
-                                >
-                                    Donate now
-                                </button>
-                                <button
-                                    onClick={() => showOpenModalVolunteer()}
-                                    className="px-4 py-2 mt-10 font-bold text-orange-100 bg-white border border-orange-100 rounded "
-                                >
-                                    Become a volunteer
-                                </button>
-                            </div>
-                            {/* <div className="flex mt-4 md:hidden">
-                                <button className="mx-0 bg-orange-100 md:mx-2 btn_share">Become a volunteer</button>
-                            </div> */}
+                    <div className="order-1 z-50 col-start-1 mt-6 md:order-1 md:mt-0 lg:block">
+                        <div className="relative order-2 col-start-1">
+                            <ImageGallery
+                                showPlayButton={false}
+                                showFullscreenButton={false}
+                                showNav={false}
+                                showBullets={false}
+                                items={listImage}
+                            />
                         </div>
                     </div>
-                    <div className="relative order-4 col-start-1 pt-10">
-                        <ImageGallery
-                            showPlayButton={false}
-                            showFullscreenButton={false}
-                            showNav={false}
-                            showBullets={false}
-                            items={images}
-                        />
-                    </div>
-                    <div className="order-5 col-start-1 mt-12 text-center">
-                        <img src={Img} alt="" className="w-24 mx-auto mb-3" />
-                        <h3 className="mb-3 text-3xl font-bold leading-8 md:text-4xl md:leading-9">How can we help?</h3>
-                        <p className="md:text-base">
-                            <Link to="#" className="text-sm text-blue-100 md:text-base">
-                                Contact us
-                            </Link>{' '}
-                            with any payment-related questions.
-                        </p>
+
+                    <div className="flex flex-wrap order-2 col-start-2 -mx-4">
+                        <div className="w-full px-4 ">
+                            <div className="p-5 text-left bg-white rounded-2xl">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
+                                    <div className="hidden lg:block">
+                                        <button
+                                            data-tooltip-id="my-tooltip"
+                                            data-tooltip-content="Volunteer"
+                                            className="btn_share"
+                                        >
+                                            <i className="fa-light fa-users-medical"></i> 234
+                                        </button>
+                                        <button
+                                            data-tooltip-id="my-tooltip"
+                                            data-tooltip-content="Comments"
+                                            className="btn_share"
+                                        >
+                                            <i className=" fa-light fa-comment"></i> 234
+                                        </button>
+                                        <button
+                                            data-tooltip-id="my-tooltip"
+                                            data-tooltip-content="Share program"
+                                            onClick={showModalShareMail}
+                                            className="btn_share"
+                                        >
+                                            <i className=" fa-light fa-share"></i> 567
+                                        </button>
+                                        <Tooltip
+                                            style={{
+                                                backgroundColor: 'white',
+                                                color: 'black',
+                                                boxShadow:
+                                                    'rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px',
+                                            }}
+                                            id="my-tooltip"
+                                        />
+                                    </div>
+                                </div>
+                                <div>{renderDescription()}</div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <button
+                                        disabled={status === 'done' ? true : false}
+                                        onClick={showModal}
+                                        className="font-bold btn"
+                                    >
+                                        Donate now
+                                    </button>
+                                    <button
+                                        onClick={() => showOpenModalVolunteer()}
+                                        className="px-4 py-2 mt-10 font-bold text-orange-100 bg-white border border-orange-100 rounded "
+                                    >
+                                        Become a volunteer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
+            <div className="w-full mt-12 text-center">
+                {!userData ? (
+                    <div>
+                        <img src={Img} alt="" className="w-24 mx-auto mb-3" />
+                        <h3 className="mb-3 text-3xl font-bold leading-8 md:text-4xl md:leading-9">How can we help?</h3>
+                        <p className="flex items-center justify-center md:text-base">
+                            <Link to="/login" className="text-sm text-blue-100 md:text-base">
+                                Contact us
+                            </Link>
+                            <p className="ml-1">with any payment-related questions.</p>
+                        </p>
+                    </div>
+                ) : (
+                    <TabComments />
+                )}
+            </div>
             <div className={userData ? '' : 'hidden'}>
                 <button
                     onClick={() => handleChangeStateOpenChatBox()}
@@ -565,7 +541,6 @@ export default function CampaignDetail(props) {
             )}
 
             {/* open modal share mail */}
-
             {isOpenModalShareMail && (
                 <ShareMailModal
                     openModal={isOpenModalShareMail}
@@ -581,26 +556,12 @@ export default function CampaignDetail(props) {
             )}
 
             {isOpenModalVolunteer && (
-                <Modal footer={false} onCancel={handleCancel} open={isOpenModalVolunteer}>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div id="volunteer-form">
-                            <div className="flex">
-                                <h1 className="text-3xl font-bold uppercase md:text-5xl">
-                                    Become a <br /> volunteer
-                                </h1>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-1 gap-5 mt-5">
-                            {inputVolunteerForm.map((data) => RENDER_INPUT_FORM(data))}
-                        </div>
-
-                        <div className="my-2 mt-3 md:w-1/2">
-                            <button className="w-full p-3 text-sm font-bold tracking-wide text-white uppercase bg-orange-100 rounded-lg focus:outline-none focus:shadow-outline">
-                                submit now
-                            </button>
-                        </div>
-                    </form>
-                </Modal>
+                <ModalRegisterVolunteer
+                    open={isOpenModalVolunteer}
+                    handleOk={handleSubmitModal}
+                    handleCancel={() => setIsOpenModalVolunteer(false)}
+                    // onDonate={handleDonate}
+                />
             )}
         </div>
     );

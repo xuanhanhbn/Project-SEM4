@@ -1,5 +1,4 @@
 #modal-detail {
-
     background: white;
     font-family: Poppins, sans-serif;
     overflow: auto;
@@ -22,8 +21,6 @@
         justify-content: space-between;
     }
 
-
-
     .partner-popup__company {
         border-left: 1px solid #c5c7d0;
         padding-left: 35px;
@@ -33,13 +30,13 @@
     .partner-popup__title {
         color: black;
         font-weight: 700;
-        font-size: 1.8rem;
+        font-size: 1.4rem;
         line-height: 1.2375rem;
     }
 
     .partner-popup__content {
         max-width: 520px;
-        font-size: .95625rem;
+        font-size: 0.95625rem;
         line-height: 1.6875rem;
     }
 
@@ -52,9 +49,8 @@
         font-weight: 700;
         font-size: 1.0125rem;
         line-height: 1.2375rem;
-        font-family: Poppins, sans-serif
+        font-family: Poppins, sans-serif;
     }
-
 
     hr {
         background: #9699a6;
@@ -66,7 +62,7 @@
         margin-top: 1rem;
         margin-bottom: 1rem;
         border: 0;
-        border-top: 1px solid rgba(0, 0, 0, .1);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     hr {
@@ -89,8 +85,6 @@
         font-size: 1.0125rem;
         margin-bottom: 0;
     }
-
-
 
     /* reponsive */
 
@@ -122,8 +116,6 @@
             padding-bottom: 2rem;
             max-width: none;
         }
-
-
 
         .partner-popup__subtitle {
             color: #009aff;

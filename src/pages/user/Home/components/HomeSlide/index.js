@@ -1,12 +1,11 @@
 import React from 'react';
 import './HomeSlide.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Palestin_1 from '~/assets/images/campaigns/Palestine-1.png';
 import { Progress } from 'antd';
 
 export default function HomeSlide(props) {
     const { dataProgram } = props;
-    const navigate = useNavigate();
 
     const handleCaculator = (item) => {
         const target = item?.target || 0;
@@ -27,16 +26,6 @@ export default function HomeSlide(props) {
     };
     return (
         <div id="homeSlide" className="px-6 ">
-            {/* <div className="flex flex-row justify-between mb-2 md:hidden">
-                <div className="flex ">
-                    <h5 className="font-medium ">Featured goals</h5>
-                    <span className="flex justify-center w-6 ml-3 bg-white rounded-full">3</span>
-                </div>
-                <div>
-                    <button className="text-blue-100">See all</button>
-                </div>
-            </div> */}
-
             <div id="listCampaigns">
                 <div className="container_wrapper ">
                     <div className="wrapper w-[100%]">
@@ -63,7 +52,9 @@ export default function HomeSlide(props) {
                                     <div className="flex flex-row">
                                         <div className="col">
                                             <i className="text-xl fa-sharp fa-thin fa-bullseye-arrow"></i>
-                                            <p className="ml-2 text-xs">{item?.target || 0} $</p>
+                                            <p className="ml-2 text-xs">
+                                                {item?.target ? item?.target.toLocaleString() : 0} $
+                                            </p>
                                         </div>
                                         <div className="col_3">
                                             <i className="text-xl fa-light fa-user-group"></i>

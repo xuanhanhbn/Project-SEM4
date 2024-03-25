@@ -1,46 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-// import { Input, Tabs, Upload } from 'antd';
-import {
-    columns,
-    fakeDataTable,
-    inputChangePassword,
-    inputUpdateProfile,
-    linePaymentData,
-    optionsChartLine,
-    tabItems,
-} from './constants';
-import { Controller, useForm } from 'react-hook-form';
-import * as Yup from 'yup';
-// import { useMutation } from '@tanstack/react-query';
-// import { beforeUpload, notify } from '~/utils/common';
-// import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-
-import { yupResolver } from '@hookform/resolvers/yup';
-// import TextArea from 'antd/es/input/TextArea';
-// import { Link, useLocation } from 'react-router-dom';
-// import logo from '~/assets/images/logo/16889553131686049166paypal.png';
-import useAuthStore from '~/store/zustand';
-import { shallow } from 'zustand/shallow';
-import { todayCardData } from './constants';
-import { Line } from 'react-chartjs-2';
-import TableCommon from '~/components/TableCommon';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+//
+import { useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { createProgramApi, getPartnerDetailApi } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
-import { Input, Progress, Space } from 'antd';
+import { Input, Space } from 'antd';
 import './style.css';
 import ModalCreateProgram from '../ModalCreateProgram';
-import moment from 'moment';
 import { Tabs } from 'antd';
 import ActiveProgram from './components/ActiveProgram';
 import DeActiveProgram from './components/DeActiveProgram';
 
 function PartnerDetailPage(props) {
-    // const [loading, setLoading] = useState(false);
-    // const [imageUrl, setImageUrl] = useState();
     const [dataDetail, setDataDetail] = useState(null);
     const [isOpenModalCreateProgram, setIsOpenModalCreateProgram] = useState(false);
     const { Search } = Input;
@@ -80,7 +53,7 @@ function PartnerDetailPage(props) {
     const items = [
         {
             key: '1',
-            label: 'Active Proram',
+            label: 'List All Proram',
             children: <ActiveProgram dataDetail={dataDetail} />,
         },
 

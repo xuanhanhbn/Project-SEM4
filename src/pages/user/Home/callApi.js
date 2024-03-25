@@ -1,9 +1,14 @@
-import { getApiDefault, getApiWithBodyDefault } from '~/utils/api';
+import { postApiDefault } from '~/utils/api';
 
 export async function getListProgram() {
-    const url = 'program/get-all-programs?name=&page=1&size=3';
+    const url = 'program/list-program-by-status';
+    const request = {
+        name: 'Active',
+        page: 1,
+        size: 4,
+    };
     try {
-        const res = await getApiDefault(url);
+        const res = await postApiDefault(url, request);
         return res;
     } catch (error) {
         return error;

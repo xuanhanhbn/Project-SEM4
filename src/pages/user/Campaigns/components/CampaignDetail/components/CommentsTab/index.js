@@ -4,7 +4,7 @@ import dfAvatar from '~/assets/images/avatar/default-avatar.jpg';
 
 function TabComments() {
     return (
-        <div tab="Comments" className="" key="2">
+        <div className="mt-1">
             <div className="h-[25rem] flex flex-col justify-between">
                 <div className="flex-grow p-3 mb-3 overflow-auto text-left comment-box">
                     <div className="mb-5 comment-item">

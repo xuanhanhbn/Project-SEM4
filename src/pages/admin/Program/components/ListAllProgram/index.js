@@ -22,7 +22,6 @@ function ListAllProgram() {
     const { mutate: mutationGetAllProgram, isPending } = useMutation({
         mutationFn: getAllProgramApi,
         onSuccess: (res) => {
-            console.log('res: ', res);
             if ((res && res?.status === 200) || res?.status === '200') {
                 return setDataProgram(res?.data);
             }

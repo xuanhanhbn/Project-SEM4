@@ -162,8 +162,8 @@ function ModalCreateProgram(props) {
             imageUrl: listImage?.imageList,
         };
 
-        // return handleCreate(dataCreate);
-        console.log('dataCreate: ', dataCreate);
+        return handleCreate(dataCreate);
+        // console.log('dataCreate: ', dataCreate);
     };
 
     // xử lý update program

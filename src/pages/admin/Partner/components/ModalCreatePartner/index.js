@@ -105,13 +105,7 @@ function ModalCreatePartner(props) {
             type="button"
         >
             {loading ? <LoadingOutlined /> : <PlusOutlined />}
-            <div
-                style={{
-                    marginTop: 8,
-                }}
-            >
-                Upload
-            </div>
+            <div style={{ marginTop: 8 }}>Upload</div>
         </button>
     );
 

@@ -37,3 +37,16 @@ export async function createPartnerApi(data) {
         return error;
     }
 }
+
+export async function blockPartnerApi(id) {
+    // console.log('dataAPI: ', data);
+    const url = `/partner/block-partner?id=${id}`;
+    try {
+        const res = await getApiDefault(url);
+        if (res) {
+            return res;
+        }
+    } catch (error) {
+        return error;
+    }
+}

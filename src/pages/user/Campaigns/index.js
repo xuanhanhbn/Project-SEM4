@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import CardCustom from '~/components/Cards';
-import Card_img_1 from '~/assets/images/campaigns/Cover_Photo_November_12 .jpg';
-import { CampaignsData } from './constants';
 import './Campaigns.css';
 import { Link } from 'react-router-dom';
 import { getAllPrograms } from './callApi';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 function Campaigns() {
+    const ref = useRef();
     const [dataProgram, setDataProgram] = useState([]);
     const mutation = useMutation({
         mutationFn: getAllPrograms,
@@ -23,6 +22,7 @@ function Campaigns() {
 
     useEffect(() => {
         mutation.mutate();
+        ref.current?.scrollIntoView({ behavior: 'smooth' });
     }, []);
 
     const handleReturnLogo = (data) => {
@@ -33,7 +33,7 @@ function Campaigns() {
         return '';
     };
     return (
-        <div id="campaigns">
+        <div id="campaigns" ref={ref}>
             <div>
                 <h1 className="campaign_title">Choose where to donate</h1>
                 <h4 className="campaign_content ">The UN World Food Program delivers the meals</h4>

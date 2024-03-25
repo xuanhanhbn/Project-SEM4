@@ -56,14 +56,14 @@ export const todayCardData = [
     {
         id: 3,
         field: 'totalDonateForPaypal',
-        cardName: `Today's Paypal`,
+        cardName: `Total Donate For Paypal`,
         todayAmount: `$33,000`,
         cardIcon: <i className="fa-brands fa-cc-paypal"></i>,
     },
     {
         id: 4,
         field: 'totalDonateForVnPay',
-        cardName: `Today's VNPay`,
+        cardName: `Total Donate For VNPay`,
         todayAmount: `$20,000`,
         cardIcon: <i className="fa-solid fa-credit-card"></i>,
     },
