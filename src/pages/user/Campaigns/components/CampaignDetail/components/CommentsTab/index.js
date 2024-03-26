@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import TextArea from 'antd/es/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import dfAvatar from '~/assets/images/avatar/default-avatar.jpg';
-import { notify } from '~/utils/common';
+import { convertTimeStampToDateTime, notify } from '~/utils/common';
 import { getAllFeedbackProgram, onEditFeedbackProgram, onFeedbackProgram, onRemoveFeedbackProgram } from './callApi';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
@@ -14,8 +14,8 @@ import { faL } from '@fortawesome/free-solid-svg-icons';
 import { Modal } from 'antd';
 
 function TabComments(props) {
-    const { dataDetail } = props;
-    const [dataFeedback, setDataFeedback] = useState([]);
+    const { dataDetail, dataFeedback, setDataFeedback } = props;
+    // const [dataFeedback, setDataFeedback] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [isUpdate, setIsUpdate] = useState(false);
     const [feedbackId, setFeedbackId] = useState('');
@@ -52,7 +52,7 @@ function TabComments(props) {
                 setInputValue('');
                 return getAllFeedback({ programId: dataDetail?.programId });
             }
-            return notify('error', 'error');
+            return notify(res?.response?.data, 'warning');
         },
     });
 
@@ -123,14 +123,18 @@ function TabComments(props) {
                             <div key={item?.feedBackId} className="mb-5 comment-item">
                                 <div className="flex user-info">
                                     <img src={dfAvatar} alt="" className="mr-3 rounded-full w-7 h-7" />
-                                    <p className="font-bold">{item?.userName}</p>
+                                    <div>
+                                        <p className="font-bold">{item?.user?.displayName}</p>
+                                        <span>{convertTimeStampToDateTime(item?.createdAt)}</span>
+                                    </div>
                                 </div>
+
                                 <div className="pl-10">
                                     <div className="p-3 break-all border shadow-inner comment rounded-xl">
                                         {item?.content}
                                     </div>
                                 </div>
-                                {userData?.userId === item?.userId && (
+                                {userData?.userId === item?.user?.userId && (
                                     <div className="flex pl-10 mt-1 ml-3">
                                         <button
                                             className="mr-2 flex items-center text-cyan-500"

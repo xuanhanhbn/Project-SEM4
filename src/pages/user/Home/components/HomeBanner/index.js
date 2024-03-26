@@ -35,13 +35,13 @@ export default function HomeBanner() {
             </div>
             <div className="wrapper_content">
                 <div className="home_content ">
-                    <h1 className="home_h1 ">Fight hunger with the ShareTheMeal app</h1>
+                    <h1 className="home_h1 ">Give-AID - Connecting Kindness, Spreading the Power of Volunteerism</h1>
                 </div>
                 <div className="home_h3">
                     <h3>
-                        With just a few taps on your phone you can donate to someone in need and the United Nations
-                        World Food Programme will deliver the meals. Help us end hunger by downloading the ShareTheMeal
-                        app today.
+                        Welcome to Give-AID - the platform that connects those in need with volunteers and
+                        philanthropists across communities. At Give-AID, we believe that every small act from you can
+                        make a big difference in someone else's life.
                     </h3>
                 </div>
             </div>

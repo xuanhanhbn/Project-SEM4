@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import moment from 'moment';
 import { toast } from 'react-toastify';
 
 export const beforeUpload = (file) => {
@@ -33,6 +34,14 @@ export const getBaseUploadLogo = (img, callback) => {
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
 };
+
+export const convertTimeStampToDateTime = (date) => {
+    if (date) {
+        return moment(date)?.format('DD/MM/YYYY HH:mm');
+    }
+    return '';
+};
+
 export const notify = (message, type) => {
     if (type === 'info') {
         toast.info(message);

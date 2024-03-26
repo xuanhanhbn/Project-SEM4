@@ -29,3 +29,13 @@ export async function onDownloadDonateProgram(id) {
         return error;
     }
 }
+
+export async function onShareMailProgram(data) {
+    const url = `program/share-program`;
+    try {
+        const res = await postApiDefault(url, data);
+        return res;
+    } catch (error) {
+        return error;
+    }
+}

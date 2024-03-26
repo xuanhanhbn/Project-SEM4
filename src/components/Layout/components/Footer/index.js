@@ -44,7 +44,7 @@ export default function Footer() {
                                 <i className="text-white fa-light fa-envelope fa-xl"></i>
                             </div>
                         </div>
-                        <div className="footer_name_uuu">ShareTheMeal © 2023</div>
+                        <div className="footer_name_uuu">Give-AID © 2023</div>
                     </div>
                 </div>
             </div>

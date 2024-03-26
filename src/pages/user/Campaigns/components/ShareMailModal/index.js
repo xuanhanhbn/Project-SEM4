@@ -6,6 +6,10 @@ import 'react-multi-email/dist/style.css';
 function ShareMailModal(props) {
     const { openModal, onSubmitModal, onCancelModal } = props;
     const [emails, setEmails] = useState([]);
+
+    const handleShareMail = () => {
+        return onSubmitModal(emails);
+    };
     return (
         <div>
             <Modal
@@ -36,7 +40,7 @@ function ShareMailModal(props) {
                         }}
                     />
                     <button
-                        onClick={() => console.log('shareMail', emails)}
+                        onClick={() => handleShareMail()}
                         disabled={emails.length === 0 ? true : false}
                         className="bg-orange-100 text-center hover:text-black hover:bg-orange-200 border-orange-100 hover:border-orange-200 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]"
                     >

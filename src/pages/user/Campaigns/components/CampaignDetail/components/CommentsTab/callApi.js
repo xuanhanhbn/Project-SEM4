@@ -1,9 +1,9 @@
 import { getApiDefault, postApiDefault } from '~/utils/api';
 
 export async function onFeedbackProgram(data) {
-    const url = `feedback/create-feedback?content=${data?.content}&programId=${data?.programId}`;
+    const url = `feedback/create-feedback`;
     try {
-        const res = await postApiDefault(url, {});
+        const res = await postApiDefault(url, data);
         return res;
     } catch (error) {
         return error;

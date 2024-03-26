@@ -8,8 +8,8 @@ export default function OutImpact() {
         <div id="impact" className="px-6 pt-8 ">
             <h2 className="title_h2">Our impact to date</h2>
             <h4 className="content_h4">
-                ShareTheMeal donations not only provide life-saving food in emergencies but also facilitate school
-                feeding, nutrition support, cash transfers and resilience programmes all over the world.
+                Give-AID donations not only provide life-saving food in emergencies but also facilitate school feeding,
+                nutrition support, cash transfers and resilience programmes all over the world.
             </h4>
             {/* <div className="font-bold text-center text-blue-100">
                 <i className="ml-2 fa-solid fa-angle-right "></i>
@@ -65,7 +65,7 @@ export default function OutImpact() {
                     <div className="flex flex-col justify-center h-full">
                         <h2 className="mb-4 text-4xl font-bold leading-9 text-white">Our impact to date</h2>
                         <p className="text-white">
-                            ShareTheMeal donations not only provide life-saving food in emergencies but also facilitate
+                            Give-AID donations not only provide life-saving food in emergencies but also facilitate
                             school feeding, nutrition support, cash transfers and resilience programmes all over the
                             world.
                         </p>

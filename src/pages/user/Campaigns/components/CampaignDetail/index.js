@@ -30,7 +30,7 @@ import ChatBoxCustom from '~/components/ChatBox';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
 import { useMutation } from '@tanstack/react-query';
-import { getDetailProgram, onDonateProgram, onDownloadDonateProgram } from './callApi';
+import { getDetailProgram, onDonateProgram, onDownloadDonateProgram, onShareMailProgram } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
 import { Input, Modal, Progress } from 'antd';
@@ -91,6 +91,7 @@ export default function CampaignDetail(props) {
     const [listImage, setListImage] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isOpenModalVolunteer, setIsOpenModalVolunteer] = useState(false);
+    const [dataFeedback, setDataFeedback] = useState([]);
 
     const ref = useRef();
     const { currentUser } = useContext(AuthContext);
@@ -180,6 +181,17 @@ export default function CampaignDetail(props) {
         },
     });
 
+    const { mutate: shareMailProgram, isPending: isPendingShare } = useMutation({
+        mutationFn: onShareMailProgram,
+        onSuccess: (res) => {
+            if (res && res?.status === 200) {
+                handleCancelModalShareMail();
+                return notify('Share success', 'success');
+            }
+            return notify('error', 'error');
+        },
+    });
+
     const handleSearchUser = async (emailPartner) => {
         const q = query(collection(db, 'users'), where('email', '==', emailPartner));
         try {
@@ -252,8 +264,13 @@ export default function CampaignDetail(props) {
     };
 
     // xử lý khi click submit modal share mail
-    const handleSubmitModalShareMail = () => {
-        setIsOpenModalShareMail(false);
+    const handleSubmitModalShareMail = (data) => {
+        const dataRequest = {
+            emails: data,
+            url: window.location.href,
+            programId: dataDetail?.programId,
+        };
+        return shareMailProgram(dataRequest);
     };
 
     // xử lý khi click đóng modal
@@ -361,10 +378,6 @@ export default function CampaignDetail(props) {
         setIsOpenModalVolunteer(false);
     };
 
-    const onChange = (key) => {
-        console.log(key);
-    };
-
     const handleReturnLogoImg = (data) => {
         if (Array.isArray(data) && data?.length > 0) {
             const filterLogo = data.filter((obj) => obj?.type === 'Logo');
@@ -373,22 +386,9 @@ export default function CampaignDetail(props) {
         return '';
     };
 
-    const items = [
-        {
-            key: '1',
-            label: 'List Donate',
-            children: <TabListDonate dataDetail={dataDetail || []} />,
-        },
-        {
-            key: '2',
-            label: 'Comments',
-            children: <TabComments />,
-        },
-    ];
-
     return (
         <div id="campaignDetail" ref={ref}>
-            <Loading isLoading={isPending || isPendingDonate || isPendingDownload} />
+            <Loading isLoading={isPending || isPendingDonate || isPendingDownload || isPendingShare} />
             <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
             {/* <div></div> */}
             <div className="flex flex-wrap">
@@ -473,7 +473,7 @@ export default function CampaignDetail(props) {
                                             data-tooltip-content="Comments"
                                             className="btn_share"
                                         >
-                                            <i className=" fa-light fa-comment"></i> 234
+                                            <i className=" fa-light fa-comment"></i> {dataFeedback?.length}
                                         </button>
                                         <button
                                             data-tooltip-id="my-tooltip"
@@ -481,7 +481,7 @@ export default function CampaignDetail(props) {
                                             onClick={showModalShareMail}
                                             className="btn_share"
                                         >
-                                            <i className=" fa-light fa-share"></i> 567
+                                            <i className=" fa-light fa-share"></i>
                                         </button>
                                         <Tooltip
                                             style={{
@@ -528,7 +528,11 @@ export default function CampaignDetail(props) {
                         </p>
                     </div>
                 ) : (
-                    <TabComments dataDetail={dataDetail} />
+                    <TabComments
+                        setDataFeedback={setDataFeedback}
+                        dataFeedback={dataFeedback}
+                        dataDetail={dataDetail}
+                    />
                 )}
             </div>
             <div className={userData ? '' : 'hidden'}>

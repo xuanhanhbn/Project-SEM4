@@ -13,7 +13,7 @@ export const dataFaqs = [
                     'Email us at support@sharethemeal.org and someone from our Customer Support team will get back to you.',
             },
             {
-                title: 'Is my monthly web subscription connected to my ShareTheMeal app?',
+                title: 'Is my monthly web subscription connected to my Give-AID app?',
                 content: `Your monthly donations will show up on your app on your "Profile" and "Transaction history".`,
             },
         ],
@@ -37,12 +37,12 @@ export const dataFaqs = [
         heading: 'About us',
         collapses: [
             {
-                title: 'Where did the idea for ShareTheMeal originate from?',
+                title: 'Where did the idea for Give-AID originate from?',
                 content:
-                    'The starting point for ShareTheMeal is that it is very inexpensive to feed one child for a day. We believe even more people would be willing to help if there was a simple and straightforward way of doing so. This is where the ShareTheMeal app comes in! Sebastian Stricker and Bernhard Kowatsch founded ShareTheMeal in April 2014 in Berlin during a sabbatical. A large number of voluntary supporters were essential to the further development of ShareTheMeal. ShareTheMeal is now an innovation project within WFP. The team is located in Berlin, Germany. We’d love to hear from you – drop us an email at support@sharethemeal.org. You can also find out more about ShareTheMeal at https://sharethemeal.org/.',
+                    'The starting point for Give-AID is that it is very inexpensive to feed one child for a day. We believe even more people would be willing to help if there was a simple and straightforward way of doing so. This is where the Give-AID app comes in! Sebastian Stricker and Bernhard Kowatsch founded Give-AID in April 2014 in Berlin during a sabbatical. A large number of voluntary supporters were essential to the further development of Give-AID. Give-AID is now an innovation project within WFP. The team is located in Berlin, Germany. We’d love to hear from you – drop us an email at support@sharethemeal.org. You can also find out more about Give-AID at https://sharethemeal.org/.',
             },
             {
-                title: 'Why doesn’t ShareTheMeal operate in developed countries?',
+                title: 'Why doesn’t Give-AID operate in developed countries?',
                 content: `Our mission is to feed the poorest people on earth and to fight global hunger in the most efficient and effective way possible. The vast majority of the world's hungry people live in developing countries.`,
             },
             {
@@ -81,11 +81,11 @@ export const dataFaqs = [
             },
             {
                 title: `Why was my credit card declined?`,
-                content: `Credit card companies and banks decline cards for many reasons. To ensure your financial information remains secure, ShareTheMeal does not receive details about why your card was declined. Unfortunately, this means we cannot resolve the problem for you. If your card is declined, please contact your credit card company or bank for help completing your payment.`,
+                content: `Credit card companies and banks decline cards for many reasons. To ensure your financial information remains secure, Give-AID does not receive details about why your card was declined. Unfortunately, this means we cannot resolve the problem for you. If your card is declined, please contact your credit card company or bank for help completing your payment.`,
             },
             {
                 title: `Why is a second confirmation step necessary for some donations?`,
-                content: `Some card issuers may request additional steps to verify your identity. These steps depend on your bank and may include fingerprint, text message or an additional password. The ShareTheMeal app will help you navigate through these steps.`,
+                content: `Some card issuers may request additional steps to verify your identity. These steps depend on your bank and may include fingerprint, text message or an additional password. The Give-AID app will help you navigate through these steps.`,
             },
         ],
     },

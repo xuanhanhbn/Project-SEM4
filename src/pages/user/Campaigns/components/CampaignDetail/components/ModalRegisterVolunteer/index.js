@@ -1,21 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Input, Modal } from 'antd';
+import { Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
-// import './ModalRegisterVolunteer.css';
-import { Link } from 'react-router-dom';
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
-
-const validationSchema = Yup.object().shape({
-    amount: Yup.string().required('Donate value is required'),
-});
+import { useNavigate } from 'react-router-dom';
 
 function ModalRegisterVolunteer(props) {
     const { open, handleOk, handleCancel, onDonate } = props;
-
+    const navigation = useNavigate();
     const { userData, setUserData, cleanup } = useAuthStore(
         (state) => ({
             userData: state.userData || '',
@@ -25,38 +17,8 @@ function ModalRegisterVolunteer(props) {
         shallow,
     );
 
-    const {
-        control,
-        handleSubmit,
-        setValue,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(validationSchema),
-        defaultValues: {
-            paymentMethod: 'Paypal', // Set default payment method
-        },
-    });
-
-    // STATE
-    const [donateValue, setDonateValue] = useState('5');
-    const [donateType, setDonateType] = useState('Paypal');
-
-    // set value và type donate mặc định
-    useEffect(() => {
-        setValue('amount', 5);
-    }, []);
-
-    // xử lý khi chọn value donate mặc định
-    const getValueDonate = (data) => {
-        setDonateValue(data);
-    };
-
     // xử lý khi click nút donate
     const onSubmit = (data) => onDonate(data);
-
-    const dollarUSLocale = Intl.NumberFormat('en-US');
-
-    // reander input, radio, button donate
 
     return (
         <div id="modalRegister Volunteer">
@@ -67,9 +29,17 @@ function ModalRegisterVolunteer(props) {
                         <div className="mt-2">
                             <p>Please log in to use this feature..</p>
                         </div>
+                        <div className="w-[100%] flex items-center justify-center">
+                            <button
+                                onClick={() => navigation('/login')}
+                                className="bg-orange-100 mt-10 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem] text-white"
+                            >
+                                LOGIN
+                            </button>
+                        </div>
                     </div>
                 ) : (
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form>
                         <div>
                             <h3 className="text-base font-bold leading-6 text-center md:text-xl">Register Volunteer</h3>
                         </div>

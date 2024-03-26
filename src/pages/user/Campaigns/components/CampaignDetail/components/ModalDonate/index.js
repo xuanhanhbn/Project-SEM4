@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Input, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './ModalDonate.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { inputValueDonate } from './data';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -37,6 +38,8 @@ function ModalDonate(props) {
             paymentMethod: 'Paypal', // Set default payment method
         },
     });
+
+    const navigation = useNavigate();
 
     // STATE
     const [donateValue, setDonateValue] = useState('5');
@@ -136,11 +139,14 @@ function ModalDonate(props) {
                         <div className="mt-2">
                             <p>Please log in to use this feature..</p>
                         </div>
-                        {/* <div className="w-[100%] flex items-center justify-center">
-                            <button className="bg-orange-100 mt-10 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]">
+                        <div className="w-[100%] flex items-center justify-center">
+                            <button
+                                onClick={() => navigation('/login')}
+                                className="bg-orange-100 mt-10 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem] text-white"
+                            >
                                 LOGIN
                             </button>
-                        </div> */}
+                        </div>
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit(onSubmit)}>
