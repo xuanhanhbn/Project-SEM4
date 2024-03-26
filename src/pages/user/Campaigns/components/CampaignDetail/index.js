@@ -30,7 +30,7 @@ import ChatBoxCustom from '~/components/ChatBox';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
 import { useMutation } from '@tanstack/react-query';
-import { getDetailProgram, onDonateProgram } from './callApi';
+import { getDetailProgram, onDonateProgram, onDownloadDonateProgram } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
 import { Input, Modal, Progress } from 'antd';
@@ -165,6 +165,16 @@ export default function CampaignDetail(props) {
             if (data && data?.status === 200) {
                 const url = data?.data?.url;
                 return window.open(url, '_blank');
+            }
+            return notify('error', 'error');
+        },
+    });
+
+    const { mutate: downloadDonateProgram, isPending: isPendingDownload } = useMutation({
+        mutationFn: onDownloadDonateProgram,
+        onSuccess: (res) => {
+            if (res && res?.status === 200) {
+                return;
             }
             return notify('error', 'error');
         },
@@ -305,6 +315,10 @@ export default function CampaignDetail(props) {
         }
     };
 
+    const handleDownloadDonate = () => {
+        return downloadDonateProgram(dataDetail?.programId);
+    };
+
     // đóng mở modal đăng ký volunteer
     const showOpenModalVolunteer = () => setIsOpenModalVolunteer(true);
 
@@ -350,6 +364,7 @@ export default function CampaignDetail(props) {
     const onChange = (key) => {
         console.log(key);
     };
+
     const handleReturnLogoImg = (data) => {
         if (Array.isArray(data) && data?.length > 0) {
             const filterLogo = data.filter((obj) => obj?.type === 'Logo');
@@ -373,7 +388,7 @@ export default function CampaignDetail(props) {
 
     return (
         <div id="campaignDetail" ref={ref}>
-            <Loading isLoading={isPending || isPendingDonate} />
+            <Loading isLoading={isPending || isPendingDonate || isPendingDownload} />
             <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
             {/* <div></div> */}
             <div className="flex flex-wrap">
@@ -423,7 +438,7 @@ export default function CampaignDetail(props) {
                     </div>
                     <div className="order-2 z-50 col-start-2 mt-6 md:order-1 md:mt-0 lg:block">
                         <div className="h-full px-4 py-6 bg-white rounded-2xl">
-                            <TabListDonate dataDetail={dataDetail || []} />
+                            <TabListDonate dataDetail={dataDetail || []} handleDownloadDonate={handleDownloadDonate} />
                             {/* <Tabs defaultActiveKey="1" items={items} onChange={onChange} /> */}
                         </div>
                     </div>
@@ -513,7 +528,7 @@ export default function CampaignDetail(props) {
                         </p>
                     </div>
                 ) : (
-                    <TabComments />
+                    <TabComments dataDetail={dataDetail} />
                 )}
             </div>
             <div className={userData ? '' : 'hidden'}>

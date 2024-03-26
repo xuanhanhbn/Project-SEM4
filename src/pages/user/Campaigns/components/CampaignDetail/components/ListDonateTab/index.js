@@ -2,14 +2,14 @@ import moment from 'moment';
 import React from 'react';
 
 function TabListDonate(props) {
-    const { dataDetail } = props;
+    const { dataDetail, handleDownloadDonate } = props;
     return (
         <div>
             <div className="flex items-center justify-between">
                 <div></div>
                 <span>List Donate</span>
                 <div className="flex items-center">
-                    <button>
+                    <button onClick={() => handleDownloadDonate()}>
                         <i className="fa-light fa-download"></i>
                     </button>
                 </div>

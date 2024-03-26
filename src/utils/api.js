@@ -1,3 +1,4 @@
+import FileSaver from 'file-saver';
 import baseApiUrlAuth from './baseApiAuth';
 import baseApiUrlNoAuth from './baseApiNoAuth';
 import baseApiUploadImage from './baseApiUpload';
@@ -55,5 +56,18 @@ export const getApiNoAuth = (url) =>
         baseApiUrlNoAuth
             .get(url)
             .then((res) => resolve(res))
+            .catch((err) => reject(err)),
+    );
+
+// DOWNLOAD FILE
+export const downloadFileDefault = (downloadFileUrl) =>
+    new Promise((resolve, reject) =>
+        baseApiUrlAuth
+            .get(`${downloadFileUrl}`, { responseType: 'blob' })
+            .then((res) => {
+                const blob = new Blob([res.data], { type: res.headers['content-type'] });
+                FileSaver.saveAs(blob, res.headers.filename);
+                resolve(res);
+            })
             .catch((err) => reject(err)),
     );
