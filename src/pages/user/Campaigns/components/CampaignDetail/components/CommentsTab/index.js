@@ -114,7 +114,7 @@ function TabComments(props) {
     };
 
     return (
-        <div className="mt-1 bg-white rounded">
+        <div className="mt-1 bg-white rounded-lg">
             <div className="h-[25rem] flex flex-col justify-between">
                 <div className="flex-grow p-3 mb-3 overflow-auto text-left comment-box">
                     {dataFeedback &&
@@ -155,15 +155,27 @@ function TabComments(props) {
                             </div>
                         ))}
                 </div>
-                <div className="w-full bg-white ">
-                    <div>
+                <div className="w-full bg-white p-2 flex items-center ">
+                    <div className="w-[5%] flex items-center justify-center">
+                        <img className="w-[40px] h-[40px] rounded-full" src={userData?.avatarUrl?.url} alt="avatar" />
+                    </div>
+                    <div className="w-[90%]">
                         <TextArea
                             onPressEnter={(e) => handleSendFeedBack(e)}
                             onChange={(e) => setInputValue(e?.target?.value)}
                             value={inputValue}
                             placeholder="Add your comment..."
                             className="p-2 focus:outline-1 focus:outline-blue-500 font-bold border-[0.1px] resize-none h-[120px] border-[#9EA5B1] rounded-md w-full"
-                        ></TextArea>
+                        />
+                    </div>
+                    <div className="w-[5%]">
+                        <button
+                            onClick={(e) => handleSendFeedBack(e)}
+                            className="text-blue-500"
+                            title="Press enter send feedback"
+                        >
+                            <i className="fa-solid fa-paper-plane-top"></i>
+                        </button>
                     </div>
                 </div>
             </div>

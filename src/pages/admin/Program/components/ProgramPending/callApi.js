@@ -1,4 +1,4 @@
-import { getApiDefault, postApiDefault } from '~/utils/api';
+import { postApiDefault } from '~/utils/api';
 
 export async function getAllProgramApi(data) {
     const request = {

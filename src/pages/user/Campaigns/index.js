@@ -6,6 +6,7 @@ import { getAllPrograms } from './callApi';
 import { useMutation } from '@tanstack/react-query';
 import { notify } from '~/utils/common';
 import { useEffect, useRef, useState } from 'react';
+import moment from 'moment';
 
 function Campaigns() {
     const ref = useRef();
@@ -74,6 +75,7 @@ function Campaigns() {
                                     progressPercentage={data.progressPercentage}
                                     cardTitle={data.programName}
                                     id={data?.programId}
+                                    startDonateDate={data?.startDonateDate}
                                 />
                             );
                         }

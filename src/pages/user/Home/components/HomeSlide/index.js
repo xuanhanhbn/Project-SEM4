@@ -3,6 +3,8 @@ import './HomeSlide.css';
 import { Link } from 'react-router-dom';
 import Palestin_1 from '~/assets/images/campaigns/Palestine-1.png';
 import { Progress } from 'antd';
+import { handleReturnLogoImage } from '~/utils/common';
+import ImageWithBanner from '~/components/ImageWithBanner';
 
 export default function HomeSlide(props) {
     const { dataProgram } = props;
@@ -39,13 +41,15 @@ export default function HomeSlide(props) {
                             >
                                 <h1 className="card_title">{item?.programName}</h1>
                                 <div className="relative ">
-                                    <img
+                                    <ImageWithBanner
+                                        imageUrl={handleReturnLogoImage(item?.attachment) || Palestin_1}
+                                        bannerText="Chỗ này là trạng thái"
+                                    />
+                                    {/* <img
                                         className="card_image"
                                         alt={item?.programName}
-                                        src={
-                                            item && item?.attachment?.length > 0 ? item?.attachment[0]?.url : Palestin_1
-                                        }
-                                    />
+                                        src={handleReturnLogoImage(item?.attachment) || Palestin_1}
+                                    /> */}
                                 </div>
 
                                 <div className="my-4">

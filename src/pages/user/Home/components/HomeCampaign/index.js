@@ -2,6 +2,7 @@ import React from 'react';
 import './HomeCampaign.css';
 import Palestine11 from '~/assets/images/campaigns/palestine11_Homecard.png';
 import { Link, useNavigate } from 'react-router-dom';
+import { handleReturnLogoImage } from '~/utils/common';
 
 export default function HomeCampaign(props) {
     const { dataProgram } = props;
@@ -19,11 +20,7 @@ export default function HomeCampaign(props) {
             <div className="tag_donate">
                 <div className="relative md:w-3/5">
                     <img
-                        src={
-                            dataProgram && dataProgram?.attachment?.length > 0
-                                ? dataProgram?.attachment[0]?.url
-                                : Palestine11
-                        }
+                        src={handleReturnLogoImage(dataProgram?.attachment) || Palestine11}
                         alt={dataProgram?.programName}
                         className="rounded-t-2xl md:h-full md:rounded-l-2xl md:rounded-tr-none"
                     />

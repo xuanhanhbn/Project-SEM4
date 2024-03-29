@@ -1,9 +1,23 @@
 import React from 'react';
 import './Cards.css';
 import { Link } from 'react-router-dom';
+import { handleCheckStartDonateDate } from '~/utils/common';
+import CountdownTimer from '../CountdownTimer';
+import moment from 'moment';
 
 export default function CardCustom(props) {
-    const { id, cardTitle, cardImage, target, supporteds, progressValue, progressPercentage, to, status } = props;
+    const {
+        id,
+        cardTitle,
+        cardImage,
+        target,
+        supporteds,
+        progressValue,
+        progressPercentage,
+        to,
+        status,
+        startDonateDate,
+    } = props;
     return (
         <Link to={`${to}/${id}`} className="card">
             <h1 className="card_title">{cardTitle}</h1>
@@ -37,12 +51,18 @@ export default function CardCustom(props) {
                     {status === 'done' ? null : <div className="text_1">{progressPercentage}</div>}
                 </div>
             </div>
-            <button
-                disabled={status === 'done' ? true : false}
-                className="bg-orange-100 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]"
-            >
-                Donate now
-            </button>
+            {handleCheckStartDonateDate(startDonateDate) ? (
+                <div className="flex items-center justify-center">
+                    <CountdownTimer targetDate={moment(startDonateDate)?.format('YYYY/MM/DD')} />
+                </div>
+            ) : (
+                <button
+                    disabled={status === 'done' ? true : false}
+                    className="bg-orange-100 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]"
+                >
+                    Donate now
+                </button>
+            )}
         </Link>
     );
 }

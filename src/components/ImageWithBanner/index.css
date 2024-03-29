@@ -1,0 +1,23 @@
+.banner-container {
+    position: relative;
+    display: inline-block;
+}
+
+.image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.banner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff0000; /* Màu của banner */
+    color: #ffffff; /* Màu của text */
+    padding: 5px 10px; /* Padding cho banner */
+    font-size: 14px; /* Kích thước chữ */
+    font-weight: bold; /* Trọng lượng chữ */
+    transform: translate(50%, -50%); /* Để căn chỉnh banner xuống góc phải */
+    transform-origin: top right;
+}

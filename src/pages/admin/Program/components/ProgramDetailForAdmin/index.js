@@ -3,26 +3,29 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { onGetDetailProgram } from './callApi';
-import { notify } from '~/utils/common';
+import { convertTimeStampToDateTime, handleFormatMoney, handleReturnLogoImage, notify } from '~/utils/common';
 import moment from 'moment';
 import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
-import { Button, Input, Modal } from 'antd';
+import { Button, Input, Modal, Progress } from 'antd';
 import './index.css';
 import Loading from '~/components/Loading';
 import { getApiWithBodyDefault } from '~/utils/api';
+import ModalEditProgram from '../ModalEditProgram';
 const { TextArea } = Input;
 
 function ProgramDetailForAdmin() {
     const baseOpenModal = {
         accept: false,
         cancel: false,
+        block: false,
+        unLock: false,
     };
     const params = useParams();
-    const navigation = useNavigate();
 
     const ref = useRef();
     const [dataProgram, setDataProgram] = useState({});
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(baseOpenModal);
     const [isMessage, setIsMessage] = useState('');
 
@@ -91,6 +94,19 @@ function ProgramDetailForAdmin() {
         }
     };
 
+    const blockProgram = async (data) => {
+        try {
+            const url = `program/toggle-lock-program?id=${dataProgram?.programId}&value=${data}`;
+            const res = await getApiWithBodyDefault(url);
+            if (res && res.status === 200) {
+                notify(res?.data, 'success');
+                handleCancel();
+                return handleGetDetail(params?.programId);
+            }
+        } catch (error) {
+            return notify(error, 'error');
+        }
+    };
     const handleCancel = () => setIsOpenModal(baseOpenModal);
 
     const handleOpenModal = (type) => {
@@ -99,22 +115,61 @@ function ProgramDetailForAdmin() {
                 ...prev,
                 accept: true,
                 cancel: false,
+                block: false,
+            }));
+        }
+        if (type && type === 'block') {
+            return setIsOpenModal((prev) => ({
+                ...prev,
+                accept: false,
+                cancel: false,
+                block: true,
+            }));
+        }
+        if (type && type === 'unLock') {
+            return setIsOpenModal((prev) => ({
+                ...prev,
+                accept: false,
+                cancel: false,
+                block: false,
+                unLock: true,
             }));
         }
         return setIsOpenModal((prev) => ({
             ...prev,
             accept: false,
+            block: false,
             cancel: true,
         }));
     };
 
-    // const indexOfSecondPeriod = dataProgram?.description?.indexOf('.', dataProgram?.description?.indexOf('.') + 1);
+    const handleCaculator = () => {
+        const target = dataProgram?.target || 0;
+        const total = dataProgram?.totalMoney || 0;
+        if (target && total) {
+            const result = (total / target) * 100;
+            if (result >= 100) {
+                return 100;
+            }
+            return result;
+        }
+        return 0;
+    };
 
-    // const hiddenText = dataProgram?.description?.slice(0, indexOfSecondPeriod + 1);
-    // const longText = dataProgram?.description?.slice(indexOfSecondPeriod + 2);
-
-    // console.log('dataProgram: ', dataProgram);
-
+    const handleCheckHiden = (type) => {
+        if (type && type === 'block') {
+            if (dataProgram?.status === 'Active') {
+                return 'block';
+            }
+            return 'hidden';
+        }
+        if (type && type === 'unLock') {
+            if (dataProgram?.status === 'Block') {
+                return 'block';
+            }
+            return 'hidden';
+        }
+    };
     return (
         <div id="campaignDetail" ref={ref}>
             <Loading isLoading={isPending} />
@@ -126,17 +181,13 @@ function ProgramDetailForAdmin() {
                         <div className="w-full px-4 ">
                             <div className="relative px-4 my-auto z-[1] ">
                                 <img
-                                    src={
-                                        dataProgram && dataProgram?.attachment?.length > 0
-                                            ? dataProgram?.attachment[0]?.url
-                                            : CardImg
-                                    }
+                                    src={handleReturnLogoImage(dataProgram?.attachment)}
                                     alt={dataProgram?.programName}
                                     className="w-full max-h-96 rounded-2xl"
                                 />
                             </div>
                             <div className="mt-[-25%] pt-[25%] bg-white border-gray-400 rounded-2xl border-[.0625rem] flex flex-col relative">
-                                <div className="p-5 grid md:grid-cols-3 grid-cols-2 gap-4 shrink basis-auto md:px-16 md:pt-9 md:pb-10 lg:px-[4rem]">
+                                <div className="p-8 grid md:grid-cols-3 grid-cols-2 gap-4 shrink basis-auto md:px-8 md:pt-9 md:pb-10 ">
                                     <div className="flex-col text-start">
                                         <span className="font-semibold">Start date: </span>{' '}
                                         {dataProgram?.startDonateDate}
@@ -148,18 +199,62 @@ function ProgramDetailForAdmin() {
                                         <span className="font-semibold">Finish date:</span> {dataProgram?.finishDate}
                                     </div>
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">Target:</span> {dataProgram?.target}
+                                        <span className="font-semibold">Target:</span>{' '}
+                                        {handleFormatMoney(dataProgram?.target)}
                                     </div>
 
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">Field:</span> Children
+                                        <div className="flex items-center">
+                                            <span className="font-semibold">Status:</span>
+                                            <p
+                                                className="ml-1"
+                                                style={{
+                                                    color: dataProgram?.status === 'Active' ? 'green' : 'red',
+                                                    fontWeight: 800,
+                                                }}
+                                            >
+                                                {dataProgram?.status}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div
-                                        className={`flex-col p-3 text-sm font-semibold text-white bg-blue-500 text-start ${
-                                            dataProgram?.recruitCollaborators ? '' : 'hidden'
-                                        }`}
-                                    >
-                                        {dataProgram?.recruitCollaborators ? 'Recruit Collaborators' : ''}
+                                    <div className="flex-col text-start">
+                                        <Progress percent={handleCaculator()} />
+                                    </div>
+                                </div>
+                                <div className="flex w-full items-center justify-center mb-2">
+                                    <div className={`w-[50%] ${handleCheckHiden('block')}`}>
+                                        <Button
+                                            onClick={() => handleOpenModal('block')}
+                                            className="w-[60%]"
+                                            size="large"
+                                            type="primary"
+                                            danger
+                                        >
+                                            Block
+                                        </Button>
+                                    </div>
+
+                                    <div className={`w-[50%] ${handleCheckHiden('unLock')}`}>
+                                        <Button
+                                            onClick={() => handleOpenModal('unLock')}
+                                            className="w-[60%]"
+                                            size="large"
+                                            type="primary"
+                                            danger
+                                        >
+                                            Un BLock
+                                        </Button>
+                                    </div>
+
+                                    <div className="w-[50%]">
+                                        <Button
+                                            onClick={() => setIsOpenModalEdit(true)}
+                                            className="w-[60%]"
+                                            size="large"
+                                            type="default"
+                                        >
+                                            EDIT
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +284,9 @@ function ProgramDetailForAdmin() {
                             <div>
                                 <div className="text-base font-medium">Partner name:</div>
                                 <div className="mt-1 text-lg font-semibold text-gray-100">
-                                    {dataProgram?.partner?.partnerName}
+                                    <Link to={`/admin/partner/detail/${dataProgram?.partner?.partnerId}`}>
+                                        {dataProgram?.partner?.partnerName}
+                                    </Link>
                                 </div>
                             </div>
                             <div>
@@ -198,6 +295,14 @@ function ProgramDetailForAdmin() {
                                     {dataProgram?.partner?.email}
                                 </div>
                             </div>
+
+                            <div>
+                                <div className="text-base font-medium">Created At:</div>
+                                <div className="mt-1 text-lg font-semibold text-gray-100">
+                                    {convertTimeStampToDateTime(dataProgram?.partner?.createdAt)}
+                                </div>
+                            </div>
+
                             <div className={dataProgram?.status === 'DeActive' ? '' : 'hidden'}>
                                 <div className="text-base font-medium">Request:</div>
                                 <div className="mt-1 text-gray-100">
@@ -211,7 +316,7 @@ function ProgramDetailForAdmin() {
                                         onClick={() => handleOpenModal('accept')}
                                         className="w-2/5 text-blue-100 border-blue-100"
                                     >
-                                        Accept{' '}
+                                        Accept
                                     </Button>
                                     <Button
                                         onClick={() => handleOpenModal('reject')}
@@ -272,6 +377,43 @@ function ProgramDetailForAdmin() {
                     <p>Program approval confirmation, upon confirmation the program will be activated</p>
                 </Modal>
             )}
+
+            {isOpenModal && isOpenModal.block && (
+                <Modal
+                    title="Block Program"
+                    open={isOpenModal.block}
+                    classNames="bg-red"
+                    onOk={() => blockProgram('Block')}
+                    okText="Confirm"
+                    onCancel={handleCancel}
+                >
+                    <p>
+                        Before you proceed to block the program, please be aware of the following: <br /> Blocking this
+                        program may prevent it from running on your device. Ensure that you understand the consequences
+                        of this action before proceeding. If you are certain that you want to block the program, please
+                        click "Confirm" below. Otherwise, click "Cancel" to exit.
+                    </p>
+                </Modal>
+            )}
+
+            {isOpenModal && isOpenModal.unLock && (
+                <Modal
+                    title="Program Access Control"
+                    open={isOpenModal.unLock}
+                    classNames="bg-red"
+                    onOk={() => blockProgram('unLock')}
+                    okText="Unblock"
+                    onCancel={handleCancel}
+                >
+                    <p>
+                        Before proceeding, please note the following: <br />
+                        Unblock the program if you wish to allow it to run again on your device. To confirm blocking
+                        this program, click "Cancel". To unblock it, click "Unblock".
+                    </p>
+                </Modal>
+            )}
+
+            {isOpenModalEdit && <ModalEditProgram isOpen={isOpenModalEdit} onClose={() => setIsOpenModalEdit(false)} />}
         </div>
     );
 }

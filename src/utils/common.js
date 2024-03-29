@@ -42,6 +42,30 @@ export const convertTimeStampToDateTime = (date) => {
     return '';
 };
 
+export const handleReturnLogoImage = (img) => {
+    if (Array.isArray(img) && img.length > 0) {
+        const filterLogo = img.filter((item) => item.type === 'Logo');
+        return filterLogo[0]?.url;
+    }
+    return '';
+};
+
+export const handleFormatMoney = (money) => {
+    if (money) {
+        return `${money?.toLocaleString()} $`;
+    }
+    return `0 $`;
+};
+
+export const handleCheckStartDonateDate = (startDonateDate) => {
+    const now = moment();
+    const startDate = moment(startDonateDate)?.format('YYYY-MM-DD');
+    if (now.isBefore(startDate)) {
+        return true;
+    }
+    return false;
+};
+
 export const notify = (message, type) => {
     if (type === 'info') {
         toast.info(message);

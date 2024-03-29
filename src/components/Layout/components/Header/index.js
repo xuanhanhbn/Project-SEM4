@@ -113,7 +113,7 @@ function Header() {
                                     onClick={scrollToTop}
                                     className={({ isActive }) => (isActive ? 'active ' : 'not-active')}
                                 >
-                                    Fundraising goals
+                                    Fundraising Campaign
                                 </NavLink>
                                 <NavLink
                                     to="/partner"
@@ -228,7 +228,7 @@ function Header() {
                             About Us
                         </Link>
                         <Link to="/campaigns" className="li_mobile_menu">
-                            Fundraising goals
+                            Fundraising Campaign
                         </Link>
                         <Link to="/faq" className="li_mobile_menu">
                             FAQs

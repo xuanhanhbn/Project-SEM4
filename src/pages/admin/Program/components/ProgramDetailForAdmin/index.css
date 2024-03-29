@@ -4,3 +4,6 @@
     border: none;
     cursor: pointer;
 }
+.ant-modal-footer .ant-btn-primary {
+    background-color: #1677ff !important;
+}

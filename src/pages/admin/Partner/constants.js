@@ -9,6 +9,7 @@ export const columns = [
         field: 'partnerName',
         maxWidth: 170,
         name: 'Partner',
+        isSort: true,
     },
     {
         field: 'email',
@@ -19,6 +20,7 @@ export const columns = [
         field: 'createdAt',
         maxWidth: 100,
         name: 'Created At',
+        isSort: true,
     },
     {
         field: 'status',

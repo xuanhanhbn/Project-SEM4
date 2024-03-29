@@ -93,7 +93,7 @@ export const linePaymentData = {
             borderWidth: 3,
             backgroundColor: 'rgba(203,12,159,0.2)',
             fill: true,
-            data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+            data: [50, 40, 0, 0, 0, 0, 0, 0, 0],
             maxBarThickness: 6,
         },
         {

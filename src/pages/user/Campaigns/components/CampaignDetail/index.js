@@ -31,7 +31,7 @@ import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
 import { useMutation } from '@tanstack/react-query';
 import { getDetailProgram, onDonateProgram, onDownloadDonateProgram, onShareMailProgram } from './callApi';
-import { notify } from '~/utils/common';
+import { handleCheckStartDonateDate, notify } from '~/utils/common';
 import Loading from '~/components/Loading';
 import { Input, Modal, Progress } from 'antd';
 import { exchangeRateMoney } from '~/utils/constant';
@@ -44,6 +44,10 @@ import { Tooltip } from 'react-tooltip';
 import TabListDonate from './components/ListDonateTab';
 import TabComments from './components/CommentsTab';
 import ModalRegisterVolunteer from './components/ModalRegisterVolunteer';
+import ModalRegisterNotifi from './components/ModalRegisterNotifi';
+import { postApiDefault } from '~/utils/api';
+import moment from 'moment';
+import CountdownTimer from '~/components/CountdownTimer';
 
 // validate form đăng ký volunteer
 const validationSchema = Yup.object().shape({
@@ -68,7 +72,6 @@ export default function CampaignDetail(props) {
     const params = useParams();
 
     const programId = params?.programId;
-    const status = 'cc';
 
     const { userData, setUserData, cleanup } = useAuthStore(
         (state) => ({
@@ -91,6 +94,8 @@ export default function CampaignDetail(props) {
     const [listImage, setListImage] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isOpenModalVolunteer, setIsOpenModalVolunteer] = useState(false);
+    const [isOpenModalNotifi, setIsOpenModalNotifi] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [dataFeedback, setDataFeedback] = useState([]);
 
     const ref = useRef();
@@ -203,6 +208,29 @@ export default function CampaignDetail(props) {
                 }
             });
         } catch (err) {
+            return err;
+        }
+    };
+
+    const handleRegisterType = async (type) => {
+        setIsLoading(true);
+        const request = {
+            programId: dataDetail.programId,
+            type: type,
+        };
+        try {
+            const url = `subprogram/register-or-cancel`;
+            const res = await postApiDefault(url, request);
+            if (res && res.status === 200) {
+                setIsOpenModalNotifi(false);
+                setIsOpenModalVolunteer(false);
+                setIsLoading(false);
+                return notify('success', 'success');
+            }
+            setIsLoading(false);
+        } catch (err) {
+            setIsLoading(false);
+
             return err;
         }
     };
@@ -339,45 +367,6 @@ export default function CampaignDetail(props) {
     // đóng mở modal đăng ký volunteer
     const showOpenModalVolunteer = () => setIsOpenModalVolunteer(true);
 
-    // render input đăng ký volunteer
-    const RENDER_INPUT_FORM = (item) => {
-        const { field } = item;
-        const message = errors[field] && errors[field].message;
-
-        return (
-            <div key={item.id}>
-                <Controller
-                    control={control}
-                    render={({ field: { onChange, value } }) => {
-                        return (
-                            <Input
-                                type={item.type}
-                                className="w-full h-10"
-                                onChange={onChange}
-                                value={value == null ? '' : value}
-                                placeholder={`${item.placeholder}*`}
-                            />
-                        );
-                    }}
-                    name={item.field}
-                />
-                <div className="mt-0 text-red-600"> {message}</div>
-            </div>
-        );
-    };
-
-    // xử lý khi click nút submit modal volunteer
-    const onSubmit = (data) => {
-        const volunteerData = data;
-        volunteerData.programid = programId;
-        console.log('dataSubmit: ', volunteerData);
-    };
-
-    // đóng modal volunteer
-    const handleCancel = () => {
-        setIsOpenModalVolunteer(false);
-    };
-
     const handleReturnLogoImg = (data) => {
         if (Array.isArray(data) && data?.length > 0) {
             const filterLogo = data.filter((obj) => obj?.type === 'Logo');
@@ -386,9 +375,16 @@ export default function CampaignDetail(props) {
         return '';
     };
 
+    const checkHiddenVolunteer = () => {
+        if (!dataDetail?.recruitCollaborators) {
+            return 'hidden';
+        }
+        return '';
+    };
+    // handleCheckStartDonateDate();
     return (
         <div id="campaignDetail" ref={ref}>
-            <Loading isLoading={isPending || isPendingDonate || isPendingDownload || isPendingShare} />
+            <Loading isLoading={isPending || isPendingDonate || isPendingDownload || isPendingShare || isLoading} />
             <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
             {/* <div></div> */}
             <div className="flex flex-wrap">
@@ -438,8 +434,16 @@ export default function CampaignDetail(props) {
                     </div>
                     <div className="order-2 z-50 col-start-2 mt-6 md:order-1 md:mt-0 lg:block">
                         <div className="h-full px-4 py-6 bg-white rounded-2xl">
-                            <TabListDonate dataDetail={dataDetail || []} handleDownloadDonate={handleDownloadDonate} />
-                            {/* <Tabs defaultActiveKey="1" items={items} onChange={onChange} /> */}
+                            {handleCheckStartDonateDate(dataDetail?.startDonateDate) ? (
+                                <CountdownTimer
+                                    targetDate={moment(dataDetail?.startDonateDate)?.format('YYYY/MM/DD')}
+                                />
+                            ) : (
+                                <TabListDonate
+                                    dataDetail={dataDetail || []}
+                                    handleDownloadDonate={handleDownloadDonate}
+                                />
+                            )}
                         </div>
                     </div>
 
@@ -470,10 +474,11 @@ export default function CampaignDetail(props) {
                                         </button>
                                         <button
                                             data-tooltip-id="my-tooltip"
-                                            data-tooltip-content="Comments"
+                                            data-tooltip-content="Notification"
                                             className="btn_share"
+                                            onClick={() => setIsOpenModalNotifi(true)}
                                         >
-                                            <i className=" fa-light fa-comment"></i> {dataFeedback?.length}
+                                            <i className="fa-light fa-bell"></i>
                                         </button>
                                         <button
                                             data-tooltip-id="my-tooltip"
@@ -481,7 +486,10 @@ export default function CampaignDetail(props) {
                                             onClick={showModalShareMail}
                                             className="btn_share"
                                         >
-                                            <i className=" fa-light fa-share"></i>
+                                            {/* <div className="flex items-center"> */}
+                                            <i className="fa-light fa-share"></i>
+                                            {/* <p className="ml-1">{dataDetail?.share}</p> */}
+                                            {/* </div> */}
                                         </button>
                                         <Tooltip
                                             style={{
@@ -495,17 +503,23 @@ export default function CampaignDetail(props) {
                                     </div>
                                 </div>
                                 <div>{renderDescription()}</div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div
+                                    className={
+                                        dataDetail?.recruitCollaborators
+                                            ? 'grid grid-cols-2 gap-4 '
+                                            : 'grid grid-cols-1 gap-4 '
+                                    }
+                                >
                                     <button
-                                        disabled={status === 'done' ? true : false}
+                                        disabled={handleCheckStartDonateDate()}
                                         onClick={showModal}
-                                        className="font-bold btn"
+                                        className="font-bold btn rounded"
                                     >
                                         Donate now
                                     </button>
                                     <button
                                         onClick={() => showOpenModalVolunteer()}
-                                        className="px-4 py-2 mt-10 font-bold text-orange-100 bg-white border border-orange-100 rounded "
+                                        className={`px-4 py-2 mt-10 font-bold text-orange-100 bg-white border border-orange-100 rounded ${checkHiddenVolunteer()}`}
                                     >
                                         Become a volunteer
                                     </button>
@@ -516,7 +530,7 @@ export default function CampaignDetail(props) {
                 </div>
             </div>
             <div className="w-full mt-12 text-center">
-                {!userData ? (
+                {Object.keys(userData).length <= 0 ? (
                     <div>
                         <img src={Img} alt="" className="w-24 mx-auto mb-3" />
                         <h3 className="mb-3 text-3xl font-bold leading-8 md:text-4xl md:leading-9">How can we help?</h3>
@@ -535,7 +549,7 @@ export default function CampaignDetail(props) {
                     />
                 )}
             </div>
-            <div className={userData ? '' : 'hidden'}>
+            <div className={Object.keys(userData).length > 0 ? '' : 'hidden'}>
                 <button
                     onClick={() => handleChangeStateOpenChatBox()}
                     className={
@@ -559,6 +573,14 @@ export default function CampaignDetail(props) {
                 />
             )}
 
+            {isOpenModalNotifi && (
+                <ModalRegisterNotifi
+                    open={isOpenModalNotifi}
+                    handleOk={handleRegisterType}
+                    handleCancel={() => setIsOpenModalNotifi(false)}
+                />
+            )}
+
             {/* open modal share mail */}
             {isOpenModalShareMail && (
                 <ShareMailModal
@@ -577,7 +599,7 @@ export default function CampaignDetail(props) {
             {isOpenModalVolunteer && (
                 <ModalRegisterVolunteer
                     open={isOpenModalVolunteer}
-                    handleOk={handleSubmitModal}
+                    handleOk={handleRegisterType}
                     handleCancel={() => setIsOpenModalVolunteer(false)}
                     // onDonate={handleDonate}
                 />

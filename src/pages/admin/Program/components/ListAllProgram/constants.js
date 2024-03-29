@@ -40,6 +40,7 @@ export const columnsAdminTable = [
         field: 'target',
         maxWidth: 130,
         name: 'Target',
+        isSort: true,
     },
     {
         field: 'action',
