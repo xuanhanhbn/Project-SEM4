@@ -15,4 +15,14 @@ export const COLUMNS_REGISTER_VOLUNTEER = [
         maxWidth: 50,
         name: 'Email',
     },
+    {
+        field: 'phoneNumber',
+        maxWidth: 50,
+        name: 'Phone Number',
+    },
+    {
+        field: 'status',
+        maxWidth: 50,
+        name: 'Status',
+    },
 ];

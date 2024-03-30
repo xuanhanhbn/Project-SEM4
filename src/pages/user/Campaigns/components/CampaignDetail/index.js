@@ -98,6 +98,7 @@ export default function CampaignDetail(props) {
     const [isOpenModalNotifi, setIsOpenModalNotifi] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [dataFeedback, setDataFeedback] = useState([]);
+    const [emailPartner, setEmailPartner] = useState('');
 
     const ref = useRef();
     const { currentUser } = useContext(AuthContext);
@@ -144,6 +145,12 @@ export default function CampaignDetail(props) {
         }
     }, [programId]);
 
+    useEffect(() => {
+        if (emailPartner) {
+            handleSearchUser(emailPartner);
+        }
+    }, [emailPartner]);
+
     const { mutate: getDetailProgramApi, isPending } = useMutation({
         mutationFn: getDetailProgram,
         onSuccess: (res) => {
@@ -159,7 +166,7 @@ export default function CampaignDetail(props) {
                     setListImage(convertedArray);
                 }
                 const emailPartner = res?.data?.partner?.email;
-                handleSearchUser(emailPartner);
+                setEmailPartner(emailPartner);
                 return setDataDetail(res?.data);
             }
             return notify('error', 'error');
@@ -476,7 +483,8 @@ export default function CampaignDetail(props) {
                                             data-tooltip-content="Volunteer"
                                             className="btn_share"
                                         >
-                                            <i className="fa-light fa-users-medical"></i> 234
+                                            <i className="fa-light fa-users-medical"></i>{' '}
+                                            {dataDetail?.countVolunteer || 0}
                                         </button>
                                         <button
                                             data-tooltip-id="my-tooltip"

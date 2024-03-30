@@ -134,6 +134,7 @@ function ChatBoxCustom(props) {
             <div className="flex items-center justify-between p-2 border-t-[1px]">
                 <Input
                     onChange={(e) => setText(e?.target?.value)}
+                    onPressEnter={handleSendMeage}
                     value={text}
                     placeholder="Enter message"
                     className="flex-1 p-1 border-none focus:shadow-none focus-within:shadow-none rounded-2xl"

@@ -57,6 +57,8 @@ function SignUpPage() {
     } = useForm({
         resolver: yupResolver(validationRegisterSchema),
     });
+
+    const navigation = useNavigate();
     // console.log('errors: ', errors);
     const uploadButton = (
         <button
@@ -153,12 +155,19 @@ function SignUpPage() {
         onSuccess: (data) => {
             if ((data && data?.status === 200) || data?.status === '200') {
                 handleRegisterAccountChatBox();
+                navigation('/login');
                 return notify(data?.data, 'success');
             }
 
             return notify(data?.response?.data, 'error');
         },
     });
+
+    // eslint-disable-next-line arrow-body-style
+    const disabledDate = (current) => {
+        // Can not select days before today and today
+        return current && current > dayjs().endOf('day');
+    };
 
     const onSubmitRegister = (data) => {
         const newDataRequest = {
@@ -249,6 +258,7 @@ function SignUpPage() {
                                     <Space direction="vertical" className="w-full">
                                         <DatePicker
                                             // format={dateFormat}
+                                            disabledDate={disabledDate}
                                             onChange={onChange}
                                             selected={field.value}
                                             className="w-full py-4"

@@ -44,8 +44,14 @@ function ListAllVolunteer({ dataDetail }) {
         if (field === 'index') {
             return index + 1;
         }
-        if (field === 'partnerName') {
-            return item?.partner?.partnerName;
+        if (field === 'userName') {
+            return item?.user?.displayName;
+        }
+        if (field === 'email') {
+            return item?.user?.email;
+        }
+        if (field === 'phoneNumber') {
+            return item?.user?.phoneNumber;
         }
 
         if (field === 'status') {
@@ -53,9 +59,32 @@ function ListAllVolunteer({ dataDetail }) {
             return <div style={{ color: 'red', fontWeight: 800 }}>{item[field]}</div>;
         }
 
-        if (field === 'target') {
-            return `${item[field].toLocaleString()} $`;
-        }
+        // if (field === 'actions') {
+        //     return (
+        //         <div className="w-full flex items-center">
+        //             <div className="w-[50%]">
+        //                 <Button
+        //                     onClick={() => handleOpenModal(item, 'accept')}
+        //                     className="bg-blue-100"
+        //                     type="primary"
+        //                     title="accept"
+        //                 >
+        //                     <i className="fa-light fa-check"></i>
+        //                 </Button>
+        //             </div>
+        //             <div className="w-[50%]">
+        //                 <Button
+        //                     onClick={() => handleOpenModal(item, 'rejected')}
+        //                     type="primary"
+        //                     danger
+        //                     title="rejected"
+        //                 >
+        //                     <i className="fa-light fa-xmark"></i>
+        //                 </Button>
+        //             </div>
+        //         </div>
+        //     );
+        // }
 
         return item[field];
     }, []);
