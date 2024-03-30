@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import './Program.css';
 
 import TableCommon from '~/components/TableCommon';
-import { columnsAdminTable } from './constants';
+import { columns, columnsAdminTable } from './constants';
 import { Input, Button, Modal } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import { getAllProgramApi } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
 
-function ListProgramPending() {
+function ListProgramFinished() {
     // State
     const [dataProgram, setDataProgram] = useState([]);
 
@@ -62,14 +62,14 @@ function ListProgramPending() {
         return item[field];
     }, []);
     return (
-        <div id="program_page_rejected">
+        <div id="program_page">
             <Loading isLoading={isPending} />
 
             <div className="flex-none w-full max-w-full  mt-6">
                 <TableCommon
                     data={dataProgram || []}
                     parseFunction={parseData}
-                    columns={columnsAdminTable}
+                    columns={columns}
                     isShowPaging
                     className="shadow-md rounded-2xl"
                 />
@@ -78,4 +78,4 @@ function ListProgramPending() {
     );
 }
 
-export default ListProgramPending;
+export default ListProgramFinished;

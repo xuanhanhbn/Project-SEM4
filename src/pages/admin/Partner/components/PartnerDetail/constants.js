@@ -223,11 +223,24 @@ export const linePaymentData = {
 };
 
 export const columns = [
-    { field: 'programName', name: 'Program Name', minWidth: 270 },
+    {
+        field: 'index',
+        name: 'STT',
+        minWidth: 80,
+        align: 'center',
+        isSort: true,
+    },
+    {
+        field: 'programName',
+        name: 'Program Name',
+        minWidth: 270,
+        isSort: false,
+    },
     {
         field: 'createdAt',
         name: 'Created At',
         minWidth: 50,
+        isSort: true,
     },
     {
         field: 'finishDate',

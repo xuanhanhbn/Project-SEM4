@@ -70,7 +70,7 @@ function Campaigns() {
                                     to="/campaign-detail"
                                     cardImage={handleReturnLogo(data?.attachment)}
                                     target={data.target}
-                                    supporteds={data.supporteds}
+                                    supporteds={data.countVolunteer}
                                     progressValue={data.progressValue}
                                     progressPercentage={data.progressPercentage}
                                     cardTitle={data.programName}

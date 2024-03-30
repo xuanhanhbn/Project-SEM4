@@ -1,13 +1,18 @@
 export const inputCreateProgram = [
-    {
-        field: 'tagName',
-        lable: 'Tag name',
-        type: 'SELECT',
-    },
+    // {
+    //     field: 'tagName',
+    //     lable: 'Tag name',
+    //     type: 'SELECT',
+    // },
     {
         field: 'partner',
         lable: 'Partner',
         type: 'SELECT',
+    },
+    {
+        field: 'recruitCollaborators',
+        lable: 'Recruit Collaborators',
+        type: 'CHECK_BOX',
     },
     {
         field: 'programName',

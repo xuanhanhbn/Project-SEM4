@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { createProgramApi, getPartnerDetailApi } from './callApi';
-import { notify } from '~/utils/common';
+import { handleReturnLogoImage, notify } from '~/utils/common';
 import Loading from '~/components/Loading';
 import { Input, Space } from 'antd';
 import './style.css';
@@ -12,6 +12,8 @@ import ModalCreateProgram from '../ModalCreateProgram';
 import { Tabs } from 'antd';
 import ActiveProgram from './components/ActiveProgram';
 import DeActiveProgram from './components/DeActiveProgram';
+import ListProgramRejected from './components/ProgramRejected';
+import ListProgramFinished from './components/ProgramFinished';
 
 function PartnerDetailPage(props) {
     const [dataDetail, setDataDetail] = useState(null);
@@ -56,16 +58,25 @@ function PartnerDetailPage(props) {
             label: 'List All Proram',
             children: <ActiveProgram dataDetail={dataDetail} />,
         },
-
+        {
+            key: '2',
+            label: 'List Proram Pending',
+            children: <DeActiveProgram />,
+        },
         {
             key: '3',
-            label: 'Program rejected',
-            children: <DeActiveProgram />,
+            label: 'List Program Rejected',
+            children: <ListProgramRejected />,
+        },
+        {
+            key: '4',
+            label: 'List Program Finished',
+            children: <ListProgramFinished />,
         },
     ];
 
     const onChange = (key) => {
-        console.log(key);
+        return key;
     };
 
     return (
@@ -76,57 +87,61 @@ function PartnerDetailPage(props) {
                     <div className="w-full max-w-full px-3 mt-6 mb-8 md:flex-none">
                         <div className="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-md shadow-soft-xl rounded-2xl bg-clip-border">
                             <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl"></div>
+                            <div className="w-full flex items-center justify-center">Partner Info</div>
                             <div className="flex-auto p-4 pt-6">
-                                <ul className="pl-0 mb-0 rounded-lg md:grid md:grid-cols-2 md:gap-4 ">
+                                <ul className="pl-0 mb-0 rounded-lg md:grid md:grid-cols-1 md:gap-4 ">
                                     <li className="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50">
-                                        <div className="flex flex-col">
-                                            <h6 className="mb-4 text-sm leading-normal">Partner info</h6>
-                                            <span className="mb-2 text-xs leading-tight">
+                                        <div className="w-full flex flex-col">
+                                            <span className="mb-2 text-base leading-tight">
                                                 Company Name:
                                                 <span className="font-semibold text-slate-700 sm:ml-2">
                                                     {dataDetail?.partnerName || dataDetail?.displayName}
                                                 </span>
                                             </span>
-                                            <span className="mb-2 text-xs leading-tight">
+
+                                            <span className="mb-2 text-base leading-tight">
                                                 Email Address:
                                                 <span className="font-semibold text-slate-700 sm:ml-2">
                                                     {dataDetail?.email}
                                                 </span>
                                             </span>
-                                            <span className="text-xs leading-tight">
+
+                                            <span className="mb-2 text-base leading-tight">
                                                 Paypal Number:
                                                 <span className="font-semibold text-slate-700 sm:ml-2">
-                                                    {dataDetail?.paypalAccount}
+                                                    {dataDetail?.paypalAccount || '-'}
                                                 </span>
                                             </span>
-                                            <span className="text-xs leading-tight">
+
+                                            <span className="mb-2 text-base leading-tight">
                                                 Vnpay Number:
                                                 <span className="font-semibold text-slate-700 sm:ml-2">
-                                                    {dataDetail?.vnpayAccount}
+                                                    {dataDetail?.vnpayAccount || '-'}
+                                                </span>
+                                            </span>
+                                            <span className="text-base leading-tight">
+                                                Description:
+                                                <span className="font-semibold text-slate-700 sm:ml-2">
+                                                    {dataDetail?.description}
                                                 </span>
                                             </span>
                                         </div>
-                                        <div className="ml-auto text-right">
+                                        <div className=" w-full flex items-center justify-end">
                                             <img
-                                                src={
-                                                    dataDetail?.attachment?.length > 0
-                                                        ? dataDetail?.attachment[0]?.url
-                                                        : ''
-                                                }
-                                                al
-                                                className="w-16"
+                                                src={handleReturnLogoImage(dataDetail?.attachment)}
+                                                className="w-2/5 rounded-lg"
                                                 alt="fb_logo"
                                             />
                                         </div>
                                     </li>
-                                    <li className="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50">
+                                    {/* <li className="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50">
                                         <div className="flex flex-col">
-                                            <h6 className="mb-4 text-sm leading-normal">Description</h6>
-                                            <span className="mb-2 text-xs leading-tight">
+                                            <h6 className="mb-4 text-base leading-normal">Description</h6>
+                                            <span className="mb-2 text-base leading-tight">
                                                 {dataDetail?.description}
                                             </span>
                                         </div>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         </div>

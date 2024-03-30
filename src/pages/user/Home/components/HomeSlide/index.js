@@ -41,15 +41,15 @@ export default function HomeSlide(props) {
                             >
                                 <h1 className="card_title">{item?.programName}</h1>
                                 <div className="relative ">
-                                    <ImageWithBanner
+                                    {/* <ImageWithBanner
                                         imageUrl={handleReturnLogoImage(item?.attachment) || Palestin_1}
                                         bannerText="Chỗ này là trạng thái"
-                                    />
-                                    {/* <img
+                                    /> */}
+                                    <img
                                         className="card_image"
                                         alt={item?.programName}
                                         src={handleReturnLogoImage(item?.attachment) || Palestin_1}
-                                    /> */}
+                                    />
                                 </div>
 
                                 <div className="my-4">

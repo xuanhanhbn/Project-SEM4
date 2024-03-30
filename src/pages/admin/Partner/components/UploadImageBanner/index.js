@@ -4,7 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import React from 'react';
 
 function UploadImageBanner(props) {
-    const { imageUrl, beforeUpload, onChange } = props;
+    const { imageUrl, beforeUpload, onChange, fileList } = props;
 
     // style button upload
     const uploadButtonUploadBanner = (
@@ -28,9 +28,10 @@ function UploadImageBanner(props) {
     return (
         <div>
             <Upload
-                name="avatar"
+                name="urlLogo"
                 listType="picture-card"
                 className="avatar-uploader"
+                accept="image/png, image/jpeg,image/jpg"
                 showUploadList={false}
                 action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                 beforeUpload={beforeUpload}

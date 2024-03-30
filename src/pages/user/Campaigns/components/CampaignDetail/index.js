@@ -435,9 +435,15 @@ export default function CampaignDetail(props) {
                     <div className="order-2 z-50 col-start-2 mt-6 md:order-1 md:mt-0 lg:block">
                         <div className="h-full px-4 py-6 bg-white rounded-2xl">
                             {handleCheckStartDonateDate(dataDetail?.startDonateDate) ? (
-                                <CountdownTimer
-                                    targetDate={moment(dataDetail?.startDonateDate)?.format('YYYY/MM/DD')}
-                                />
+                                <div>
+                                    <p>
+                                        The program is currently being meticulously prepared, and we will be updating
+                                        the list of kind-hearted donors as:
+                                    </p>
+                                    <CountdownTimer
+                                        targetDate={moment(dataDetail?.startDonateDate)?.format('YYYY/MM/DD')}
+                                    />
+                                </div>
                             ) : (
                                 <TabListDonate
                                     dataDetail={dataDetail || []}

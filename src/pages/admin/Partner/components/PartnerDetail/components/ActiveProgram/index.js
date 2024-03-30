@@ -1,13 +1,18 @@
 import { Progress } from 'antd';
 import moment from 'moment';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import TableCommon from '~/components/TableCommon';
 import { columns } from '../../constants';
+import { useMutation } from '@tanstack/react-query';
+import { getAllProgramApi } from './callApi';
+import { notify } from '~/utils/common';
 
 function ActiveProgram(props) {
     // const [dataDetail, setDataDetail] = useState(null);
     const { dataDetail } = props;
+    const [dataProgram, setDataProgram] = useState([]);
+
     const handleCaculator = (item) => {
         const target = item?.target || 0;
         const total = item?.totalMoney || 0;
@@ -21,8 +26,25 @@ function ActiveProgram(props) {
         return 0;
     };
 
+    useEffect(() => {
+        mutationGetAllProgram();
+    }, []);
+
+    const { mutate: mutationGetAllProgram, isPending } = useMutation({
+        mutationFn: getAllProgramApi,
+        onSuccess: (res) => {
+            if ((res && res?.status === 200) || res?.status === '200') {
+                return setDataProgram(res?.data);
+            }
+            return notify(res?.message, 'error');
+        },
+    });
+
     // render data table
     const parseData = useCallback((item, field, index) => {
+        if (field === 'index') {
+            return index + 1;
+        }
         if (field === 'actions') {
             return (
                 <Link to={`/admin/program/detail/${item?.programId}`}>
@@ -49,7 +71,7 @@ function ActiveProgram(props) {
     return (
         <div>
             <TableCommon
-                data={dataDetail?.programs || []}
+                data={dataProgram || []}
                 parseFunction={parseData}
                 columns={columns}
                 isShowPaging

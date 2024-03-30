@@ -34,9 +34,9 @@ export default function CardCustom(props) {
                             <p className="ml-2 text-xs">{target ? target.toLocaleString() : 0} $</p>
                         </div>
                     )}
-                    <div className="col_3">
+                    <div className="flex w-full justify-end">
                         <i className="text-xl fa-light fa-user-group"></i>
-                        <p className="ml-2 text-sm">{supporteds ? supporteds : 0} supporteds</p>
+                        <p className="ml-2 text-sm">{supporteds ? supporteds : 0} volunteer</p>
                     </div>
                 </div>
                 <div className="min-h-[12px]  mt-4">

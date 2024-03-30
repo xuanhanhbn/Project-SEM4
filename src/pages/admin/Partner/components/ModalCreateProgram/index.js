@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Modal, Input, InputNumber, Space, Select, DatePicker, message } from 'antd';
+import { Modal, Input, InputNumber, Space, Select, DatePicker, message, Checkbox } from 'antd';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -60,6 +60,7 @@ function ModalCreateProgram(props) {
         imageList: [],
     });
     const [valueDescription, setValueDescription] = useState('');
+    const [isRecruitCollaborators, setIsRecruitCollaborators] = useState(true);
 
     const editorRef = useRef();
 
@@ -67,7 +68,7 @@ function ModalCreateProgram(props) {
         // programThumbnailId: Yup.mixed().required('Partner Thumbnail is required'),
         programName: Yup.string().required('Full name is required'),
         // programDescription: Yup.string().required('Description is required'),
-        tagName: type === 'create' && Yup.string().required('Tag is required'),
+        // tagName: type === 'create' && Yup.string().required('Tag is required'),
         partner: type === 'create' && Yup.string().required('Partner is required'),
         startDate: type === 'create' && Yup.string().required('Start date is required'),
         endDate: Yup.string().required('End date is required'),
@@ -157,13 +158,12 @@ function ModalCreateProgram(props) {
             finishDate: moment(data.finishDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             description: valueDescription || '',
             finishSoon: true,
-            recruitCollaborators: true,
+            recruitCollaborators: isRecruitCollaborators,
             imageLogo: listImage.imageLogo,
             imageUrl: listImage?.imageList,
         };
 
         return handleCreate(dataCreate);
-        // console.log('dataCreate: ', dataCreate);
     };
 
     // xử lý update program
@@ -202,6 +202,8 @@ function ModalCreateProgram(props) {
     // xử lý ấn đóng rivew ảnh
     const handleCancel = () => setPreviewOpen(false);
 
+    const handleChangeCheckBoxRegisterVolunnter = (e) => setIsRecruitCollaborators(e.target.checked);
+
     //  xử lý khi ấn xem review ảnh
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -226,37 +228,47 @@ function ModalCreateProgram(props) {
 
     // render input create program
     const RENDER_INPUT_CREATE_PROGRAM = (item) => {
+        if (item.type === 'CHECK_BOX') {
+            return (
+                <div key={item.field} className="flex flex-col">
+                    <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
+                    <Checkbox onChange={handleChangeCheckBoxRegisterVolunnter} checked={isRecruitCollaborators}>
+                        Would you like to register as a volunteer? Y/N
+                    </Checkbox>
+                </div>
+            );
+        }
         if (item.type === 'SELECT') {
-            if (item.field === 'tagName') {
-                const { field } = item;
-                const message = errors[field] && errors[field].message;
-                return (
-                    <div key={item.field} className="flex flex-col">
-                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, value } }) => {
-                                return (
-                                    <Select
-                                        showSearch
-                                        placeholder="Select a tag name"
-                                        className="input-height"
-                                        optionFilterProp="children"
-                                        onChange={onChange}
-                                        value={value}
-                                        // onSearch={onSearchPartner}
-                                        filterOption={filterOption}
-                                        options={selectOptions || []}
-                                        disabled={type === 'edit' ? true : false}
-                                    />
-                                );
-                            }}
-                            name={item.field}
-                        />
-                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-                    </div>
-                );
-            }
+            // if (item.field === 'tagName') {
+            //     const { field } = item;
+            //     const message = errors[field] && errors[field].message;
+            //     return (
+            //         <div key={item.field} className="flex flex-col">
+            //             <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
+            //             <Controller
+            //                 control={control}
+            //                 render={({ field: { onChange, value } }) => {
+            //                     return (
+            //                         <Select
+            //                             showSearch
+            //                             placeholder="Select a tag name"
+            //                             className="input-height"
+            //                             optionFilterProp="children"
+            //                             onChange={onChange}
+            //                             value={value}
+            //                             // onSearch={onSearchPartner}
+            //                             filterOption={filterOption}
+            //                             options={selectOptions || []}
+            //                             disabled={type === 'edit' ? true : false}
+            //                         />
+            //                     );
+            //                 }}
+            //                 name={item.field}
+            //             />
+            //             {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
+            //         </div>
+            //     );
+            // }
 
             if (item.field === 'partner') {
                 const { field } = item;

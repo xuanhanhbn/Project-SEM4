@@ -1,26 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Program.css';
-
-import TableCommon from '~/components/TableCommon';
-import { columnsAdminTable } from './constants';
-import { Input, Button, Modal } from 'antd';
 import { useMutation } from '@tanstack/react-query';
-import { getAllProgramApi } from './callApi';
+import React, { useCallback, useEffect, useState } from 'react';
+import TableCommon from '~/components/TableCommon';
+import { getAllVolunteer } from './callApi';
 import { notify } from '~/utils/common';
-import Loading from '~/components/Loading';
+import { COLUMNS_REGISTER_VOLUNTEER } from './constant';
 
-function ListProgramPending() {
-    // State
+function ListPendingVolunteer({ dataDetail }) {
+    console.log('dataDetail: ', dataDetail);
+
+    const baseDataRequest = {
+        programId: '',
+        name: '',
+        page: 1,
+        size: 20,
+    };
     const [dataProgram, setDataProgram] = useState([]);
+    const [dataRequest, setDataRequest] = useState(baseDataRequest);
 
-    useEffect(() => {
-        mutationGetAllProgram();
-    }, []);
+    // useEffect(() => {
+    //     if (dataDetail && dataDetail.recruitCollaborators) {
+    //         const newDataRequest = {
+    //             ...dataRequest,
+    //             programId: dataDetail?.programId,
+    //             name: 'Pending',
+    //         };
+    //         setDataRequest(newDataRequest);
+    //         mutationGetAllVolunteer(newDataRequest);
+    //     }
+    // }, [dataDetail]);
 
-    const { mutate: mutationGetAllProgram, isPending } = useMutation({
-        mutationFn: getAllProgramApi,
+    const { mutate: mutationGetAllVolunteer, isPending } = useMutation({
+        mutationFn: getAllVolunteer,
         onSuccess: (res) => {
             if ((res && res?.status === 200) || res?.status === '200') {
                 return setDataProgram(res?.data);
@@ -29,7 +40,6 @@ function ListProgramPending() {
         },
     });
 
-    // roll admin lấy danh sách program
     const parseData = useCallback((item, field, index) => {
         if (field === 'index') {
             return index + 1;
@@ -47,30 +57,17 @@ function ListProgramPending() {
             return `${item[field].toLocaleString()} $`;
         }
 
-        if (field === 'action') {
-            return (
-                <div className="flex ">
-                    <Link to={`/admin/program-detail-for-admin/${item?.programId}`}>
-                        <Button title="View">
-                            <i className="fa-sharp fa-solid fa-eye"></i>
-                        </Button>
-                    </Link>
-                </div>
-            );
-        }
-
         return item[field];
     }, []);
-    return (
-        <div id="program_page_rejected">
-            <Loading isLoading={isPending} />
 
-            <div className="flex-none w-full max-w-full  mt-6">
+    return (
+        <div className="w-full">
+            <div>
                 <TableCommon
                     data={dataProgram || []}
                     parseFunction={parseData}
-                    columns={columnsAdminTable}
-                    isShowPaging
+                    columns={COLUMNS_REGISTER_VOLUNTEER}
+                    isShowPaging={true}
                     className="shadow-md rounded-2xl"
                 />
             </div>
@@ -78,4 +75,4 @@ function ListProgramPending() {
     );
 }
 
-export default ListProgramPending;
+export default ListPendingVolunteer;

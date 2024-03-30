@@ -11,7 +11,7 @@ import { getAllProgramApi } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
 
-function ListProgramPending() {
+function ListProgramRejected() {
     // State
     const [dataProgram, setDataProgram] = useState([]);
 
@@ -62,7 +62,7 @@ function ListProgramPending() {
         return item[field];
     }, []);
     return (
-        <div id="program_page_rejected">
+        <div id="program_page">
             <Loading isLoading={isPending} />
 
             <div className="flex-none w-full max-w-full  mt-6">
@@ -78,4 +78,4 @@ function ListProgramPending() {
     );
 }
 
-export default ListProgramPending;
+export default ListProgramRejected;

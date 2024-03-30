@@ -7,12 +7,25 @@ import ModalCreateProgram from '../ModalCreateProgram';
 import { Line } from 'react-chartjs-2';
 import { linePaymentData, optionsChartLine, todayCardData } from './constants';
 import { useParams } from 'react-router-dom';
-import { notify } from '~/utils/common';
+import { convertTimeStampToDateTime, notify } from '~/utils/common';
 import { getApiDefault } from '~/utils/api';
 import Loading from '~/components/Loading';
-import { Progress } from 'antd';
+import { Progress, Tabs } from 'antd';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
+import ListAllVolunteer from './components/ListAllVolunteer';
+import ListPendingVolunteer from './components/ListPendingVolunteer';
+import ListRejectVolunteer from './components/ListRejectVolunteer';
 
 export default function ProgramDetail() {
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
     const params = useParams();
     // state
     const ref = useRef();
@@ -107,7 +120,7 @@ export default function ProgramDetail() {
         }
 
         if (item?.field === 'totalFollowers') {
-            return 0;
+            return dataDetail?.countVolunteer || 0;
         }
     };
 
@@ -122,7 +135,7 @@ export default function ProgramDetail() {
     // render thẻ thông số theo ngày
     const RENDER_TODAY_CARD = (data) => {
         return (
-            <div className="w-full max-w-full px-3 mb-6 sm:flex-none xl:mb-0 " key={data.id}>
+            <div className="w-full max-w-full  mb-6 sm:flex-none xl:mb-0 " key={data.id}>
                 <div className="relative flex flex-col min-w-0 break-words bg-white shadow-md rounded-2xl bg-clip-border">
                     <div className="flex-auto p-4">
                         <div className="flex flex-row -mx-3">
@@ -187,6 +200,40 @@ export default function ProgramDetail() {
         return 0;
     };
 
+    const handleHiddenEdit = () => {
+        if (dataDetail.status !== 'Active' && userData?.role === 'ADMIN') {
+            return '';
+        }
+        return 'hidden';
+    };
+
+    const handleCheckHiddenVolunteer = () => {
+        if (dataDetail.recruitCollaborators) {
+            return '';
+        }
+        return 'hidden';
+    };
+
+    const items = [
+        {
+            key: '1',
+            label: 'List All Volunteer',
+            children: <ListAllVolunteer dataDetail={dataDetail} />,
+        },
+        {
+            key: '2',
+            label: 'List Pending Volunteer ',
+            children: <ListPendingVolunteer dataDetail={dataDetail} />,
+        },
+        {
+            key: '3',
+            label: 'List Rejected Volunteer',
+            children: <ListRejectVolunteer dataDetail={dataDetail} />,
+        },
+    ];
+
+    const onChangeTabs = (value) => value;
+
     return (
         <div id="programDetail" ref={ref}>
             <Loading isLoading={isLoading} />
@@ -209,13 +256,15 @@ export default function ProgramDetail() {
                                 <div className="card_container w-full">
                                     <div className="flex-col text-start">
                                         <span className="font-semibold">Start date: </span>{' '}
-                                        {dataDetail?.startDonateDate}
+                                        {convertTimeStampToDateTime(dataDetail?.startDonateDate)}
                                     </div>
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">End date:</span> {dataDetail?.endDonateDate}
+                                        <span className="font-semibold">End date:</span>{' '}
+                                        {convertTimeStampToDateTime(dataDetail?.endDonateDate)}
                                     </div>
                                     <div className="flex-col text-start">
-                                        <span className="font-semibold">Finish date:</span> {dataDetail?.finishDate}
+                                        <span className="font-semibold">Finish date:</span>{' '}
+                                        {convertTimeStampToDateTime(dataDetail?.finishDate)}
                                     </div>
                                     <div className="flex-col text-start">
                                         <span className="font-semibold">Partner:</span>{' '}
@@ -234,14 +283,13 @@ export default function ProgramDetail() {
                                 </div>
                                 <button
                                     onClick={() => showModalEditProgram()}
-                                    className="px-5 py-2 m-4 text-lg font-semibold text-white rounded-lg bg-blue-103"
+                                    className={`px-5 py-2 m-4 text-lg font-semibold text-white rounded-lg bg-blue-103 ${handleHiddenEdit()}`}
                                 >
                                     Edit Program
                                 </button>
                             </div>
                         </div>
                     </div>
-                    {console.log('dataDetail: ', dataDetail)}
                     {/* nếu program chưa active hoạc bị từ chối thì hiển thị phần mô tả program */}
                     <div className={dataDetail?.status === 'Active' ? 'hidden' : 'mt-10'}>
                         <div className="p-5 text-left bg-white rounded-2xl">
@@ -264,7 +312,7 @@ export default function ProgramDetail() {
                     </div>
 
                     <div className={dataDetail?.status === 'Active' ? 'flex-1 w-full mt-12' : 'hidden'}>
-                        <div className="w-full max-w-full px-3 mt-0 lg:flex-none">
+                        <div className="w-full max-w-full mt-0 lg:flex-none">
                             <div className="shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
                                 <div className="p-6 pb-0 mb-0 bg-white border-b-0 border-solid rounded-t-2xl">
                                     <h6>Payment methods overview</h6>
@@ -280,6 +328,13 @@ export default function ProgramDetail() {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div className={`bg-white w-full shadow-md rounded-md mt-12 p-4 ${handleCheckHiddenVolunteer()}`}>
+                        <span>Volunteer</span>
+                        <div className="px-2 mt-4">
+                            <Tabs defaultActiveKey="1" items={items} onChange={onChangeTabs} />
                         </div>
                     </div>
                 </div>

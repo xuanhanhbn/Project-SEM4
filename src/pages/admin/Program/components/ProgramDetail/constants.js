@@ -49,7 +49,7 @@ export const todayCardData = [
     {
         id: 2,
         field: 'totalFollowers',
-        cardName: `Total Followers`,
+        cardName: `Total Volunteers`,
         todayAmount: `2,300`,
         cardIcon: <i className="fa-solid fa-user"></i>,
     },
