@@ -48,6 +48,7 @@ import ModalRegisterNotifi from './components/ModalRegisterNotifi';
 import { postApiDefault } from '~/utils/api';
 import moment from 'moment';
 import CountdownTimer from '~/components/CountdownTimer';
+import ModalCancelRegisterVolunteer from './components/CancelRegisterVolunteer';
 
 // validate form đăng ký volunteer
 const validationSchema = Yup.object().shape({
@@ -225,6 +226,7 @@ export default function CampaignDetail(props) {
                 setIsOpenModalNotifi(false);
                 setIsOpenModalVolunteer(false);
                 setIsLoading(false);
+                getDetailProgramApi(programId);
                 return notify('success', 'success');
             }
             setIsLoading(false);
@@ -302,9 +304,7 @@ export default function CampaignDetail(props) {
     };
 
     // xử lý khi click đóng modal
-    const handleCancelModal = () => {
-        setIsOpenModal(false);
-    };
+    const handleCancelModal = () => setIsOpenModal(false);
 
     const toggleExpanded = () => setIsExpanded(!isExpanded);
 
@@ -527,7 +527,7 @@ export default function CampaignDetail(props) {
                                         onClick={() => showOpenModalVolunteer()}
                                         className={`px-4 py-2 mt-10 font-bold text-orange-100 bg-white border border-orange-100 rounded ${checkHiddenVolunteer()}`}
                                     >
-                                        Become a volunteer
+                                        {dataDetail?.volunteer ? `Cancel a volunteer` : `Become a volunteer`}
                                     </button>
                                 </div>
                             </div>
@@ -601,8 +601,14 @@ export default function CampaignDetail(props) {
                     <ChatBoxCustom closeChatBox={() => handleChangeStateOpenChatBox()} />
                 </div>
             )}
-
-            {isOpenModalVolunteer && (
+            {isOpenModalVolunteer && dataDetail?.volunteer ? (
+                <ModalCancelRegisterVolunteer
+                    open={isOpenModalVolunteer}
+                    handleOk={handleRegisterType}
+                    handleCancel={() => setIsOpenModalVolunteer(false)}
+                    // onDonate={handleDonate}
+                />
+            ) : (
                 <ModalRegisterVolunteer
                     open={isOpenModalVolunteer}
                     handleOk={handleRegisterType}
