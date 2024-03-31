@@ -122,7 +122,11 @@ function TabComments(props) {
                         dataFeedback?.map((item) => (
                             <div key={item?.feedBackId} className="mb-5 comment-item">
                                 <div className="flex user-info">
-                                    <img src={dfAvatar} alt="" className="mr-3 rounded-full w-7 h-7" />
+                                    <img
+                                        src={item?.user?.avatarUrl?.url}
+                                        alt=""
+                                        className="mr-3 rounded-full w-7 h-7"
+                                    />
                                     <div>
                                         <p className="font-bold">{item?.user?.displayName}</p>
                                         <span>{convertTimeStampToDateTime(item?.createdAt)}</span>

@@ -140,7 +140,7 @@ function ChatBoxCustom(props) {
                         </div>
                     </div>
 
-                    <div className="mt-2">
+                    <div className="mt-2 ">
                         {messages && messages?.map((mess) => <Message mess={mess} key={mess?.id} />)}
                     </div>
                 </div>

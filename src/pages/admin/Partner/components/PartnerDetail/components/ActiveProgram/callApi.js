@@ -1,7 +1,7 @@
 import { getApiDefault } from '~/utils/api';
 
-export async function getAllProgramApi() {
-    const url = `program/list-program-by-status?name=Active&page=1&size=20`;
+export async function getAllProgramApi(data) {
+    const url = `program/list-program-by-status?partnerId=${data?.partnerId}&name=${data?.name}&page=${data?.page}&size=${data?.size}`;
     try {
         const res = await getApiDefault(url);
         if (res) {

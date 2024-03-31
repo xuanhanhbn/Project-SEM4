@@ -1,69 +1,72 @@
 #programDetail {
-    @apply max-w-6xl px-4 pt-8 pb-24 mx-auto text-center
+    @apply max-w-6xl px-4 pt-8 pb-24 mx-auto text-center;
 }
 
 #programDetail .image-gallery-thumbnail,
 .image-gallery-thumbnail {
-    @apply border-none
+    @apply border-none;
 }
 
 #programDetail .image-gallery-thumbnail.active,
 .image-gallery-thumbnail:focus {
-    @apply shadow-[0_0_0_.25rem_#febb00]
+    @apply shadow-[0_0_0_.25rem_#febb00];
 }
 
 #programDetail .image-gallery-content .image-gallery-slide .image-gallery-image {
-    @apply max-h-none
+    @apply max-h-none;
 }
 
 #programDetail .image-gallery-thumbnail {
-    @apply rounded-2xl min-h-[81px] mx-2
+    @apply rounded-2xl min-h-[81px] mx-2;
 }
 
 #programDetail .image-gallery-thumbnail-inner {
-    @apply w-full h-full
+    @apply w-full h-full;
 }
 
 #programDetail .image-gallery-thumbnail-image {
-    @apply rounded-2xl h-full min-h-[81px]
+    @apply rounded-2xl h-full min-h-[81px];
 }
 
 #programDetail .image-gallery-image {
-    @apply rounded-2xl
+    @apply rounded-2xl;
 }
 
 #programDetail .image-gallery-slides {
-    @apply rounded-2xl
+    @apply rounded-2xl;
 }
 
 #programDetail .image-gallery-thumbnails {
-    @apply py-6 pb-1
+    @apply py-6 pb-1;
 }
 
 #programDetail .image-gallery-thumbnails-container {
-    @apply w-72
+    @apply w-72;
 }
 
 #programDetail .btn_share {
-    @apply px-4 py-2 mx-2 rounded-lg hover:text-white hover:bg-orange-100
+    @apply px-4 py-2 mx-2 rounded-lg hover:text-white hover:bg-orange-100;
 }
 
 #programDetail .card {
-    @apply mt-[-25%] pt-[25%] bg-white border-gray-400 rounded-2xl border-[.0625rem] flex flex-col relative
+    @apply mt-[-25%] pt-[25%] bg-white border-gray-400 rounded-2xl border-[.0625rem] flex flex-col relative;
 }
 
 #programDetail .card_container {
-    @apply p-5 grid md:grid-cols-3 grid-cols-2 gap-4 shrink basis-auto md:px-16 md:pt-9 md:pb-10 lg:px-[4rem]
+    @apply p-5 grid md:grid-cols-3 grid-cols-2 gap-4 shrink basis-auto md:px-16 md:pt-9 md:pb-10 lg:px-[4rem];
 }
 
 #programDetail .card_header {
-    @apply flex w-full overflow-hidden text-xs text-gray-100 text-ellipsis whitespace-nowrap md:text-base
+    @apply flex w-full overflow-hidden text-xs text-gray-100 text-ellipsis whitespace-nowrap md:text-base;
 }
 
 #programDetail .btn {
-    @apply bg-orange-100 mt-10 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]
+    @apply bg-orange-100 mt-10 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem];
 }
 
 #programDetail .view_btn {
-    @apply inline-block px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-full shadow-none cursor-pointer text-xs border-fuchsia-500 bg-fuchsia-500 text-white hover:border-fuchsia-500 hover:bg-transparent hover:text-fuchsia-500 hover:opacity-75 hover:shadow-none active:bg-fuchsia-500 active:text-white active:hover:bg-transparent active:hover:text-fuchsia-500
+    @apply inline-block px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-full shadow-none cursor-pointer text-xs border-fuchsia-500 bg-fuchsia-500 text-white hover:border-fuchsia-500 hover:bg-transparent hover:text-fuchsia-500 hover:opacity-75 hover:shadow-none active:bg-fuchsia-500 active:text-white active:hover:bg-transparent active:hover:text-fuchsia-500;
+}
+#programDetail .btn-finished-program {
+    @apply inline-block ml-3 px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer text-xs border-fuchsia-500 text-fuchsia-500 hover:border-fuchsia-500 hover:bg-transparent hover:text-fuchsia-500 hover:opacity-75 hover:shadow-none active:bg-fuchsia-500 active:text-white active:hover:bg-transparent active:hover:text-fuchsia-500;
 }

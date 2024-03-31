@@ -10,12 +10,15 @@ import { useParams } from 'react-router-dom';
 import { convertTimeStampToDateTime, notify } from '~/utils/common';
 import { getApiDefault } from '~/utils/api';
 import Loading from '~/components/Loading';
-import { Progress, Tabs } from 'antd';
+import { Button, Progress, Tabs } from 'antd';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
 import ListAllVolunteer from './components/ListAllVolunteer';
 import ListPendingVolunteer from './components/ListPendingVolunteer';
 import ListRejectVolunteer from './components/ListRejectVolunteer';
+import ModalFinishedProgram from './components/ModalFinished';
+import { useMutation } from '@tanstack/react-query';
+import { finishedProgram } from './components/ModalFinished/callApi';
 
 export default function ProgramDetail() {
     const { userData, setUserData, cleanup } = useAuthStore(
@@ -30,9 +33,11 @@ export default function ProgramDetail() {
     // state
     const ref = useRef();
     const [isOpenModalEditProject, setIsOpenModalEditProject] = useState(false);
+    const [isOpenModalFinished, setIsOpenModalFinished] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [dataDetail, setDataDetail] = useState({});
     const [isExpanded, setIsExpanded] = useState(false);
+    const [listImage, setListImage] = useState([]);
 
     useEffect(() => {
         ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -64,21 +69,13 @@ export default function ProgramDetail() {
     };
 
     // // xử lý open modal edit program
-    const showModalEditProgram = () => {
-        setIsOpenModalEditProject(true);
-    };
+    const showModalEditProgram = () => setIsOpenModalEditProject(true);
 
     // // xử lý khi click submit edit program
-    const handleSubmitModal = () => {
-        setIsOpenModalEditProject(false);
-        // console.log('click ok btn');
-    };
+    const handleSubmitModal = () => setIsOpenModalEditProject(false);
 
     // xử lý khi click đóng modal
-    const handleCancelModal = () => {
-        setIsOpenModalEditProject(false);
-        // console.log('click cancel btn');
-    };
+    const handleCancelModal = () => setIsOpenModalEditProject(false);
 
     const handleReturnData = (item) => {
         if (item?.field === 'totalMoney') {
@@ -160,9 +157,7 @@ export default function ProgramDetail() {
     };
 
     // Hàm xử lý khi nhấn nút Xem thêm hoặc Thu gọn
-    const toggleExpanded = () => {
-        setIsExpanded(!isExpanded);
-    };
+    const toggleExpanded = () => setIsExpanded(!isExpanded);
 
     const renderDescription = () => {
         if (isExpanded) {
@@ -214,6 +209,35 @@ export default function ProgramDetail() {
         return 'hidden';
     };
 
+    const handleCheckHiddenBtnFinished = () => {
+        if (dataDetail.status === 'Active' && userData?.role === 'PARTNER') {
+            return '';
+        }
+        return 'hidden';
+    };
+
+    const onChangeTabs = (value) => value;
+
+    const handleFinishedProgram = (data) => {
+        const request = {
+            id: dataDetail?.programId,
+            url: data,
+        };
+        return mutationFinishedProgram(request);
+    };
+
+    const { mutate: mutationFinishedProgram, isPending } = useMutation({
+        mutationFn: finishedProgram,
+        onSuccess: (res) => {
+            if ((res && res?.status === 200) || res?.status === '200') {
+                handleGetDetail(params?.programId);
+                setIsOpenModalFinished(false);
+                return notify('Finished success', 'success');
+            }
+            return notify(res?.message, 'error');
+        },
+    });
+
     const items = [
         {
             key: '1',
@@ -232,11 +256,22 @@ export default function ProgramDetail() {
         },
     ];
 
-    const onChangeTabs = (value) => value;
+    const handleReturnListImg = () => {
+        const filterImage = dataDetail?.attachment?.filter((obj) => obj?.type === 'finished');
+        if (filterImage && filterImage?.length > 0) {
+            const convertedArray = filterImage.map((item) => ({
+                original: item.url,
+                thumbnail: item.url,
+            }));
+            console.log('convertedArray: ', convertedArray);
+            return convertedArray;
+        }
+        return [];
+    };
 
     return (
         <div id="programDetail" ref={ref}>
-            <Loading isLoading={isLoading} />
+            <Loading isLoading={isLoading || isPending} />
             <div className="fixed z-50 right-2 bottom-5"></div>
             <div>
                 <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataDetail?.programName}</h1>
@@ -281,6 +316,18 @@ export default function ProgramDetail() {
                                 <div className="px-16 w-full">
                                     <Progress percent={handleCaculator()} />
                                 </div>
+                                <div
+                                    className={`w-full mb-2 flex items-center justify-center  ${handleCheckHiddenBtnFinished()}`}
+                                >
+                                    <Button
+                                        onClick={() => setIsOpenModalFinished(true)}
+                                        type="primary"
+                                        size="large"
+                                        className="btn-finished-program "
+                                    >
+                                        Finished Program
+                                    </Button>
+                                </div>
                                 <button
                                     onClick={() => showModalEditProgram()}
                                     className={`px-5 py-2 m-4 text-lg font-semibold text-white rounded-lg bg-blue-103 ${handleHiddenEdit()}`}
@@ -290,8 +337,9 @@ export default function ProgramDetail() {
                             </div>
                         </div>
                     </div>
+
                     {/* nếu program chưa active hoạc bị từ chối thì hiển thị phần mô tả program */}
-                    <div className={dataDetail?.status === 'Active' ? 'hidden' : 'mt-10'}>
+                    <div className="mt-10">
                         <div className="p-5 text-left bg-white rounded-2xl">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-2xl font-bold leading-8 ">Overview</h2>
@@ -307,14 +355,41 @@ export default function ProgramDetail() {
                     </div>
 
                     {/* nếu program đã được active thì ẩn phần motar và hiện phần thông số và biểu đồ */}
-                    <div className={dataDetail?.status === 'Active' ? 'grid-cols-2 gap-4 mt-10 md:grid' : 'hidden'}>
+                    <div
+                        className={
+                            dataDetail?.status === 'Active' || dataDetail?.status === 'End'
+                                ? 'grid-cols-2 gap-4 mt-10 md:grid'
+                                : 'hidden'
+                        }
+                    >
                         {todayCardData.map((data) => RENDER_TODAY_CARD(data))}
                     </div>
 
-                    <div className={dataDetail?.status === 'Active' ? 'flex-1 w-full mt-12' : 'hidden'}>
-                        <div className="w-full max-w-full mt-0 lg:flex-none">
-                            <div className="shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
-                                <div className="p-6 pb-0 mb-0 bg-white border-b-0 border-solid rounded-t-2xl">
+                    <div className={`bg-white w-full shadow-md rounded-md mt-12 p-4 ${handleCheckHiddenVolunteer()}`}>
+                        <span>Volunteer</span>
+                        <div className="px-2 mt-4">
+                            <Tabs defaultActiveKey="1" items={items} onChange={onChangeTabs} />
+                        </div>
+                    </div>
+
+                    <div className={dataDetail?.status === 'End' ? 'flex-1 w-full mt-12' : 'hidden'}>
+                        <div className="w-full max-w-full mt-0 lg:flex-none shadow-md rounded-md bg-white">
+                            <div className="my-4">
+                                All invoices and relevant documentation regarding the appropriate use of the donated
+                                funds
+                            </div>
+
+                            {/* <div className="shadow-md h-[400px] relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border"> */}
+                            <ImageGallery
+                                showPlayButton={false}
+                                showFullscreenButton={false}
+                                autoPlay={true}
+                                slideDuration={3}
+                                // showNav={false}
+                                showBullets={false}
+                                items={handleReturnListImg()}
+                            />
+                            {/* <div className="p-6 pb-0 mb-0 bg-white border-b-0 border-solid rounded-t-2xl">
                                     <h6>Payment methods overview</h6>
                                     <p className="text-sm leading-normal">
                                         <i className="fa fa-arrow-up text-lime-500"></i>
@@ -326,15 +401,8 @@ export default function ProgramDetail() {
                                     <div className="h-full">
                                         <Line options={optionsChartLine} data={linePaymentData} />
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={`bg-white w-full shadow-md rounded-md mt-12 p-4 ${handleCheckHiddenVolunteer()}`}>
-                        <span>Volunteer</span>
-                        <div className="px-2 mt-4">
-                            <Tabs defaultActiveKey="1" items={items} onChange={onChangeTabs} />
+                                </div> */}
+                            {/* </div> */}
                         </div>
                     </div>
                 </div>
@@ -346,6 +414,14 @@ export default function ProgramDetail() {
                     handleSubmitModalCreate={handleSubmitModal}
                     handleCancelModalCreate={handleCancelModal}
                     type="edit"
+                />
+            )}
+
+            {isOpenModalFinished && (
+                <ModalFinishedProgram
+                    isModalOpen={isOpenModalFinished}
+                    handleOk={handleFinishedProgram}
+                    handleCancel={() => setIsOpenModalFinished(false)}
                 />
             )}
         </div>

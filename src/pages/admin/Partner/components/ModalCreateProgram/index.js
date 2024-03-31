@@ -71,7 +71,7 @@ function ModalCreateProgram(props) {
         // tagName: type === 'create' && Yup.string().required('Tag is required'),
         partner: type === 'create' && Yup.string().required('Partner is required'),
         startDate: type === 'create' && Yup.string().required('Start date is required'),
-        endDate: Yup.string().required('End date is required'),
+        // endDate: Yup.string().required('End date is required'),
         finishDate: Yup.string().required('Finish date is required'),
         target: type === 'create' && Yup.string().required('Target is required'),
     });
@@ -307,7 +307,7 @@ function ModalCreateProgram(props) {
             const { field } = item;
             const message = errors[field] && errors[field].message;
             return (
-                <div key={item.field} className="flex flex-col col-span-2">
+                <div key={item.field} className="flex flex-col ">
                     <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
                     <Controller
                         control={control}

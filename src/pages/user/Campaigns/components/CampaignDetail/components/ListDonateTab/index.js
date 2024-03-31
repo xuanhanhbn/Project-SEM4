@@ -7,7 +7,9 @@ function TabListDonate(props) {
         <div>
             <div className="flex items-center justify-between">
                 <div></div>
-                <span>List Donate</span>
+                <span>
+                    <strong>List Donate: </strong> {dataDetail?.countDonation}
+                </span>
                 <div className="flex items-center">
                     <button onClick={() => handleDownloadDonate()}>
                         <i className="fa-light fa-download"></i>

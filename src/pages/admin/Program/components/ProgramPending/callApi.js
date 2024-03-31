@@ -1,14 +1,9 @@
-import { postApiDefault } from '~/utils/api';
+import { getApiDefault, postApiDefault } from '~/utils/api';
 
 export async function getAllProgramApi(data) {
-    const request = {
-        name: 'DeActive',
-        page: 1,
-        size: 20,
-    };
-    const url = `program/list-program-by-status`;
+    const url = `program/list-program-by-status?partnerId=${data?.partnerId}&name=${data?.name}&page=${data?.page}&size=${data?.size}`;
     try {
-        const res = await postApiDefault(url, request);
+        const res = await getApiDefault(url);
         if (res) {
             return res;
         }

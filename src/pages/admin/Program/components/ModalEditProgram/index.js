@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Modal, Input, InputNumber, Space, Select, DatePicker, message } from 'antd';
+import { Modal, Input, InputNumber, Space, Select, DatePicker, message, Checkbox, Button } from 'antd';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import { inputCreateProgram } from './constants';
+import { INPUT_EDIT_PROGRAM, inputCreateProgram } from './constants';
 import './ModalCreate.css';
 import moment from 'moment';
 import UploadImageCarousel from '../UploadImageCarousel';
@@ -18,8 +18,7 @@ import { useMutation } from '@tanstack/react-query';
 import Loading from '~/components/Loading';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
-
-const { TextArea } = Input;
+import dayjs from 'dayjs';
 
 const selectOptions = [
     {
@@ -46,7 +45,7 @@ function ModalEditProgram(props) {
         shallow,
     );
 
-    const { isOpen, onClose, handleCreate, type } = props;
+    const { isOpen, onClose, handleCreate, type, oldData } = props;
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -60,6 +59,7 @@ function ModalEditProgram(props) {
         imageList: [],
     });
     const [valueDescription, setValueDescription] = useState('');
+    const [dataRequest, setDataRequest] = useState({});
 
     const editorRef = useRef();
 
@@ -84,35 +84,31 @@ function ModalEditProgram(props) {
         resolver: yupResolver(validationSchema),
     });
 
+    // useEffect(() => {
+    //     if (userData) {
+    //         const options = [
+    //             {
+    //                 value: userData?.partnerId,
+    //                 label: userData?.displayName,
+    //             },
+    //         ];
+    //         setValue('partner', userData?.partnerId);
+    //         return setOptionPartner(options);
+    //     }
+    // }, [userData]);
+
     useEffect(() => {
-        if (userData) {
-            const options = [
-                {
-                    value: userData?.partnerId,
-                    label: userData?.displayName,
-                },
-            ];
-            setValue('partner', userData?.partnerId);
-            return setOptionPartner(options);
+        if (Object.keys(oldData).length > 0) {
+            setDataRequest(oldData);
+            // editorRef?.current?.setContents('<p>Hello, SunEditor!</p>');
         }
-    }, [userData]);
+    }, [oldData]);
 
     const disabledStartDate = (current) => {
         // Lấy ngày hiện tại
-        const currentDate = moment().startOf('day');
-
+        const currentDate = moment(dataRequest?.startDonateDate).startOf('day');
         // So sánh ngày hiện tại với ngày được chọn
         return current && current <= currentDate;
-    };
-
-    const disabledEndDate = (current) => {
-        // So sánh ngày hiện tại với ngày được chọn
-        return current && current <= endDateProgram.add(1, 'day');
-    };
-
-    const disabledFinishDate = (current) => {
-        // So sánh ngày hiện tại với ngày được chọn
-        return current && current <= finishDateProgram.add(1, 'day');
     };
 
     // lưu thay đổi trong editor vào trong ValueDescription
@@ -167,12 +163,9 @@ function ModalEditProgram(props) {
     };
 
     // xử lý update program
-    const updateProgram = (data) => {
-        console.log('data', data);
+    const updateProgram = () => {
+        console.log('dataRequest', dataRequest);
     };
-
-    // xử lý tìm kiếm bằng lable trong select partner
-    const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
     // xử lý upload ảnh
     const handleUploadCarouselImage = (info) => {
@@ -212,315 +205,116 @@ function ModalEditProgram(props) {
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
     };
 
-    // ử lý chọn ngày bắt đầu chương trình
-    const onChangeStartDate = (value, field) => {
-        field.onChange(value);
-        if (type === 'create') setEndDateProgram(value);
+    // xử lý chọn ngày dừng nhận donate
+    const onChangeEndDate = (value, dateString, type) => {
+        const newDataRequest = {
+            ...dataRequest,
+            finishDate: dateString,
+        };
+        setDataRequest(newDataRequest);
     };
 
-    // xử lý chọn ngày dừng nhận donate
-    const onChangeEndDate = (value, field) => {
-        field.onChange(value);
-        setFinishDateProgram(value);
+    const handleReturnValue = (item) => {
+        if (item.field === 'partnerName') {
+            return dataRequest?.partner?.partnerName;
+        }
+        return dataRequest[item.field];
     };
 
     // render input create program
     const RENDER_INPUT_CREATE_PROGRAM = (item) => {
-        if (item.type === 'SELECT') {
-            if (item.field === 'tagName') {
-                const { field } = item;
-                const message = errors[field] && errors[field].message;
-                return (
-                    <div key={item.field} className="flex flex-col">
-                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, value } }) => {
-                                return (
-                                    <Select
-                                        showSearch
-                                        placeholder="Select a tag name"
-                                        className="input-height"
-                                        optionFilterProp="children"
-                                        onChange={onChange}
-                                        value={value}
-                                        // onSearch={onSearchPartner}
-                                        filterOption={filterOption}
-                                        options={selectOptions || []}
-                                        disabled={type === 'edit' ? true : false}
-                                    />
-                                );
-                            }}
-                            name={item.field}
-                        />
-                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-                    </div>
-                );
-            }
-
-            if (item.field === 'partner') {
-                const { field } = item;
-                const message = errors[field] && errors[field].message;
-                return (
-                    <div key={item.field} className="flex flex-col">
-                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, value } }) => {
-                                return (
-                                    <Select
-                                        showSearch
-                                        placeholder="Select a partner"
-                                        className="input-height"
-                                        optionFilterProp="children"
-                                        onChange={onChange}
-                                        value={optionPartner}
-                                        // onSearch={onSearchPartner}
-                                        disabled={true}
-                                        filterOption={filterOption}
-                                        options={optionPartner}
-                                    />
-                                );
-                            }}
-                            name={item.field}
-                        />
-                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-                    </div>
-                );
-            }
+        if (item.type === 'CHECK_BOX') {
+            return (
+                <div key={item.field} className="px-2 flex flex-col" style={{ width: item?.width }}>
+                    <label className="my-2 text-xs font-bold ">{item.lable}:</label>
+                    <Checkbox checked={dataRequest[item.field]} disabled={item.disabled}>
+                        Would you like to register as a volunteer? Y/N
+                    </Checkbox>
+                </div>
+            );
         }
 
-        if (item.type === 'INPUT_NAME') {
-            const { field } = item;
-            const message = errors[field] && errors[field].message;
+        if (item.type === 'INPUT') {
             return (
-                <div key={item.field} className="flex flex-col col-span-2">
-                    <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                    <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => {
-                            return (
-                                <Input
-                                    onChange={onChange}
-                                    value={value}
-                                    className="input-height"
-                                    placeholder="Program name"
-                                />
-                            );
-                        }}
-                        name={item.field}
+                <div key={item.field} className="px-2 flex flex-col" style={{ width: item?.width }}>
+                    <label className="my-2 text-xs font-bold ">{item.lable}:</label>
+                    <Input
+                        size="large"
+                        value={handleReturnValue(item)}
+                        className="input-height"
+                        placeholder="Program name"
+                        disabled={item.disabled}
                     />
-                    {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
                 </div>
             );
         }
 
         if (item.type === 'INPUT_DATE') {
-            if (item.field === 'startDate') {
-                const { field } = item;
-                const message = errors[field] && errors[field].message;
-                return (
-                    <div key={item.field} className="flex flex-col w-full">
-                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                        <Controller
-                            control={control}
-                            render={({ field }) => {
-                                return (
-                                    <Space direction="vertical">
-                                        <DatePicker
-                                            onChange={(date) => onChangeStartDate(date, field)}
-                                            selected={field.value}
-                                            className="input-height"
-                                            disabledDate={disabledStartDate}
-                                            disabled={type === 'edit' ? true : false}
-                                        />
-                                    </Space>
-                                );
-                            }}
-                            name={item.field}
-                        />
-                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-                    </div>
-                );
-            }
-
-            if (item.field === 'endDate') {
-                const { field } = item;
-                const message = errors[field] && errors[field].message;
-                return (
-                    <div key={item.field} className="flex flex-col w-full">
-                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                        <Controller
-                            control={control}
-                            render={({ field }) => {
-                                return (
-                                    <Space direction="vertical">
-                                        <DatePicker
-                                            disabled={type === 'create' && !endDateProgram ? true : false}
-                                            onChange={(date) => onChangeEndDate(date, field)}
-                                            selected={field.value}
-                                            className="input-height"
-                                            disabledDate={type === 'create' ? disabledEndDate : disabledStartDate}
-                                        />
-                                    </Space>
-                                );
-                            }}
-                            name={item.field}
-                        />
-                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-                    </div>
-                );
-            }
-
-            if (item.field === 'finishDate') {
-                const { field } = item;
-                const message = errors[field] && errors[field].message;
-                return (
-                    <div key={item.field} className="flex flex-col w-full">
-                        <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                        <Controller
-                            control={control}
-                            render={({ field }) => {
-                                return (
-                                    <Space direction="vertical">
-                                        <DatePicker
-                                            disabled={finishDateProgram ? false : true}
-                                            onChange={(date) => field.onChange(date)}
-                                            selected={field.value}
-                                            className="input-height"
-                                            disabledDate={disabledFinishDate}
-                                        />
-                                    </Space>
-                                );
-                            }}
-                            name={item.field}
-                        />
-                        {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
-                    </div>
-                );
-            }
+            return (
+                <div key={item.field} className="px-2 flex flex-col" style={{ width: item?.width }}>
+                    <label className="my-2 text-xs font-bold ">{item.lable}:</label>
+                    <DatePicker
+                        onChange={(date, dateString) => onChangeEndDate(date, dateString, item?.field)}
+                        selected={item.field}
+                        value={dayjs(dataRequest[item.field], 'YYYY/MM/DD')}
+                        size="large"
+                        className="input-height"
+                        disabledDate={disabledStartDate}
+                        disabled={item.disabled}
+                        allowClear={false}
+                    />
+                </div>
+            );
         }
 
         if (item.type === 'INPUT_AMOUNT') {
-            const { field } = item;
-            const message = errors[field] && errors[field].message;
             return (
-                <div key={item.field} className="flex flex-col">
-                    <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                    <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => {
-                            return (
-                                <Space>
-                                    <InputNumber
-                                        className="input-height"
-                                        formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                                        onChange={onChange}
-                                        value={value}
-                                        disabled={type === 'edit' ? true : false}
-                                    />
-                                </Space>
-                            );
-                        }}
-                        name={item.field}
+                <div key={item.field} className="px-2 flex flex-col" style={{ width: item?.width }}>
+                    <label className="my-2 text-xs font-bold ">{item.lable}:</label>
+                    <InputNumber
+                        className="w-full"
+                        formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                        size="large"
+                        value={dataRequest[item.field]}
+                        disabled={item.disabled}
                     />
-                    {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>}
                 </div>
             );
         }
 
         if (item.type === 'INPUT_AREA') {
-            const { field } = item;
-            const message = errors[field] && errors[field].message;
             return (
-                <div key={item.field} className="flex flex-col col-span-2">
-                    <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-                    {/* <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => {
-                            return (
-                                <TextArea
-                                    autoSize={{
-                                        minRows: 3,
-                                        maxRows: 5,
-                                    }}
-                                    onChange={onChange}
-                                    value={value}
-                                    placeholder="Please describe your program in detail."
-                                />
-                            );
-                        }}
-                        name={item.field}
+                <div key={item.field} className="px-2 flex flex-col" style={{ width: item?.width }}>
+                    <label className="my-2 text-xs font-bold ">{item.lable}:</label>
+                    <SunEditor
+                        defaultValue="123"
+                        disable={item.disabled}
+                        height="250px"
+                        minHeight="250px"
+                        onChange={onChangeHandler}
+                        ref={editorRef}
                     />
-                    {message && <p style={{ color: 'red', marginTop: 0, marginBottom: 10 }}>{message}</p>} */}
-                    <SunEditor height="250px" minHeight="250px" onChange={onChangeHandler} ref={editorRef} />
                 </div>
             );
         }
-
-        if (item.type === 'INPUT_UPLOAD') {
-            if (item.field === 'programThumbnailCarouselId') {
-                return (
-                    <div key={item.field} className="flex flex-col col-span-2">
-                        <>
-                            <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-
-                            <UploadImageCarousel
-                                fileList={fileList}
-                                onPreview={handlePreview}
-                                onChange={handleUploadCarouselImage}
-                                open={previewOpen}
-                                title={previewTitle}
-                                onCancel={handleCancel}
-                                src={previewImage}
-                            />
-                        </>
-                    </div>
-                );
-            }
-
-            if (item.field === 'programThumbnailBannerId') {
-                return (
-                    <div key={item.field} className="flex flex-col col-span-2">
-                        <>
-                            <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-
-                            <UploadImageBanner
-                                beforeUpload={beforeUpload}
-                                onChange={handleChangeUpaloadImageBanner}
-                                imageUrl={imageUrl}
-                            />
-                        </>
-                    </div>
-                );
-            }
-        }
     };
+
     return (
         <div>
             <Loading isLoading={isPendingUploadImg || isPendingUploadListImg} />
             <Modal
                 title="Edit Program"
-                footer={false}
+                // footer={false}
                 className="relative"
                 open={isOpen}
-                onOk={type === 'update' ? handleSubmit(updateProgram) : handleSubmit(onSubmit)}
+                onOk={() => updateProgram()}
                 onCancel={onClose}
                 width={800}
             >
-                <form
-                    onSubmit={type === 'edit' ? handleSubmit(updateProgram) : handleSubmit(onSubmit)}
-                    id="create_program_modal"
-                    className="grid grid-cols-2 gap-4 pt-3"
-                >
-                    {inputCreateProgram.map((item) => RENDER_INPUT_CREATE_PROGRAM(item))}
-
-                    <button className="col-span-2 btn_create" type="submit">
-                        submit
-                    </button>
-                </form>
+                <div className="w-full flex items-center justify-center flex-wrap">
+                    {INPUT_EDIT_PROGRAM.map((item) => RENDER_INPUT_CREATE_PROGRAM(item))}
+                </div>
             </Modal>
         </div>
     );

@@ -36,12 +36,12 @@ function Messages() {
                 <div className="flex flex-col flex-1 ">
                     <div className="p-8  overflow-auto min-h-[24rem]">
                         <div>
-                            <div className="flex items-end mt-6">
+                            <div className="flex items-end ">
                                 <div className="w-10">
                                     <img src={data?.user?.photoURL} alt="" className="rounded-full w-7 h-w-7" />
                                 </div>
                                 {/* FOR USER */}
-                                <div className="w-[100%]">
+                                <div className="w-[100%] h-[580px] overflow-y-scroll">
                                     {messages &&
                                         messages?.length > 0 &&
                                         messages

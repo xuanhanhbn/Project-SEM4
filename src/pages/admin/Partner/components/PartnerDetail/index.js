@@ -14,8 +14,19 @@ import ActiveProgram from './components/ActiveProgram';
 import DeActiveProgram from './components/DeActiveProgram';
 import ListProgramRejected from './components/ProgramRejected';
 import ListProgramFinished from './components/ProgramFinished';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
 
 function PartnerDetailPage(props) {
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+
     const [dataDetail, setDataDetail] = useState(null);
     const [isOpenModalCreateProgram, setIsOpenModalCreateProgram] = useState(false);
     const { Search } = Input;
@@ -152,7 +163,7 @@ function PartnerDetailPage(props) {
                             <Space direction="vertical">
                                 <Search placeholder="Search program" allowClear size="large" />
                             </Space>
-                            <div>
+                            <div className={userData?.role === 'PARTNER' ? '' : 'hidden'}>
                                 <button
                                     onClick={() => setIsOpenModalCreateProgram(true)}
                                     className="btn-create-program"

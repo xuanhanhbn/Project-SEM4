@@ -1,4 +1,5 @@
-import { Progress } from 'antd';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Button, Progress } from 'antd';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -7,10 +8,29 @@ import { columns } from '../../constants';
 import { useMutation } from '@tanstack/react-query';
 import { getAllProgramApi } from './callApi';
 import { notify } from '~/utils/common';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
+import Loading from '~/components/Loading';
 
 function ActiveProgram(props) {
-    // const [dataDetail, setDataDetail] = useState(null);
-    const { dataDetail } = props;
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+
+    const baseDataRequest = {
+        partnerId: '',
+        name: '',
+        page: 1,
+        size: 20,
+    };
+
+    // const { dataDetail } = props;
+    const [dataRequest, setDataRequest] = useState(baseDataRequest);
     const [dataProgram, setDataProgram] = useState([]);
 
     const handleCaculator = (item) => {
@@ -27,7 +47,13 @@ function ActiveProgram(props) {
     };
 
     useEffect(() => {
-        mutationGetAllProgram();
+        const newRequest = {
+            ...dataRequest,
+            partnerId: userData?.partnerId || '',
+            name: 'Active',
+        };
+        setDataRequest(newRequest);
+        mutationGetAllProgram(newRequest);
     }, []);
 
     const { mutate: mutationGetAllProgram, isPending } = useMutation({
@@ -47,9 +73,13 @@ function ActiveProgram(props) {
         }
         if (field === 'actions') {
             return (
-                <Link to={`/admin/program/detail/${item?.programId}`}>
-                    <i className="fa-sharp fa-solid fa-eye"></i>
-                </Link>
+                <div className="flex justify-center">
+                    <Link to={`/admin/program/detail/${item?.programId}`}>
+                        <Button title="View">
+                            <i className="fa-sharp fa-solid fa-eye"></i>
+                        </Button>
+                    </Link>
+                </div>
             );
         }
         if (field === 'status') {
@@ -70,6 +100,7 @@ function ActiveProgram(props) {
     }, []);
     return (
         <div>
+            <Loading isLoading={isPending} />
             <TableCommon
                 data={dataProgram || []}
                 parseFunction={parseData}

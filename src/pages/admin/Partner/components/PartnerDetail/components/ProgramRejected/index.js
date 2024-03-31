@@ -10,13 +10,37 @@ import { useMutation } from '@tanstack/react-query';
 import { getAllProgramApi } from './callApi';
 import { notify } from '~/utils/common';
 import Loading from '~/components/Loading';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
 
 function ListProgramRejected() {
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+    const baseDataRequest = {
+        partnerId: '',
+        name: '',
+        page: 1,
+        size: 20,
+    };
+
     // State
+    const [dataRequest, setDataRequest] = useState(baseDataRequest);
     const [dataProgram, setDataProgram] = useState([]);
 
     useEffect(() => {
-        mutationGetAllProgram();
+        const newRequest = {
+            ...dataRequest,
+            partnerId: userData?.partnerId || '',
+            name: 'Rejected',
+        };
+        setDataRequest(newRequest);
+        mutationGetAllProgram(newRequest);
     }, []);
 
     const { mutate: mutationGetAllProgram, isPending } = useMutation({
@@ -49,7 +73,7 @@ function ListProgramRejected() {
 
         if (field === 'action') {
             return (
-                <div className="flex ">
+                <div className="flex justify-center">
                     <Link to={`/admin/program-detail-for-admin/${item?.programId}`}>
                         <Button title="View">
                             <i className="fa-sharp fa-solid fa-eye"></i>

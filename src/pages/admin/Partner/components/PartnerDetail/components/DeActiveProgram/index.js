@@ -7,13 +7,40 @@ import { useMutation } from '@tanstack/react-query';
 import { getAllProgramApi } from './callApi';
 import { notify } from '~/utils/common';
 import { columns } from './constant';
+import useAuthStore from '~/store/zustand';
+import { shallow } from 'zustand/shallow';
+import Loading from '~/components/Loading';
+import { Button } from 'antd';
 
 function DeActiveProgram(props) {
-    const { dataDetail } = props;
+    // const { dataDetail } = props;
+    const { userData, setUserData, cleanup } = useAuthStore(
+        (state) => ({
+            userData: state.userData || '',
+            setUserData: state.setUserData,
+            cleanup: state.cleanup,
+        }),
+        shallow,
+    );
+
+    const baseDataRequest = {
+        partnerId: '',
+        name: '',
+        page: 1,
+        size: 20,
+    };
+
+    const [dataRequest, setDataRequest] = useState(baseDataRequest);
     const [dataProgram, setDataProgram] = useState([]);
 
     useEffect(() => {
-        mutationGetAllProgram();
+        const newRequest = {
+            ...dataRequest,
+            partnerId: userData?.partnerId || '',
+            name: 'DeActive',
+        };
+        setDataRequest(newRequest);
+        mutationGetAllProgram(newRequest);
     }, []);
 
     const { mutate: mutationGetAllProgram, isPending } = useMutation({
@@ -33,9 +60,13 @@ function DeActiveProgram(props) {
         }
         if (field === 'actions') {
             return (
-                <Link to={`/admin/program/detail/${item?.programId}`}>
-                    <i className="fa-sharp fa-solid fa-eye"></i>
-                </Link>
+                <div className="flex justify-center">
+                    <Link to={`/admin/program/detail/${item?.programId}`}>
+                        <Button title="View">
+                            <i className="fa-sharp fa-solid fa-eye"></i>
+                        </Button>
+                    </Link>
+                </div>
             );
         }
         if (field === 'target' || field === 'totalMoney') {
@@ -50,6 +81,7 @@ function DeActiveProgram(props) {
     }, []);
     return (
         <div>
+            <Loading isLoading={isPending} />
             <TableCommon
                 data={dataProgram || []}
                 parseFunction={parseData}

@@ -44,7 +44,7 @@ export const sideBarList = [
         type: 'TAB_ITEM',
         tabIcon: <i className="fa-brands fa-rocketchat"></i>,
         path: '/admin/message',
-        role: ['PARTNER'],
+        role: ['ADMIN', 'PARTNER'],
     },
     {
         id: 6,

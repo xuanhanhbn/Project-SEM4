@@ -65,6 +65,7 @@ export const downloadFileDefault = (downloadFileUrl) =>
         baseApiUrlAuth
             .get(`${downloadFileUrl}`, { responseType: 'blob' })
             .then((res) => {
+                // console.log('res: ',res);
                 const blob = new Blob([res.data], { type: res.headers['content-type'] });
                 FileSaver.saveAs(blob, res.headers.filename);
                 resolve(res);

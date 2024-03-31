@@ -420,7 +420,7 @@ export default function CampaignDetail(props) {
                                             <div className="flex justify-end w-full text-xs text-gray-100 md:text-base">
                                                 <i className="text-base fa-light fa-user-group"></i>
                                                 <p className="ml-2 text-xs line-clamp-1 text-ellipsis whitespace-nowrap">
-                                                    {dataDetail?.volunteers || 0} supporteds
+                                                    {dataDetail?.countVolunteer || 0} volunteer
                                                 </p>
                                             </div>
                                         </div>
@@ -483,8 +483,12 @@ export default function CampaignDetail(props) {
                                             data-tooltip-content="Volunteer"
                                             className="btn_share"
                                         >
-                                            <i className="fa-light fa-users-medical"></i>{' '}
-                                            {dataDetail?.countVolunteer || 0}
+                                            <div className="flex items-center">
+                                                <div>
+                                                    <i className="fa-light fa-users-medical"></i>
+                                                </div>
+                                                <div className="ml-1">{dataDetail?.countVolunteer || 0}</div>
+                                            </div>
                                         </button>
                                         <button
                                             data-tooltip-id="my-tooltip"

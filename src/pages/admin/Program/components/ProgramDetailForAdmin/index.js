@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { onGetDetailProgram } from './callApi';
 import { convertTimeStampToDateTime, handleFormatMoney, handleReturnLogoImage, notify } from '~/utils/common';
-import moment from 'moment';
-import CardImg from '~/assets/images/campaigns/drc2_homecard.jpg';
 import { Button, Input, Modal, Progress } from 'antd';
 import './index.css';
 import Loading from '~/components/Loading';
@@ -109,7 +107,7 @@ function ProgramDetailForAdmin() {
     };
     const handleCancel = () => setIsOpenModal(baseOpenModal);
 
-    const handleOpenModal = (type) => {
+    const handleOpenModal = (item, type) => {
         if (type && type === 'accept') {
             return setIsOpenModal((prev) => ({
                 ...prev,
@@ -413,7 +411,13 @@ function ProgramDetailForAdmin() {
                 </Modal>
             )}
 
-            {isOpenModalEdit && <ModalEditProgram isOpen={isOpenModalEdit} onClose={() => setIsOpenModalEdit(false)} />}
+            {isOpenModalEdit && (
+                <ModalEditProgram
+                    oldData={dataProgram}
+                    isOpen={isOpenModalEdit}
+                    onClose={() => setIsOpenModalEdit(false)}
+                />
+            )}
         </div>
     );
 }

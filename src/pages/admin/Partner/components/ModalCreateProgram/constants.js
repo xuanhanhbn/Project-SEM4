@@ -19,27 +19,27 @@ export const inputCreateProgram = [
         lable: 'Program name',
         type: 'INPUT_NAME',
     },
-
-    {
-        field: 'startDate',
-        lable: 'Start date',
-        type: 'INPUT_DATE',
-    },
-    {
-        field: 'endDate',
-        lable: 'End date',
-        type: 'INPUT_DATE',
-    },
-    {
-        field: 'finishDate',
-        lable: 'Finish date',
-        type: 'INPUT_DATE',
-    },
     {
         field: 'target',
         lable: 'Target',
         type: 'INPUT_AMOUNT',
     },
+    {
+        field: 'startDate',
+        lable: 'Start date',
+        type: 'INPUT_DATE',
+    },
+    // {
+    //     field: 'endDate',
+    //     lable: 'End date',
+    //     type: 'INPUT_DATE',
+    // },
+    {
+        field: 'finishDate',
+        lable: 'Finish date',
+        type: 'INPUT_DATE',
+    },
+
     {
         field: 'programDescription',
         lable: 'Program description',
