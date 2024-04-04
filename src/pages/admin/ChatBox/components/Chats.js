@@ -60,13 +60,17 @@ function Chats() {
                                 className="flex items-center justify-between w-full"
                             >
                                 <div className="w-[80%] flex items-center">
-                                    <img src={chat[1].userInfo.photoURL} className="mr-3 rounded-full w-9 h-9" alt="" />
+                                    <img
+                                        src={chat[1]?.userInfo?.photoURL}
+                                        className="mr-3 rounded-full w-9 h-9"
+                                        alt=""
+                                    />
                                     <div>
                                         <span
                                             className="truncate w-[130px] text-sm font-bold"
                                             style={{ color: '#000' }}
                                         >
-                                            {chat[1].userInfo.displayName}
+                                            {chat[1]?.userInfo?.displayName}
                                         </span>
                                         <p
                                             className={
