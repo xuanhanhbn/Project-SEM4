@@ -4,7 +4,6 @@ import React from 'react';
 
 function UploadImageCarousel(props) {
     const { fileList, onPreview, onChange, open, title, onCancel, src, beforeUpload } = props;
-
     // style button upload
     const uploadButtonUploadCareousel = (
         <button

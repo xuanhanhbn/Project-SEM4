@@ -178,13 +178,13 @@ function ModalCreateProgram(props) {
     // xử lý upload ảnh
     const handleUploadCarouselImage = (info) => {
         const files = info?.file || {};
-        console.log('files: ', files);
+        console.log('info?.fileList: ', info?.fileList);
         // if (files.status === 'done') {
         //     message.success(`${info.file.name} file uploaded successfully`);
         //     return mutationUploadListImage({ files: files?.originFileObj });
         // }
-        mutationUploadListImage({ files: files?.originFileObj });
-        return setFileListCarouselImage(info?.fileList);
+        return mutationUploadListImage({ files: files?.originFileObj });
+        // return setFileListCarouselImage(info?.fileList);
     };
 
     // xử lý upload ảnh banner
@@ -479,7 +479,7 @@ function ModalCreateProgram(props) {
                         <>
                             <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
                             <UploadImageCarousel
-                                fileList={fileList}
+                                fileList={listImage.imageList}
                                 beforeUpload={beforeUpload}
                                 onPreview={handlePreview}
                                 onChange={handleUploadCarouselImage}
