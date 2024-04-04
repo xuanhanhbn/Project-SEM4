@@ -24,6 +24,7 @@ function ProgramDetailForAdmin() {
     const ref = useRef();
     const [dataProgram, setDataProgram] = useState({});
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(baseOpenModal);
     const [isMessage, setIsMessage] = useState('');
@@ -91,14 +92,17 @@ function ProgramDetailForAdmin() {
     };
 
     const acceptedProgram = async (data) => {
+        setIsLoading(true);
         try {
             const url = `program/active-program/${dataProgram?.programId}?reasonRejection=${isMessage}&value=${data}`;
             const res = await getApiWithBodyDefault(url);
             if (res && res.status === 200) {
+                setIsLoading(false);
                 notify(res?.data, 'success');
                 handleCancel();
                 return handleGetDetail(params?.programId);
             }
+            setIsLoading(false);
         } catch (error) {
             return notify(error, 'error');
         }
@@ -270,7 +274,7 @@ function ProgramDetailForAdmin() {
 
     return (
         <div id="campaignDetail" ref={ref}>
-            <Loading isLoading={isPending || isPendingExtendsProgram} />
+            <Loading isLoading={isPending || isPendingExtendsProgram || isLoading} />
             <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataProgram?.programName}</h1>
             {/* <div></div> */}
             <div className="grid grid-rows-1 md:flex">

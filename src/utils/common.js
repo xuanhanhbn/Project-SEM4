@@ -58,12 +58,12 @@ export const handleFormatMoney = (money) => {
 };
 
 export const handleCheckStartDonateDate = (startDonateDate) => {
-    const now = moment();
-    const startDate = moment(startDonateDate)?.format('YYYY-MM-DD');
-    if (now.isBefore(startDate)) {
-        return true;
-    }
-    return false;
+    // Lấy ngày hiện tại
+    const currentDate = moment().format('YYYY-MM-DD');
+
+    // Chuyển đổi ngày nhận vào thành đối tượng Moment
+    const inputDate = moment(startDonateDate);
+    return inputDate.isAfter(currentDate);
 };
 
 export const notify = (message, type) => {
