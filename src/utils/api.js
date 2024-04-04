@@ -60,12 +60,12 @@ export const getApiNoAuth = (url) =>
     );
 
 // DOWNLOAD FILE
-export const downloadFileDefault = (downloadFileUrl) =>
+export const downloadFileDefault = (downloadFileUrl, name) =>
     new Promise((resolve, reject) =>
         baseApiUrlAuth
             .get(`${downloadFileUrl}`, { responseType: 'blob' })
             .then((res) => {
-                // console.log('res: ',res);
+                console.log('name: ', name);
                 const blob = new Blob([res.data], { type: res.headers['content-type'] });
                 FileSaver.saveAs(blob, res.headers.filename);
                 resolve(res);

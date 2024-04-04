@@ -37,59 +37,58 @@ function ChatBoxCustom(props) {
 
     // xử lý khi send message
     const handleSendMeage = async () => {
-        console.log('12#');
-        // try {
-        //     if (img) {
-        //         const storageRef = ref(storage, uuid());
+        try {
+            if (img) {
+                const storageRef = ref(storage, uuid());
 
-        //         const uploadTask = uploadBytesResumable(storageRef, img);
+                const uploadTask = uploadBytesResumable(storageRef, img);
 
-        //         uploadTask.on(
-        //             (error) => {
-        //                 //TODO:Handle Error
-        //             },
-        //             () => {
-        //                 getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-        //                     await updateDoc(doc(db, 'chats', data.chatId), {
-        //                         messages: arrayUnion({
-        //                             id: uuid(),
-        //                             text,
-        //                             senderId: currentUser.uid,
-        //                             date: Timestamp.now(),
-        //                             img: downloadURL,
-        //                         }),
-        //                     });
-        //                 });
-        //             },
-        //         );
-        //     } else {
-        //         await updateDoc(doc(db, 'chats', data.chatId), {
-        //             messages: arrayUnion({
-        //                 id: uuid(),
-        //                 text,
-        //                 senderId: currentUser?.uid,
-        //                 date: Timestamp.now(),
-        //                 newMessage: true,
-        //             }),
-        //         });
-        //     }
+                uploadTask.on(
+                    (error) => {
+                        //TODO:Handle Error
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                            await updateDoc(doc(db, 'chats', data.chatId), {
+                                messages: arrayUnion({
+                                    id: uuid(),
+                                    text,
+                                    senderId: currentUser.uid,
+                                    date: Timestamp.now(),
+                                    img: downloadURL,
+                                }),
+                            });
+                        });
+                    },
+                );
+            } else {
+                await updateDoc(doc(db, 'chats', data.chatId), {
+                    messages: arrayUnion({
+                        id: uuid(),
+                        text,
+                        senderId: currentUser?.uid,
+                        date: Timestamp.now(),
+                        newMessage: true,
+                    }),
+                });
+            }
 
-        //     await updateDoc(doc(db, 'userChats', currentUser?.uid), {
-        //         [data.chatId + '.lastMessage']: { text },
-        //         [data.chatId + '.newMessage']: { newMessage },
-        //         [data.chatId + '.date']: serverTimestamp(),
-        //     });
+            await updateDoc(doc(db, 'userChats', currentUser?.uid), {
+                [data.chatId + '.lastMessage']: { text },
+                [data.chatId + '.newMessage']: { newMessage },
+                [data.chatId + '.date']: serverTimestamp(),
+            });
 
-        //     await updateDoc(doc(db, 'userChats', data?.user?.uid), {
-        //         [data.chatId + '.lastMessage']: { text },
-        //         [data.chatId + '.newMessage']: { newMessage },
-        //         [data.chatId + '.date']: serverTimestamp(),
-        //     });
-        //     setText('');
-        //     setImg(null);
-        // } catch (error) {
-        //     return error;
-        // }
+            await updateDoc(doc(db, 'userChats', data?.user?.uid), {
+                [data.chatId + '.lastMessage']: { text },
+                [data.chatId + '.newMessage']: { newMessage },
+                [data.chatId + '.date']: serverTimestamp(),
+            });
+            setText('');
+            setImg(null);
+        } catch (error) {
+            return error;
+        }
     };
 
     return (
