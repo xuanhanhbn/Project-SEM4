@@ -19,6 +19,7 @@ function ChatBoxCustom(props) {
 
     const { currentUser } = useContext(AuthContext);
     const { data } = useContext(ChatContext);
+
     //State
     const [text, setText] = useState('');
     const [newMessage, setNewMessage] = useState(true);

@@ -376,7 +376,7 @@ export default function CampaignDetail(props) {
     };
 
     const handleDownloadDonate = () => {
-        return downloadDonateProgram({ data: dataDetail?.programId, name: '123' });
+        return downloadDonateProgram(dataDetail?.programId);
     };
 
     // đóng mở modal đăng ký volunteer

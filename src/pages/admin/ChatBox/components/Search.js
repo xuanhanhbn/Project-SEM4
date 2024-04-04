@@ -74,7 +74,6 @@ function Search() {
         setUser(null);
         setUsername('');
     };
-
     return (
         <div>
             <form onSubmit={handleSubmit(handleSearchUser)}>

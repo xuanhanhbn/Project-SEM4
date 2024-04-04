@@ -20,11 +20,10 @@ export async function onDonateProgram(data) {
     }
 }
 
-export async function onDownloadDonateProgram(id, name) {
-    console.log('naneee: ', name);
+export async function onDownloadDonateProgram(id) {
     const url = `api/v1/download-donations?programId=${id}`;
     try {
-        const res = await downloadFileDefault(url, name);
+        const res = await downloadFileDefault(url);
         return res;
     } catch (error) {
         return error;
