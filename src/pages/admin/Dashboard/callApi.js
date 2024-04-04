@@ -1,10 +1,10 @@
 import { getApiDefault } from '~/utils/api';
 
-export async function getAllPrograms() {
-    const url = '/program/get-all-programs?name=&page=1&size=20';
+export async function getDashboard(data) {
+    const url = `/dashboard/get?year=${data?.year}`;
     try {
         const res = await getApiDefault(url);
-        if (res && res?.status === 200) {
+        if (res) {
             return res;
         }
     } catch (error) {

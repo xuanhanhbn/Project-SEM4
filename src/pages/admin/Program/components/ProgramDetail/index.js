@@ -338,7 +338,6 @@ export default function ProgramDetail() {
                         </div>
                     </div>
 
-                    {/* nếu program chưa active hoạc bị từ chối thì hiển thị phần mô tả program */}
                     <div className="mt-10">
                         <div className="p-5 text-left bg-white rounded-2xl">
                             <div className="flex items-center justify-between mb-6">

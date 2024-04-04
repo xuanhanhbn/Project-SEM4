@@ -1,21 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import './Program.css';
+
 import TableCommon from '~/components/TableCommon';
-import { columnsRejectProgram } from '../../constants';
+import { columnsAdminTable } from './constants';
+import { Button } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import { getAllProgramApi } from './callApi';
 import { notify } from '~/utils/common';
-import { columns } from './constant';
+import Loading from '~/components/Loading';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
-import Loading from '~/components/Loading';
-import { Button } from 'antd';
 
-function DeActiveProgram(props) {
-    const { dataDetail } = props;
-    const params = useParams();
-
+function ListProgramEnd() {
     const { userData, setUserData, cleanup } = useAuthStore(
         (state) => ({
             userData: state.userData || '',
@@ -32,14 +30,15 @@ function DeActiveProgram(props) {
         size: 20,
     };
 
+    // State
     const [dataRequest, setDataRequest] = useState(baseDataRequest);
     const [dataProgram, setDataProgram] = useState([]);
 
     useEffect(() => {
         const newRequest = {
             ...dataRequest,
-            partnerId: params?.partnerId || userData?.partnerId || '',
-            name: 'DeActive',
+            partnerId: userData?.partnerId || '',
+            name: 'End',
         };
         setDataRequest(newRequest);
         mutationGetAllProgram(newRequest);
@@ -55,15 +54,28 @@ function DeActiveProgram(props) {
         },
     });
 
-    // render data table
+    // roll admin lấy danh sách program
     const parseData = useCallback((item, field, index) => {
         if (field === 'index') {
             return index + 1;
         }
-        if (field === 'actions') {
+        if (field === 'partnerName') {
+            return item?.partner?.partnerName;
+        }
+
+        if (field === 'status') {
+            if (item.status === 'Active') return <div style={{ color: 'green', fontWeight: 800 }}>{item[field]}</div>;
+            return <div style={{ color: 'red', fontWeight: 800 }}>{item[field]}</div>;
+        }
+
+        if (field === 'target') {
+            return `${item[field].toLocaleString()} $`;
+        }
+
+        if (field === 'action') {
             return (
-                <div className="flex justify-center">
-                    <Link to={`/admin/program/detail/${item?.programId}`}>
+                <div className="flex ">
+                    <Link to={`/admin/program-detail-for-admin/${item?.programId}`}>
                         <Button title="View">
                             <i className="fa-sharp fa-solid fa-eye"></i>
                         </Button>
@@ -71,28 +83,24 @@ function DeActiveProgram(props) {
                 </div>
             );
         }
-        if (field === 'target' || field === 'totalMoney') {
-            return `${(item[field] && item[field].toLocaleString()) || 0} $`;
-        }
-        if (field === 'status') {
-            if (item.status === 'Active') return <div style={{ color: 'green', fontWeight: 800 }}>{item[field]}</div>;
-            return <div style={{ color: 'red', fontWeight: 800 }}>{item[field]}</div>;
-        }
 
         return item[field];
     }, []);
     return (
-        <div>
+        <div id="program_page">
             <Loading isLoading={isPending} />
-            <TableCommon
-                data={dataProgram || []}
-                parseFunction={parseData}
-                columns={columns}
-                isShowPaging
-                className="shadow-md rounded-2xl"
-            />
+
+            <div className="flex-none w-full max-w-full mt-6">
+                <TableCommon
+                    data={dataProgram || []}
+                    parseFunction={parseData}
+                    columns={columnsAdminTable}
+                    isShowPaging
+                    className="shadow-md rounded-2xl"
+                />
+            </div>
         </div>
     );
 }
 
-export default DeActiveProgram;
+export default ListProgramEnd;

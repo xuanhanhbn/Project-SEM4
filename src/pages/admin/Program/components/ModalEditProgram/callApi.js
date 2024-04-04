@@ -1,4 +1,4 @@
-import { postApiImageDefault } from '~/utils/api';
+import { postApiDefault, postApiImageDefault } from '~/utils/api';
 
 export async function uploadImageApi(data) {
     const url = '/attachment/upload';

@@ -13,47 +13,21 @@ import UploadImageBanner from '../UploadImageBanner';
 import { getBase64, beforeUpload, getBaseUploadCarousel64, notify } from '~/utils/common';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
-import { uploadImageApi } from './callApi';
+import { extendProgramApi, uploadImageApi } from './callApi';
 import { useMutation } from '@tanstack/react-query';
 import Loading from '~/components/Loading';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import dayjs from 'dayjs';
 
-const selectOptions = [
-    {
-        value: 'school',
-        label: 'School',
-    },
-    {
-        value: 'children',
-        label: 'Children',
-    },
-    {
-        value: 'plantATree',
-        label: 'Plant a tree',
-    },
-];
-
 function ModalEditProgram(props) {
-    const { userData, setUserData, cleanup } = useAuthStore(
-        (state) => ({
-            userData: state.userData || '',
-            setUserData: state.setUserData,
-            cleanup: state.cleanup,
-        }),
-        shallow,
-    );
+    const { isOpen, onClose, onEdit, type, oldData } = props;
 
-    const { isOpen, onClose, handleCreate, type, oldData } = props;
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileListCarouselImage] = useState([]);
     const [imageUrl, setImageUrl] = useState();
     const [endDateProgram, setEndDateProgram] = useState('');
-    const [finishDateProgram, setFinishDateProgram] = useState('');
-    const [optionPartner, setOptionPartner] = useState([]);
     const [listImage, setListImage] = useState({
         imageLogo: '',
         imageList: [],
@@ -83,19 +57,6 @@ function ModalEditProgram(props) {
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
-
-    // useEffect(() => {
-    //     if (userData) {
-    //         const options = [
-    //             {
-    //                 value: userData?.partnerId,
-    //                 label: userData?.displayName,
-    //             },
-    //         ];
-    //         setValue('partner', userData?.partnerId);
-    //         return setOptionPartner(options);
-    //     }
-    // }, [userData]);
 
     useEffect(() => {
         if (Object.keys(oldData).length > 0) {
@@ -143,53 +104,13 @@ function ModalEditProgram(props) {
         },
     });
 
-    // xử lý create progeam
-    const onSubmit = (data) => {
-        const dataCreate = {
-            programName: data?.programName || '',
-            target: data?.target || 0,
-            startDonateDate: moment(data.startDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            endDonateDate: moment(data.endDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            finishDate: moment(data.finishDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            description: valueDescription || '',
-            finishSoon: true,
-            recruitCollaborators: true,
-            imageLogo: listImage.imageLogo,
-            imageUrl: listImage?.imageList,
-        };
-
-        return handleCreate(dataCreate);
-        // console.log('dataCreate: ', dataCreate);
-    };
-
     // xử lý update program
     const updateProgram = () => {
-        console.log('dataRequest', dataRequest);
-    };
-
-    // xử lý upload ảnh
-    const handleUploadCarouselImage = (info) => {
-        const files = info.file || {};
-        if (files.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-            mutationUploadListImage({ files: files?.originFileObj });
-        }
-        return setFileListCarouselImage(info?.fileList);
-    };
-
-    // xử lý upload ảnh banner
-    const handleChangeUpaloadImageBanner = (info) => {
-        const files = info.file || {};
-
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-            getBase64(info.file.originFileObj, (url) => {
-                setImageUrl(url);
-            });
-            return mutationUploadLogo({ files: files?.originFileObj });
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
+        const newRequest = {
+            id: dataRequest?.programId,
+            finishDate: dataRequest?.finishDate,
+        };
+        return onEdit(newRequest);
     };
 
     // xử lý ấn đóng rivew ảnh
@@ -211,7 +132,7 @@ function ModalEditProgram(props) {
             ...dataRequest,
             finishDate: dateString,
         };
-        setDataRequest(newDataRequest);
+        return setDataRequest(newDataRequest);
     };
 
     const handleReturnValue = (item) => {

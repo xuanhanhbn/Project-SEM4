@@ -20,12 +20,15 @@ function PartnerDetail() {
     // call api
     const { mutate: mutationGetAllPartner } = useMutation({
         mutationFn: getPartnerDetailApi,
-        onSuccess: (data) => {
-            if ((data && data?.status === 200) || data?.status === '200') {
-                setDataDetail(data?.data);
-                setDataProgram(data?.data?.programs);
+        onSuccess: (res) => {
+            if ((res && res?.status === 200) || res?.status === '200') {
+                const filterProgram = res?.data?.programs?.filter(
+                    (item) => item.status === 'Active' || item.status === 'End',
+                );
+                setDataProgram(filterProgram);
+                setDataDetail(res?.data);
             }
-            return notify(data?.message, 'error');
+            return notify(res?.message, 'error');
         },
     });
 
@@ -35,32 +38,6 @@ function PartnerDetail() {
 
     // nếu không có logo thì lấy ảnh mặc định
     const urlLogo = dataDetail?.attachment?.length > 0 ? dataDetail?.attachment[0]?.url : logoPartner;
-
-    // render item program của partner
-    // const RENDER_PROGRAM = (item) => {
-    //     const imageUrl = item.attachment[0].url;
-    //     return (
-    //         <Link to="/partner/detail" key={item?.programId} className="w-full md:flex">
-    //             <img
-    //                 className="object-cover object-center w-full h-32 bg-center rounded-lg md:w-2/5"
-    //                 src={imageUrl}
-    //                 //   alt={data?.partnerName + '_logo'}
-    //                 alt=""
-    //             />
-    //             <div className="flex-grow md:ml-6 asphalt-text-style">
-    //                 <strong className="md:line-clamp-2 line-clamp-1 md:w-72">
-    //                     program name program nameprogram nameprogram nameprogram name
-    //                 </strong>
-    //                 <div className="hidden md:block">
-    //                     <p className=" line-clamp-3 w-72">
-    //                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et
-    //                         dictum interdum, nisi lorem egestas vitae scel erisque enim ligula venenatis dolor.
-    //                     </p>
-    //                 </div>
-    //             </div>
-    //         </Link>
-    //     );
-    // };
 
     const onScroll = (e) => {
         // Refer to: https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#problems_and_solutions
@@ -132,12 +109,14 @@ function PartnerDetail() {
                 >
                     <div className="bg-white ">
                         <div>
-                            <h2 className="partner-popup__title mb-4">List Program</h2>
+                            <h2 className="partner-popup__title mb-4">{`List Program : ${
+                                dataProgram?.length || 0
+                            }`}</h2>
                         </div>
                         <div>
                             <List>
                                 <VirtualList
-                                    data={dataDetail?.programs || []}
+                                    data={dataProgram || []}
                                     height={ContainerHeight}
                                     itemHeight={47}
                                     itemKey="email"

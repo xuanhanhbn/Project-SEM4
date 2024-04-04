@@ -2,13 +2,14 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { onGetDetailProgram } from './callApi';
+import { extendProgramApi, onGetDetailProgram } from './callApi';
 import { convertTimeStampToDateTime, handleFormatMoney, handleReturnLogoImage, notify } from '~/utils/common';
 import { Button, Input, Modal, Progress } from 'antd';
 import './index.css';
 import Loading from '~/components/Loading';
 import { getApiWithBodyDefault } from '~/utils/api';
 import ModalEditProgram from '../ModalEditProgram';
+import { todayCardData } from './constant';
 const { TextArea } = Input;
 
 function ProgramDetailForAdmin() {
@@ -50,10 +51,21 @@ function ProgramDetailForAdmin() {
         },
     });
 
+    const { mutate: mutationExtendsProgram, isPending: isPendingExtendsProgram } = useMutation({
+        mutationFn: extendProgramApi,
+        onSuccess: (res) => {
+            if ((res && res?.status === 200) || res?.status === '200') {
+                handleGetDetail(params?.programId);
+                return setIsOpenModalEdit(false);
+            }
+            return notify(res?.message, 'error');
+        },
+    });
+
+    const handleExtendsProgram = (data) => mutationExtendsProgram(data);
+
     // Hàm xử lý khi nhấn nút Xem thêm hoặc Thu gọn
-    const toggleExpanded = () => {
-        setIsExpanded(!isExpanded);
-    };
+    const toggleExpanded = () => setIsExpanded(!isExpanded);
 
     const renderDescription = () => {
         if (isExpanded) {
@@ -168,9 +180,89 @@ function ProgramDetailForAdmin() {
             return 'hidden';
         }
     };
+
+    const handleReturnData = (item) => {
+        if (item?.field === 'totalMoney') {
+            let tong = 0;
+            // Duyệt qua từng phần tử trong mảng và tính tổng
+            // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+            if (dataProgram?.hasOwnProperty('totalMoney')) {
+                tong += dataProgram?.totalMoney;
+            }
+            return `${tong !== 0 ? tong?.toLocaleString() : 0} $`;
+        }
+
+        if (item?.field === 'totalDonateForPaypal') {
+            let tong = 0;
+            if (dataProgram?.donations?.length > 0) {
+                const filterDonate = dataProgram?.donations?.filter((obj) => obj?.paymentMethod === 'Paypal');
+                for (let i = 0; i < filterDonate?.length; i++) {
+                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+                    if (filterDonate[i].hasOwnProperty('amount')) {
+                        tong += filterDonate[i].amount;
+                    }
+                    return `${tong !== 0 ? tong?.toLocaleString() : 0} $`;
+                }
+            }
+            return '0 $';
+        }
+
+        if (item?.field === 'totalDonateForVnPay') {
+            let tong = 0;
+            if (dataProgram?.donations?.length > 0) {
+                const filterDonate = dataProgram?.donations?.filter((obj) => obj?.paymentMethod === 'VNPay');
+                for (let i = 0; i < filterDonate?.length; i++) {
+                    // Kiểm tra xem thuộc tính "total" có tồn tại không trước khi cộng vào tổng
+                    if (filterDonate[i].hasOwnProperty('amount')) {
+                        tong += filterDonate[i].amount;
+                    }
+                    return `${tong !== 0 ? tong?.toLocaleString() : 0} $`;
+                }
+            }
+            return '0 $';
+        }
+
+        if (item?.field === 'totalFollowers') {
+            return dataProgram?.countVolunteer || 0;
+        }
+    };
+
+    const RENDER_TODAY_CARD = (data) => {
+        return (
+            <div className="w-full max-w-full  mb-6 sm:flex-none xl:mb-0 " key={data.id}>
+                <div className="relative flex flex-col min-w-0 break-words bg-white shadow-md rounded-2xl bg-clip-border">
+                    <div className="flex-auto p-4">
+                        <div className="flex flex-row -mx-3">
+                            <div className="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p className="mb-0 font-sans text-sm font-semibold leading-normal">
+                                        {data.cardName}
+                                    </p>
+                                    <h5 className="mb-0 font-bold">{handleReturnData(data)}</h5>
+                                </div>
+                            </div>
+                            <div className="px-3 text-right basis-1/3">
+                                <div className="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500">
+                                    <div className="text-lg relative top-3.5 text-white">{data.cardIcon}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const handleCheckHiddenEdit = () => {
+        if (dataProgram?.status === 'End') {
+            return 'hidden';
+        }
+        return '';
+    };
+
     return (
         <div id="campaignDetail" ref={ref}>
-            <Loading isLoading={isPending} />
+            <Loading isLoading={isPending || isPendingExtendsProgram} />
             <h1 className="mb-12 text-4xl font-bold leading-10 ">{dataProgram?.programName}</h1>
             {/* <div></div> */}
             <div className="grid grid-rows-1 md:flex">
@@ -244,7 +336,7 @@ function ProgramDetailForAdmin() {
                                         </Button>
                                     </div>
 
-                                    <div className="w-[50%]">
+                                    <div className={`w-[50%] ${handleCheckHiddenEdit()}`}>
                                         <Button
                                             onClick={() => setIsOpenModalEdit(true)}
                                             className="w-[60%]"
@@ -258,6 +350,17 @@ function ProgramDetailForAdmin() {
                             </div>
                         </div>
                     </div>
+
+                    <div
+                        className={
+                            dataProgram?.status === 'Active' || dataProgram?.status === 'End'
+                                ? 'grid-cols-2 gap-4 mt-10 md:grid'
+                                : 'hidden'
+                        }
+                    >
+                        {todayCardData.map((data) => RENDER_TODAY_CARD(data))}
+                    </div>
+
                     <div className="mt-10">
                         <div className="p-5 text-left bg-white rounded-2xl">
                             <div className="flex items-center justify-between mb-6">
@@ -273,6 +376,7 @@ function ProgramDetailForAdmin() {
                         </div>
                     </div>
                 </div>
+
                 <div className="mt-6 md:w-5/12 md:pr-4 md:pl-11 md:mt-0">
                     <div className="sticky py-6 bg-white top-24 rounded-2xl">
                         <div className="flex items-center justify-around mb-5">
@@ -416,6 +520,7 @@ function ProgramDetailForAdmin() {
                     oldData={dataProgram}
                     isOpen={isOpenModalEdit}
                     onClose={() => setIsOpenModalEdit(false)}
+                    onEdit={handleExtendsProgram}
                 />
             )}
         </div>

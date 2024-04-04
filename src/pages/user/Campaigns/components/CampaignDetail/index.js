@@ -97,6 +97,7 @@ export default function CampaignDetail(props) {
     const [isOpenModalVolunteer, setIsOpenModalVolunteer] = useState(false);
     const [isOpenModalNotifi, setIsOpenModalNotifi] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isProgramEnd, setIsProgramEnd] = useState(false);
     const [dataFeedback, setDataFeedback] = useState([]);
     const [emailPartner, setEmailPartner] = useState('');
 
@@ -150,6 +151,13 @@ export default function CampaignDetail(props) {
             handleSearchUser(emailPartner);
         }
     }, [emailPartner]);
+
+    useEffect(() => {
+        if (Object.keys(dataDetail).length > 0 && dataDetail.status === 'End') {
+            return setIsProgramEnd(true);
+        }
+        return setIsProgramEnd(false);
+    }, [dataDetail]);
 
     const { mutate: getDetailProgramApi, isPending } = useMutation({
         mutationFn: getDetailProgram,
@@ -355,7 +363,7 @@ export default function CampaignDetail(props) {
                 </div>
             );
         } else {
-            const limitedDescription = dataDetail?.description?.substring(0, 200);
+            const limitedDescription = dataDetail?.description?.substring(0, 420);
             return (
                 <div>
                     <div dangerouslySetInnerHTML={{ __html: limitedDescription }} />
@@ -388,7 +396,7 @@ export default function CampaignDetail(props) {
         }
         return '';
     };
-    // handleCheckStartDonateDate();
+
     return (
         <div id="campaignDetail" ref={ref}>
             <Loading isLoading={isPending || isPendingDonate || isPendingDownload || isPendingShare || isLoading} />
@@ -521,27 +529,31 @@ export default function CampaignDetail(props) {
                                     </div>
                                 </div>
                                 <div>{renderDescription()}</div>
-                                <div
-                                    className={
-                                        dataDetail?.recruitCollaborators
-                                            ? 'grid grid-cols-2 gap-4 '
-                                            : 'grid grid-cols-1 gap-4 '
-                                    }
-                                >
-                                    <button
-                                        disabled={handleCheckStartDonateDate()}
-                                        onClick={showModal}
-                                        className="font-bold btn rounded"
+                                {dataDetail?.status === 'End' ? (
+                                    <></>
+                                ) : (
+                                    <div
+                                        className={
+                                            dataDetail?.recruitCollaborators
+                                                ? 'grid grid-cols-2 gap-4 '
+                                                : 'grid grid-cols-1 gap-4 '
+                                        }
                                     >
-                                        Donate now
-                                    </button>
-                                    <button
-                                        onClick={() => showOpenModalVolunteer()}
-                                        className={`px-4 py-2 mt-10 font-bold text-orange-100 bg-white border border-orange-100 rounded ${checkHiddenVolunteer()}`}
-                                    >
-                                        {dataDetail?.volunteer ? `Cancel a volunteer` : `Become a volunteer`}
-                                    </button>
-                                </div>
+                                        <button
+                                            disabled={handleCheckStartDonateDate()}
+                                            onClick={showModal}
+                                            className="font-bold btn rounded"
+                                        >
+                                            Donate now
+                                        </button>
+                                        <button
+                                            onClick={() => showOpenModalVolunteer()}
+                                            className={`px-4 py-2 mt-10 font-bold text-orange-100 bg-white border border-orange-100 rounded ${checkHiddenVolunteer()}`}
+                                        >
+                                            {dataDetail?.volunteer ? `Cancel a volunteer` : `Become a volunteer`}
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -613,6 +625,7 @@ export default function CampaignDetail(props) {
                     <ChatBoxCustom closeChatBox={() => handleChangeStateOpenChatBox()} />
                 </div>
             )}
+
             {isOpenModalVolunteer && dataDetail?.volunteer ? (
                 <ModalCancelRegisterVolunteer
                     open={isOpenModalVolunteer}
@@ -627,6 +640,20 @@ export default function CampaignDetail(props) {
                     handleCancel={() => setIsOpenModalVolunteer(false)}
                     // onDonate={handleDonate}
                 />
+            )}
+
+            {isProgramEnd && (
+                <Modal
+                    title="Program has ended"
+                    open={isProgramEnd}
+                    onOk={() => setIsProgramEnd(false)}
+                    onCancel={() => setIsProgramEnd(false)}
+                >
+                    <p>
+                        Currently, our program has concluded. Thank you for tuning in. We hope to see you again in
+                        upcoming programs...
+                    </p>
+                </Modal>
             )}
         </div>
     );

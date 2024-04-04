@@ -30,6 +30,7 @@ function Partner() {
     const [dataTable, setDataTable] = useState(null);
     const [isOpenModalUploadPartner, setIsOpenModalUploadPartner] = useState(false);
     const [isOpenModalBlock, setIsOpenModalBlock] = useState(false);
+    const [isOpenModalUnLock, setIsOpenModalUnLock] = useState(false);
     const [partnerId, setPartnerId] = useState('');
     const [dataRegisterAccountChatBox, setDataRegiserAccountChatBox] = useState(baseDataRegisterAccountChatBox);
 
@@ -56,6 +57,7 @@ function Partner() {
         setIsModalOpenCreatePartner(false);
         setIsOpenModalUploadPartner(false);
         setIsOpenModalBlock(false);
+        setIsOpenModalUnLock(false);
     };
 
     // xử lý khi tìm kiếm partner
@@ -66,8 +68,12 @@ function Partner() {
         setIsOpenModalUploadPartner(true);
     };
 
-    const handleOpenModalBlock = (item) => {
-        setIsOpenModalBlock(true);
+    const handleOpenModalBlock = (item, type) => {
+        if (type && type === 'block') {
+            setIsOpenModalBlock(true);
+            return setPartnerId(item);
+        }
+        setIsOpenModalUnLock(true);
         return setPartnerId(item);
     };
 
@@ -87,6 +93,25 @@ function Partner() {
             return <div style={{ color: 'red', fontWeight: 800 }}>{item[field]}</div>;
         }
         if (field === 'actions') {
+            if (item && item.status === 'Active') {
+                return (
+                    <div className="flex items-center">
+                        <Button>
+                            <Link to={`/admin/partner/detail/${item?.partnerId}`}>
+                                <i className="fa-sharp fa-solid fa-eye"></i>
+                            </Link>
+                        </Button>
+                        <div className="ml-2">
+                            <Button
+                                onClick={() => handleOpenModalBlock(item?.partnerId, 'block')}
+                                className="text-red-500"
+                            >
+                                <i className="fa-sharp fa-light fa-ban"></i>
+                            </Button>
+                        </div>
+                    </div>
+                );
+            }
             return (
                 <div className="flex items-center">
                     <Button>
@@ -95,8 +120,11 @@ function Partner() {
                         </Link>
                     </Button>
                     <div className="ml-2">
-                        <Button onClick={() => handleOpenModalBlock(item?.partnerId)} className="text-red-500">
-                            <i className="fa-sharp fa-light fa-ban"></i>
+                        <Button
+                            onClick={() => handleOpenModalBlock(item?.partnerId, 'unlock')}
+                            className="text-red-500"
+                        >
+                            <i className="fa-light fa-unlock"></i>
                         </Button>
                     </div>
                 </div>
@@ -167,7 +195,7 @@ function Partner() {
     });
 
     //call api create partner
-    const { mutate: mutationCreatePartner } = useMutation({
+    const { mutate: mutationCreatePartner, isPending: isPendingCreate } = useMutation({
         mutationFn: createPartnerApi,
         onSuccess: (res) => {
             if ((res && res?.status === 201) || res?.status === '201') {
@@ -188,7 +216,7 @@ function Partner() {
             if ((res && res?.status === 200) || res?.status === '200') {
                 mutationGetAllPartner();
                 handleCancelModal();
-                return notify('Block Partner Success', 'success');
+                return notify('Success', 'success');
             } else {
                 return notify(res?.response?.data, 'warning');
             }
@@ -201,7 +229,7 @@ function Partner() {
 
     return (
         <div id="partner">
-            <Loading isLoading={isPending} />
+            <Loading isLoading={isPending || isPendingCreate} />
             <h1 className="mt-3 text-xl font-bold">Partner</h1>
             <div className="search_box">
                 <div className="flex items-center justify-center h-12 px-4 text-black bg-white border rounded-md border-gray-104">
@@ -236,19 +264,25 @@ function Partner() {
             )}
             {isOpenModalBlock && (
                 <Modal
-                    title="Basic Modal"
+                    title="Block Partner"
                     open={isOpenModalBlock}
-                    onOk={() => mutationBlockPartner(partnerId)}
+                    onOk={() => mutationBlockPartner({ id: partnerId, value: 'Block' })}
                     onCancel={handleCancelModal}
-                    // footer={null}
                 >
-                    <p>Some contents...</p>
-                    {/* <div className="flex justify-end">
-                        <Button className="mr-2">Cancel</Button>
-                        <Button type="primary" className="bg-green-500 !bg-transparent">
-                            OK
-                        </Button>
-                    </div> */}
+                    <p>
+                        When confirmed, the partner will be blocked and will not have the right to create any programs.
+                    </p>
+                </Modal>
+            )}
+
+            {isOpenModalUnLock && (
+                <Modal
+                    title="Block Partner"
+                    open={isOpenModalUnLock}
+                    onOk={() => mutationBlockPartner({ id: partnerId, value: 'Active' })}
+                    onCancel={handleCancelModal}
+                >
+                    <p>When confirmed, the partner will have the right to create programs.</p>
                 </Modal>
             )}
 

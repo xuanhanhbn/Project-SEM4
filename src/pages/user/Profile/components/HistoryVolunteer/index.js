@@ -7,9 +7,8 @@ import { convertTimeStampToDateTime, handleFormatMoney, notify } from '~/utils/c
 import { Link, useParams } from 'react-router-dom';
 import { getApiDefault } from '~/utils/api';
 
-function HistoryDonate() {
+function HistoryVolunteer() {
     const [dataTable, setDataTable] = useState([]);
-
     const params = useParams();
     useEffect(() => {
         if (params && params?.userId) {
@@ -22,7 +21,7 @@ function HistoryDonate() {
             const url = `user/get-by-id/${id}`;
             const res = await getApiDefault(url);
             if (res && res.status === 200) {
-                return setDataTable(res?.data?.donations);
+                return setDataTable(res?.data?.subPrograms);
             }
         } catch (error) {
             return notify(error, 'error');
@@ -57,4 +56,4 @@ function HistoryDonate() {
     );
 }
 
-export default HistoryDonate;
+export default HistoryVolunteer;

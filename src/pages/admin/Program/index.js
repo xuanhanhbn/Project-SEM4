@@ -4,6 +4,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 import ListProgramPending from './components/ProgramPending';
 import ListAllProgram from './components/ListAllProgram';
+import ListProgramEnd from './components/ListProgramEnd';
 
 function Program() {
     const items = [
@@ -16,6 +17,11 @@ function Program() {
             key: '2',
             label: 'List All Program',
             children: <ListAllProgram />,
+        },
+        {
+            key: '3',
+            label: 'List Program End',
+            children: <ListProgramEnd />,
         },
     ];
 

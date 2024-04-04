@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
 import HistoryDonate from './components/HistoryDonate';
+import HistoryVolunteer from './components/HistoryVolunteer';
 
 function ProfilePage() {
     const { userData, setUserData, cleanup } = useAuthStore(
@@ -18,18 +19,13 @@ function ProfilePage() {
     const items = [
         {
             key: '1',
-            label: 'HistoryDonate',
+            label: 'History Donate',
             children: <HistoryDonate />,
         },
         {
             key: '2',
-            label: 'Tab 2',
-            children: 'Content of Tab Pane 2',
-        },
-        {
-            key: '3',
-            label: 'Tab 3',
-            children: 'Content of Tab Pane 3',
+            label: 'History SubProgram',
+            children: <HistoryVolunteer />,
         },
     ];
 

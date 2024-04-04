@@ -125,7 +125,8 @@ function ModalCreateProgram(props) {
     const { mutate: mutationUploadLogo, isPending: isPendingUploadImg } = useMutation({
         mutationFn: uploadImageApi,
         onSuccess: (res) => {
-            if ((res && res?.status === 200) || res?.status === '200') {
+            console.log('res: ', res);
+            if (res && res?.status === 200) {
                 return setListImage((prev) => ({
                     ...prev,
                     imageLogo: res?.data[0],
@@ -154,7 +155,7 @@ function ModalCreateProgram(props) {
             programName: data?.programName || '',
             target: data?.target || 0,
             startDonateDate: moment(data.startDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            endDonateDate: moment(data.endDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            // endDonateDate: moment(data.endDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             finishDate: moment(data.finishDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             description: valueDescription || '',
             finishSoon: true,
@@ -176,11 +177,13 @@ function ModalCreateProgram(props) {
 
     // xử lý upload ảnh
     const handleUploadCarouselImage = (info) => {
-        const files = info.file || {};
-        if (files.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully`);
-            mutationUploadListImage({ files: files?.originFileObj });
-        }
+        const files = info?.file || {};
+        console.log('files: ', files);
+        // if (files.status === 'done') {
+        //     message.success(`${info.file.name} file uploaded successfully`);
+        //     return mutationUploadListImage({ files: files?.originFileObj });
+        // }
+        mutationUploadListImage({ files: files?.originFileObj });
         return setFileListCarouselImage(info?.fileList);
     };
 
@@ -195,7 +198,8 @@ function ModalCreateProgram(props) {
             });
             return mutationUploadLogo({ files: files?.originFileObj });
         } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
+            // message.error(`${info.file.name} file upload failed.`);
+            return mutationUploadLogo({ files: files?.originFileObj });
         }
     };
 
@@ -218,13 +222,14 @@ function ModalCreateProgram(props) {
     const onChangeStartDate = (value, field) => {
         field.onChange(value);
         if (type === 'create') setEndDateProgram(value);
+        setFinishDateProgram(value);
     };
 
     // xử lý chọn ngày dừng nhận donate
-    const onChangeEndDate = (value, field) => {
-        field.onChange(value);
-        setFinishDateProgram(value);
-    };
+    // const onChangeEndDate = (value, field) => {
+    //     field.onChange(value);
+    //     setFinishDateProgram(value);
+    // };
 
     // render input create program
     const RENDER_INPUT_CREATE_PROGRAM = (item) => {
@@ -302,7 +307,6 @@ function ModalCreateProgram(props) {
                 );
             }
         }
-
         if (item.type === 'INPUT_NAME') {
             const { field } = item;
             const message = errors[field] && errors[field].message;
@@ -327,7 +331,6 @@ function ModalCreateProgram(props) {
                 </div>
             );
         }
-
         if (item.type === 'INPUT_DATE') {
             if (item.field === 'startDate') {
                 const { field } = item;
@@ -370,7 +373,7 @@ function ModalCreateProgram(props) {
                                     <Space direction="vertical">
                                         <DatePicker
                                             disabled={type === 'create' && !endDateProgram ? true : false}
-                                            onChange={(date) => onChangeEndDate(date, field)}
+                                            // onChange={(date) => onChangeEndDate(date, field)}
                                             selected={field.value}
                                             className="input-height"
                                             disabledDate={type === 'create' ? disabledEndDate : disabledStartDate}
@@ -413,7 +416,6 @@ function ModalCreateProgram(props) {
                 );
             }
         }
-
         if (item.type === 'INPUT_AMOUNT') {
             const { field } = item;
             const message = errors[field] && errors[field].message;
@@ -442,7 +444,6 @@ function ModalCreateProgram(props) {
                 </div>
             );
         }
-
         if (item.type === 'INPUT_AREA') {
             const { field } = item;
             const message = errors[field] && errors[field].message;
@@ -471,16 +472,15 @@ function ModalCreateProgram(props) {
                 </div>
             );
         }
-
         if (item.type === 'INPUT_UPLOAD') {
             if (item.field === 'programThumbnailCarouselId') {
                 return (
                     <div key={item.field} className="flex flex-col col-span-2">
                         <>
                             <label className="mb-2 text-xs font-bold ">{item.lable}:</label>
-
                             <UploadImageCarousel
                                 fileList={fileList}
+                                beforeUpload={beforeUpload}
                                 onPreview={handlePreview}
                                 onChange={handleUploadCarouselImage}
                                 open={previewOpen}
@@ -502,7 +502,7 @@ function ModalCreateProgram(props) {
                             <UploadImageBanner
                                 beforeUpload={beforeUpload}
                                 onChange={handleChangeUpaloadImageBanner}
-                                imageUrl={imageUrl}
+                                imageUrl={listImage.imageLogo}
                             />
                         </>
                     </div>

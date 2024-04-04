@@ -4,20 +4,32 @@ import { Link } from 'react-router-dom';
 import { handleCheckStartDonateDate } from '~/utils/common';
 import CountdownTimer from '../CountdownTimer';
 import moment from 'moment';
+import { Progress } from 'antd';
 
 export default function CardCustom(props) {
-    const {
-        id,
-        cardTitle,
-        cardImage,
-        target,
-        supporteds,
-        progressValue,
-        progressPercentage,
-        to,
-        status,
-        startDonateDate,
-    } = props;
+    const { id, cardTitle, cardImage, targetProgram, totalMoneyProgram, supporteds, to, status, startDonateDate } =
+        props;
+
+    const handleCaculator = () => {
+        const target = targetProgram || 0;
+        const total = totalMoneyProgram || 0;
+        if (target && total) {
+            const result = (total / target) * 100;
+            if (result >= 100) {
+                return 100;
+            }
+            return result;
+        }
+        return 0;
+    };
+
+    const handleReturnClassName = () => {
+        if (status === 'End') {
+            return 'border border-orange-100 text-orange-500 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]';
+        }
+        return 'bg-orange-100 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]';
+    };
+
     return (
         <Link to={`${to}/${id}`} className="card">
             <h1 className="card_title">{cardTitle}</h1>
@@ -28,27 +40,18 @@ export default function CardCustom(props) {
 
             <div className="my-4">
                 <div className="flex flex-row">
-                    {status === 'done' ? null : (
-                        <div className="col">
-                            <i className="text-xl fa-sharp fa-thin fa-bullseye-arrow"></i>
-                            <p className="ml-2 text-xs">{target ? target.toLocaleString() : 0} $</p>
-                        </div>
-                    )}
+                    <div className="col">
+                        <i className="text-xl fa-sharp fa-thin fa-bullseye-arrow"></i>
+                        <p className="ml-2 text-xs">{targetProgram ? targetProgram.toLocaleString() : 0} $</p>
+                    </div>
                     <div className="flex w-full justify-end">
                         <i className="text-xl fa-light fa-user-group"></i>
                         <p className="ml-2 text-sm">{supporteds ? supporteds : 0} volunteer</p>
                     </div>
                 </div>
-                <div className="min-h-[12px]  mt-4">
-                    {status === 'done' ? null : (
-                        <div className="h-1 mx-auto mt-2 bg-gray-400 rounded-sm">
-                            {/* <div className="w-10/12 h-1 bg-blue-100 rounded-sm"></div> */}
-                        </div>
-                    )}
-                </div>
+
                 <div className="flex justify-between mx-auto mt-2">
-                    <div className="text_1">{progressValue}</div>
-                    {status === 'done' ? null : <div className="text_1">{progressPercentage}</div>}
+                    <Progress percent={handleCaculator()} />
                 </div>
             </div>
             {handleCheckStartDonateDate(startDonateDate) ? (
@@ -56,11 +59,8 @@ export default function CardCustom(props) {
                     <CountdownTimer targetDate={moment(startDonateDate)?.format('YYYY/MM/DD')} />
                 </div>
             ) : (
-                <button
-                    disabled={status === 'done' ? true : false}
-                    className="bg-orange-100 border-orange-100 rounded-lg w-full font-semibold text-sm p-[.75rem_1rem_.8125rem]"
-                >
-                    Donate now
+                <button disabled={status === 'End' ? true : false} className={handleReturnClassName()}>
+                    {status === 'End' ? 'Program End' : 'Donate now'}
                 </button>
             )}
         </Link>

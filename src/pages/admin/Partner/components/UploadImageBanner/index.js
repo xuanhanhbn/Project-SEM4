@@ -5,7 +5,6 @@ import React from 'react';
 
 function UploadImageBanner(props) {
     const { imageUrl, beforeUpload, onChange, fileList } = props;
-
     // style button upload
     const uploadButtonUploadBanner = (
         <button

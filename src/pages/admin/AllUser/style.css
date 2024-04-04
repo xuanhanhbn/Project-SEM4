@@ -1,0 +1,44 @@
+#all-user-container {
+    .ant-input-search-button {
+        display: none;
+    }
+
+    .ant-input-group-addon {
+        display: none;
+    }
+
+    .ant-input-group .ant-input-affix-wrapper {
+        border: none;
+        border-radius: 0%;
+    }
+
+    .ant-input-affix-wrapper:hover {
+        border-color: transparent;
+    }
+
+    input.ant-input {
+        font-weight: 500;
+    }
+
+    .ant-input-affix-wrapper:focus {
+        border-color: transparent;
+        box-shadow: none;
+    }
+
+    .ant-input-affix-wrapper:focus-within {
+        border-color: transparent;
+        box-shadow: none;
+    }
+}
+
+#all-user-container {
+    @apply w-full px-5 pt-5;
+}
+
+#all-user-container .btn_create {
+    @apply inline-block ml-3 px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer text-xs border-fuchsia-500 text-fuchsia-500 hover:border-fuchsia-500 hover:bg-transparent hover:text-fuchsia-500 hover:opacity-75 hover:shadow-none active:bg-fuchsia-500 active:text-white active:hover:bg-transparent active:hover:text-fuchsia-500;
+}
+
+#all-user-container .search_box {
+    @apply flex justify-end text-white font-semibold;
+}

@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import banner from '~/assets/images/banner/Give-AID.png';
-import logo from '~/assets/images/logo/tải xuống.png';
 import { getAllPartnerApi } from './callApi';
 import { notify } from '~/utils/common';
 import { Card, List } from 'antd';
@@ -15,11 +15,12 @@ function PartnerPage() {
     // call api
     const { mutate: mutationGetAllPartner } = useMutation({
         mutationFn: getAllPartnerApi,
-        onSuccess: (data) => {
-            if ((data && data?.status === 200) || data?.status === '200') {
-                return setDataAllPartner(data?.data);
+        onSuccess: (res) => {
+            if (res && res?.status === 200 && res?.data?.length > 0) {
+                const filterPartner = res?.data?.filter((item) => item.status === 'Active');
+                return setDataAllPartner(filterPartner);
             }
-            return notify(data?.message, 'error');
+            return notify(res?.message, 'error');
         },
     });
 
@@ -27,6 +28,14 @@ function PartnerPage() {
     useEffect(() => {
         mutationGetAllPartner();
     }, []);
+
+    const handleReturnTotalProgram = (data) => {
+        if (Array.isArray(data) && data.length > 0) {
+            const filterProgram = data?.filter((item) => item.status === 'Active' || item.status === 'End');
+            return filterProgram?.length || 0;
+        }
+        return 0;
+    };
 
     return (
         <div id="partner-page">
@@ -66,38 +75,20 @@ function PartnerPage() {
                                         src={item?.attachment[0]?.url}
                                         alt={item?.partnerName + '_logo'}
                                     />
-                                    <div className="flex justify-between mt-4">
+                                    <div className="mt-4">
                                         <div>
-                                            <strong>Follower: </strong>1
+                                            <strong>Total Program: </strong>
+                                            {handleReturnTotalProgram(item?.programs)}
                                         </div>
                                         <div>
-                                            <strong>Created At: </strong>
-                                            {item.createdAt ? moment(item.createdAt).format('DD/MM/YYY') : ''}
+                                            <strong>Partner created At: </strong>
+                                            {item.createdAt ? moment(item?.createdAt).format('DD/MM/YYYY') : ''}
                                         </div>
                                     </div>
-                                    {/* <p className="pl-4 my-4 font-bold text-black">{item?.partnerName}</p> */}
                                 </Card>
                             </List.Item>
                         )}
                     />
-                    {/* {!dataAllPartner
-                        ? null
-                        : dataAllPartner.map((data) => {
-                              return (
-                                  <Link
-                                      to={`/partner/detail/${data.partnerId}`}
-                                      key={data?.partnerId}
-                                      className="max-w-xs p-2 mb-8 duration-150 bg-gray-400 rounded-lg shadow cursor-pointer md:mb-0 hover:scale-105 hover:shadow-md"
-                                  >
-                                      <img
-                                          className="object-cover object-center w-full h-44 bg-center rounded-lg"
-                                          src={data?.attachment[0]?.url}
-                                          alt={data?.partnerName + '_logo'}
-                                      />
-                                      <p className="pl-4 my-4 font-bold text-black">{data?.partnerName}</p>
-                                  </Link>
-                              );
-                          })} */}
                 </div>
             </div>
         </div>

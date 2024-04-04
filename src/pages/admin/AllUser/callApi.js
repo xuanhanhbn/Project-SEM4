@@ -1,22 +1,10 @@
 import { getApiDefault, postApiDefault } from '~/utils/api';
 
-export async function getAllPartnerApi() {
-    const url = `partner/get-all-partner?name=&page=1&size=20`;
+export async function getAllUserApi(data) {
+    const url = `user/get-all-user?name=${data?.name}&page=${data?.page}&size=${data?.size}`;
     try {
         const res = await getApiDefault(url);
         // console.log('res: ', res);
-        if (res && res?.status === 200) {
-            return res;
-        }
-    } catch (error) {
-        return error;
-    }
-}
-
-export async function getApiSearchPartner(data) {
-    const url = `partner/get-partner-by-search?search=${data}`;
-    try {
-        const res = await getApiDefault(url, data);
         if (res && res?.status === 200) {
             return res;
         }
@@ -38,9 +26,9 @@ export async function createPartnerApi(data) {
     }
 }
 
-export async function blockPartnerApi(data) {
+export async function blockUserApi(data) {
     // console.log('dataAPI: ', data);
-    const url = `/partner/toggle-lock-partner/${data?.id}?value=${data?.value}`;
+    const url = `/user/toggle-lock-user?email=${data?.email}&value=${data?.value}`;
     try {
         const res = await getApiDefault(url);
         if (res) {

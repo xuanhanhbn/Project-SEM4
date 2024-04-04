@@ -77,9 +77,9 @@ const publicRoutes = [
         layout: null,
     },
     {
-        path: '/profile',
+        path: '/profile/:userId',
         component: ProfilePage,
-        // layout: null,
+        layout: null,
     },
     {
         path: '/partner',

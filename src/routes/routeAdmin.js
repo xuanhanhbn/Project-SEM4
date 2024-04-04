@@ -1,3 +1,4 @@
+import ALlUser from '~/pages/admin/AllUser';
 import BillingPage from '~/pages/admin/Billing';
 import ChatBox from '~/pages/admin/ChatBox';
 import Dashboard from '~/pages/admin/Dashboard';
@@ -47,6 +48,10 @@ const AdminRouter = [
     {
         path: '/admin/tables',
         component: TablePages,
+    },
+    {
+        path: '/admin/get-all-user',
+        component: ALlUser,
     },
 ];
 const privateRoutes = [];

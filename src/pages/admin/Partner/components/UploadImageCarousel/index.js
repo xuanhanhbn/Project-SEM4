@@ -3,7 +3,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import React from 'react';
 
 function UploadImageCarousel(props) {
-    const { fileList, onPreview, onChange, open, title, onCancel, src } = props;
+    const { fileList, onPreview, onChange, open, title, onCancel, src, beforeUpload } = props;
 
     // style button upload
     const uploadButtonUploadCareousel = (
@@ -41,6 +41,7 @@ function UploadImageCarousel(props) {
                 fileList={fileList}
                 onPreview={onPreview}
                 onChange={onChange}
+                beforeUpload={beforeUpload}
                 // onSuccess={handleSuccess}
                 // onError={handleError}
             >

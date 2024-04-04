@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './Program.css';
 
 import TableCommon from '~/components/TableCommon';
@@ -13,7 +13,10 @@ import Loading from '~/components/Loading';
 import useAuthStore from '~/store/zustand';
 import { shallow } from 'zustand/shallow';
 
-function ListProgramRejected() {
+function ListProgramRejected(props) {
+    const { dataDetail } = props;
+    const params = useParams();
+
     const { userData, setUserData, cleanup } = useAuthStore(
         (state) => ({
             userData: state.userData || '',
@@ -36,7 +39,7 @@ function ListProgramRejected() {
     useEffect(() => {
         const newRequest = {
             ...dataRequest,
-            partnerId: userData?.partnerId || '',
+            partnerId: params?.partnerId || userData?.partnerId || '',
             name: 'Rejected',
         };
         setDataRequest(newRequest);

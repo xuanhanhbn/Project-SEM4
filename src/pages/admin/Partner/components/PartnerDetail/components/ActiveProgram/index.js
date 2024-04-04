@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Progress } from 'antd';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import TableCommon from '~/components/TableCommon';
 import { columns } from '../../constants';
 import { useMutation } from '@tanstack/react-query';
@@ -13,6 +14,8 @@ import { shallow } from 'zustand/shallow';
 import Loading from '~/components/Loading';
 
 function ActiveProgram(props) {
+    const { dataDetail } = props;
+
     const { userData, setUserData, cleanup } = useAuthStore(
         (state) => ({
             userData: state.userData || '',
@@ -29,7 +32,7 @@ function ActiveProgram(props) {
         size: 20,
     };
 
-    // const { dataDetail } = props;
+    const params = useParams();
     const [dataRequest, setDataRequest] = useState(baseDataRequest);
     const [dataProgram, setDataProgram] = useState([]);
 
@@ -49,7 +52,7 @@ function ActiveProgram(props) {
     useEffect(() => {
         const newRequest = {
             ...dataRequest,
-            partnerId: userData?.partnerId || '',
+            partnerId: params?.partnerId || userData?.partnerId || '',
             name: 'Active',
         };
         setDataRequest(newRequest);

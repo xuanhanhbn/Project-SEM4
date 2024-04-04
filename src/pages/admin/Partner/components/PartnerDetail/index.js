@@ -72,17 +72,17 @@ function PartnerDetailPage(props) {
         {
             key: '2',
             label: 'List Proram Pending',
-            children: <DeActiveProgram />,
+            children: <DeActiveProgram dataDetail={dataDetail} />,
         },
         {
             key: '3',
             label: 'List Program Rejected',
-            children: <ListProgramRejected />,
+            children: <ListProgramRejected dataDetail={dataDetail} />,
         },
         {
             key: '4',
             label: 'List Program Finished',
-            children: <ListProgramFinished />,
+            children: <ListProgramFinished dataDetail={dataDetail} />,
         },
     ];
 
@@ -130,10 +130,24 @@ function PartnerDetailPage(props) {
                                                     {dataDetail?.vnpayAccount || '-'}
                                                 </span>
                                             </span>
-                                            <span className="text-base leading-tight">
+
+                                            <span className="mb-2 text-base leading-tight">
                                                 Description:
                                                 <span className="font-semibold text-slate-700 sm:ml-2">
                                                     {dataDetail?.description}
+                                                </span>
+                                            </span>
+
+                                            <span className="text-base leading-tight">
+                                                Status:
+                                                <span
+                                                    className="font-semibold text-slate-700 sm:ml-2"
+                                                    style={{
+                                                        fontWeight: 800,
+                                                        color: dataDetail?.status === 'Active' ? 'green' : 'red',
+                                                    }}
+                                                >
+                                                    {dataDetail?.status}
                                                 </span>
                                             </span>
                                         </div>

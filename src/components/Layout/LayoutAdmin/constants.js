@@ -24,14 +24,14 @@ export const sideBarList = [
     // },
 
     {
-        id: 5,
+        id: 2,
         tabName: 'ACCOUNT PAGES',
         type: 'TABTITLE',
         tabIcon: '',
         role: ['PARTNER'],
     },
     {
-        id: 2,
+        id: 3,
         tabName: 'Partner',
         type: 'TAB_ITEM',
         tabIcon: <i className="fa-regular fa-handshake"></i>,
@@ -39,7 +39,7 @@ export const sideBarList = [
         role: ['ADMIN', 'PARTNER'],
     },
     {
-        id: 7,
+        id: 4,
         tabName: 'Message',
         type: 'TAB_ITEM',
         tabIcon: <i className="fa-brands fa-rocketchat"></i>,
@@ -47,11 +47,19 @@ export const sideBarList = [
         role: ['ADMIN', 'PARTNER'],
     },
     {
-        id: 6,
+        id: 5,
         tabName: 'Program',
         type: 'TAB_ITEM',
         tabIcon: <i className="fa-duotone fa-diagram-project"></i>,
         path: '/admin/program',
+        role: ['ADMIN'],
+    },
+    {
+        id: 6,
+        tabName: 'All User',
+        type: 'TAB_ITEM',
+        tabIcon: <i className="fa-light fa-user"></i>,
+        path: '/admin/get-all-user',
         role: ['ADMIN'],
     },
 ];

@@ -174,7 +174,7 @@ function Header() {
                                     onClick={handleClose}
                                 >
                                     <Link
-                                        to="/profile"
+                                        to={`/profile/${userData?.userId}`}
                                         className="li_user_menu"
                                         role="menuitem"
                                         tabIndex="-1"
