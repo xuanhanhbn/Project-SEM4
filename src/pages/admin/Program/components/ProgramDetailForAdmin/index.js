@@ -119,7 +119,7 @@ function ProgramDetailForAdmin() {
     };
     const handleCancel = () => setIsOpenModal(baseOpenModal);
 
-    const handleOpenModal = (item, type) => {
+    const handleOpenModal = (type) => {
         if (type && type === 'accept') {
             return setIsOpenModal((prev) => ({
                 ...prev,
@@ -145,12 +145,20 @@ function ProgramDetailForAdmin() {
                 unLock: true,
             }));
         }
-        return setIsOpenModal((prev) => ({
-            ...prev,
-            accept: false,
-            block: false,
-            cancel: true,
-        }));
+        if (type && type === 'reject') {
+            return setIsOpenModal((prev) => ({
+                ...prev,
+                accept: false,
+                cancel: true,
+                block: false,
+            }));
+        }
+        // return setIsOpenModal((prev) => ({
+        //     ...prev,
+        //     accept: false,
+        //     block: false,
+        //     cancel: true,
+        // }));
     };
 
     const handleCaculator = () => {
