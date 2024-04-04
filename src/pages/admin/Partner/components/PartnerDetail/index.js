@@ -131,7 +131,7 @@ function PartnerDetailPage(props) {
                                                 </span>
                                             </span>
 
-                                            <span className="mb-2 text-base leading-tight">
+                                            <span className="truncate w-[200px] mb-2 text-base leading-tight">
                                                 Description:
                                                 <span className="font-semibold text-slate-700 sm:ml-2">
                                                     {dataDetail?.description}
@@ -141,7 +141,7 @@ function PartnerDetailPage(props) {
                                             <span className="text-base leading-tight">
                                                 Status:
                                                 <span
-                                                    className="font-semibold text-slate-700 sm:ml-2"
+                                                    className=" font-semibold text-slate-700 sm:ml-2"
                                                     style={{
                                                         fontWeight: 800,
                                                         color: dataDetail?.status === 'Active' ? 'green' : 'red',
