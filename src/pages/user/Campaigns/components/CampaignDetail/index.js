@@ -33,7 +33,7 @@ import { useMutation } from '@tanstack/react-query';
 import { getDetailProgram, onDonateProgram, onDownloadDonateProgram, onShareMailProgram } from './callApi';
 import { handleCheckStartDonateDate, notify } from '~/utils/common';
 import Loading from '~/components/Loading';
-import { Input, Modal, Progress } from 'antd';
+import { Button, Input, Modal, Progress } from 'antd';
 import { exchangeRateMoney } from '~/utils/constant';
 import { Tabs } from 'antd';
 import { inputVolunteerForm } from './constants';
@@ -540,7 +540,7 @@ export default function CampaignDetail(props) {
                                         }
                                     >
                                         <button
-                                            disabled={handleCheckStartDonateDate()}
+                                            disabled={handleCheckStartDonateDate(dataDetail?.startDonateDate)}
                                             onClick={showModal}
                                             className="font-bold btn rounded"
                                         >
